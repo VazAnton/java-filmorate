@@ -43,7 +43,7 @@ public class UserController {
                 }
             } catch (NullPointerException nullPointerException) {
                 log.error("При создании пользователя не было указано его имя.");
-                throw new ValidationException("Имя пользователя может быть пустым, но должно быть указано!");
+                user.setName(user.getLogin());
             }
             if (user.getBirthday().isAfter(LocalDate.now())) {
                 log.error("Передана некорректная дата рождения пользователя.");
@@ -83,7 +83,7 @@ public class UserController {
                 }
             } catch (NullPointerException nullPointerException) {
                 log.error("При создании пользователя не было указано его имя.");
-                throw new ValidationException("Имя пользователя может быть пустым, но должно быть указано!");
+                user.setName(user.getLogin());
             }
             if (user.getBirthday().isAfter(LocalDate.now())) {
                 log.error("Передана некорректная дата рождения пользователя.");
