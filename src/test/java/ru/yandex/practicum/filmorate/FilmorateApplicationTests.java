@@ -684,7 +684,6 @@ class FilmorateApplicationTests {
         User user1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "Вениамин",
                 LocalDate.of(1997, 6, 22));
         userController.addUser(user1);
-        
         final NullPointerException nullPointerException = assertThrows(
                 NullPointerException.class,
                 new Executable() {
