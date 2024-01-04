@@ -36,9 +36,14 @@ public class UserController {
                 log.error("Логин пользователя содержит пробелы.");
                 throw new ValidationException("Логин пользователя не может содержать пробелы!");
             }
-            if (user.getName().isEmpty()) {
-                log.debug("В качестве имени пользователя используется логин");
-                user.setName(user.getLogin());
+            try {
+                if (user.getName().isEmpty()) {
+                    log.error("Было передано пустое имя пользователя.");
+                    user.setName(user.getLogin());
+                }
+            } catch (NullPointerException nullPointerException) {
+                log.error("При создании пользователя не было указано его имя.");
+                throw new ValidationException("Имя пользователя может быть пустым, но должно быть указано!");
             }
             if (user.getBirthday().isAfter(LocalDate.now())) {
                 log.error("Передана некорректная дата рождения пользователя.");
@@ -71,9 +76,14 @@ public class UserController {
                 log.error("Логин пользователя содержит пробелы.");
                 throw new ValidationException("Логин пользователя не может содержать пробелы!");
             }
-            if (user.getName().isEmpty()) {
-                log.debug("В качестве имени пользователя используется логин");
-                user.setName(user.getLogin());
+            try {
+                if (user.getName().isEmpty()) {
+                    log.error("Было передано пустое имя пользователя.");
+                    user.setName(user.getLogin());
+                }
+            } catch (NullPointerException nullPointerException) {
+                log.error("При создании пользователя не было указано его имя.");
+                throw new ValidationException("Имя пользователя может быть пустым, но должно быть указано!");
             }
             if (user.getBirthday().isAfter(LocalDate.now())) {
                 log.error("Передана некорректная дата рождения пользователя.");
