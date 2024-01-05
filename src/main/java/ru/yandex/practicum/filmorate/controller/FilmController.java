@@ -49,7 +49,8 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) {
-        if (film != null) {
+        if (film != null && films.containsKey(film.getId())) {
+            Film chosenFilm = films.get(film.getId());
             if (film.getName().isEmpty()) {
                 log.error("Было передано пустое название фильмаю");
                 throw new ValidationException("Название фильма не может быть пустым!");
@@ -66,7 +67,11 @@ public class FilmController {
                 log.error("Была передана неверная продолжительность фильма");
                 throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
             }
-            films.put(film.getId(), film);
+            chosenFilm.setName(film.getName());
+            chosenFilm.setDescription(film.getDescription());
+            chosenFilm.setReleaseDate(film.getReleaseDate());
+            chosenFilm.setDuration(film.getDuration());
+            films.put(film.getId(), chosenFilm);
         } else {
             log.error("Был передан пустой объект.");
             throw new NullPointerException("Объект не может быть пустым");
