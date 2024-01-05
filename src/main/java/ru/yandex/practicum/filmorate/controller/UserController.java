@@ -89,6 +89,7 @@ public class UserController {
                 log.error("Передана некорректная дата рождения пользователя.");
                 throw new ValidationException("День рождения пользователя не может быть больше текущей даты!");
             }
+            chosenUser.setName(user.getName());
             chosenUser.setEmail(user.getEmail());
             chosenUser.setLogin(user.getLogin());
             chosenUser.setBirthday(user.getBirthday());

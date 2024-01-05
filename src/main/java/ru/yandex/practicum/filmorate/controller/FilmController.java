@@ -34,7 +34,7 @@ public class FilmController {
                 log.error("Введена некорректная дата релиза");
                 throw new ValidationException("Дата релиза не может быть раньше даты релиза первого фильма");
             }
-            if (film.getDuration().isNegative()) {
+            if (film.getDuration() < 0) {
                 log.error("Была передана неверная продолжительность фильма");
                 throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
             }
@@ -50,7 +50,6 @@ public class FilmController {
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) {
         if (film != null) {
-            Film chosenFilm = films.get(film.getId());
             if (film.getName().isEmpty()) {
                 log.error("Было передано пустое название фильмаю");
                 throw new ValidationException("Название фильма не может быть пустым!");
@@ -63,16 +62,11 @@ public class FilmController {
                 log.error("Введена некорректная дата релиза");
                 throw new ValidationException("Дата релиза не может быть раньше даты релиза первого фильма");
             }
-            if (film.getDuration().isNegative()) {
+            if (film.getDuration() < 0) {
                 log.error("Была передана неверная продолжительность фильма");
                 throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
             }
-            chosenFilm.setName(film.getName());
-            chosenFilm.setDescription(film.getDescription());
-            chosenFilm.setReleaseDate(film.getReleaseDate());
-            chosenFilm.setDuration(film.getDuration());
-            films.put(film.getId(), chosenFilm);
-
+            films.put(film.getId(), film);
         } else {
             log.error("Был передан пустой объект.");
             throw new NullPointerException("Объект не может быть пустым");

@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +30,7 @@ class FilmorateApplicationTests {
     @Test
     public void checkAddFilmIfValidationIsFine() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         assertEquals(0, filmController.getFilms().size());
 
         filmController.addFilm(film1);
@@ -42,7 +41,7 @@ class FilmorateApplicationTests {
     @Test
     public void addShouldThrowValidationExceptionIfFilmNameIsEmpty() {
         Film film1 = new Film(1, "", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -63,7 +62,7 @@ class FilmorateApplicationTests {
         Film film1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
 
         filmController.addFilm(film1);
 
@@ -75,7 +74,7 @@ class FilmorateApplicationTests {
         Film film1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -95,7 +94,7 @@ class FilmorateApplicationTests {
     @Test
     public void addShouldThrowValidationExceptionIfFilmReleaseDateIsWrong() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                27), Duration.ofMinutes(126));
+                27), 126);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -115,7 +114,7 @@ class FilmorateApplicationTests {
     @Test
     public void shouldAddFilmIfFilmReleaseDateIsMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                28), Duration.ofMinutes(126));
+                28), 126);
 
         filmController.addFilm(film1);
 
@@ -125,7 +124,7 @@ class FilmorateApplicationTests {
     @Test
     public void shouldAddFilmIfFilmReleaseDateIsAfterThenMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1900, 12,
-                26), Duration.ofMinutes(126));
+                26), 126);
 
         filmController.addFilm(film1);
 
@@ -135,7 +134,7 @@ class FilmorateApplicationTests {
     @Test
     public void addShouldThrowValidationExceptionIfFilmDurationIsNegative() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(-1));
+                26), -1);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -172,10 +171,10 @@ class FilmorateApplicationTests {
     @Test
     public void checkUpdateFilmIfValidationIsFine() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         Film newFilm1 = new Film(1, "Маска", "Один из дучших фильмов с Джимом Керри",
                 LocalDate.of(2003, 3,
-                        26), Duration.ofMinutes(126));
+                        26), 126);
         assertEquals(0, filmController.getFilms().size());
 
         filmController.addFilm(film1);
@@ -188,9 +187,9 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmNameIsEmpty() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         Film newFilm1 = new Film(1, "", "Фильм на века", LocalDate.of(2004, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         filmController.addFilm(film1);
 
         final ValidationException validationException = assertThrows(
@@ -210,13 +209,13 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmDescriptionIs200Characters() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         Film newFilm1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
         assertEquals(1, filmController.getFilms().size());
@@ -230,12 +229,12 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmDescriptionIsMoreThen200Characters() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         filmController.addFilm(film1);
         Film newFilm1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
                 "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -255,9 +254,9 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmReleaseDateIsWrong() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         Film newFilm1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                27), Duration.ofMinutes(126));
+                27), 126);
         filmController.addFilm(film1);
 
         final ValidationException validationException = assertThrows(
@@ -278,10 +277,10 @@ class FilmorateApplicationTests {
     @Test
     public void shouldUpdateFilmIfFilmReleaseDateIsMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                28), Duration.ofMinutes(126));
+                28), 126);
         Film newFilm1 = new Film(1, "Маска", "Один из лучших фильмов с джимом Керри",
                 LocalDate.of(1895, 12,
-                        28), Duration.ofMinutes(126));
+                        28), 126);
 
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
@@ -292,10 +291,10 @@ class FilmorateApplicationTests {
     @Test
     public void shouldUpdateFilmIfFilmReleaseDateIsAfterThenMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1900, 12,
-                26), Duration.ofMinutes(126));
+                26), 126);
         Film newFilm1 = new Film(1, "Маска", "Один из лучших фильмов с джимом Керри",
                 LocalDate.of(1895, 12,
-                        28), Duration.ofMinutes(126));
+                        28), 126);
 
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
@@ -306,9 +305,9 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmDurationIsNegative() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         Film newFilm1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(-1));
+                26), -1);
         filmController.addFilm(film1);
 
         final ValidationException validationException = assertThrows(
@@ -329,7 +328,7 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowNullPointerExceptionIfFilmIsNull() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), Duration.ofMinutes(126));
+                26), 126);
         filmController.addFilm(film1);
 
         final NullPointerException nullPointerException = assertThrows(
@@ -615,7 +614,7 @@ class FilmorateApplicationTests {
     public void shouldUpdateUserIfNameIsEmptyButLoginNotEmpty() {
         User user1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "Вениамин",
                 LocalDate.of(1997, 6, 22));
-        User newUser1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "",
+        User newUser1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", null,
                 LocalDate.of(1997, 6, 22));
 
         userController.addUser(user1);
@@ -623,9 +622,7 @@ class FilmorateApplicationTests {
 
         assertEquals(1, userController.getUsers().size());
         assertEquals("Venya", user1.getLogin());
-        assertEquals("Вениамин", user1.getName());
-        assertEquals("Venya", newUser1.getLogin());
-        assertEquals("Venya", newUser1.getName());
+        assertEquals("Venya", user1.getName());
     }
 
     @Test
