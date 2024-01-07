@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
@@ -45,12 +44,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.addFilm(film1);
-                    }
-                }
+                () -> filmController.addFilm(film1)
         );
 
         assertEquals("Название фильма не может быть пустым!", validationException.getMessage());
@@ -59,9 +53,9 @@ class FilmorateApplicationTests {
 
     @Test
     public void addShouldNotThrowValidationExceptionIfFilmDescriptionIs200Characters() {
-        Film film1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
+        Film film1 = new Film(1, "Маска", "Фильм \"Маска\" -  это захватывающая комедия, где " +
+                "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему невероятные суперсилы. " +
+                "Фильм смешной и непременно заставит вас улыбнуться.", LocalDate.of(2003, 3,
                 26), 126);
 
         filmController.addFilm(film1);
@@ -71,19 +65,18 @@ class FilmorateApplicationTests {
 
     @Test
     public void addShouldThrowValidationExceptionIfFilmDescriptionIsMoreThen200Characters() {
-        Film film1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
+        Film film1 = new Film(1, "Маска", "Фильм Маска - это захватывающая комедийная " +
+                "приключенческая история о скромном банковском служащем по имени Стэнли Ипкисс. Однажды он находит " +
+                "древнюю маску, которая превращает его в эксцентричного супергероя. Стэнли начинает использовать свои " +
+                "новые суперспособности для борьбы с преступностью и покорения сердца красавицы. Но с каждым днем он " +
+                "понимает, что маска имеет свою темную сторону. Фильм полон юмора, экшена и неожиданных поворотов " +
+                "сюжета. Не пропустите эту захватывающую историю о супергерое-неудачнике!",
+                LocalDate.of(2003, 3,
                 26), 126);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.addFilm(film1);
-                    }
-                }
+                () -> filmController.addFilm(film1)
         );
 
         assertEquals("Описание к фильму не может содержать более 200 символов!",
@@ -98,12 +91,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.addFilm(film1);
-                    }
-                }
+                () -> filmController.addFilm(film1)
         );
 
         assertEquals("Дата релиза не может быть раньше даты релиза первого фильма",
@@ -138,12 +126,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.addFilm(film1);
-                    }
-                }
+                () -> filmController.addFilm(film1)
         );
 
         assertEquals("Продолжительность фильма не может быть отрицаетльной",
@@ -155,12 +138,7 @@ class FilmorateApplicationTests {
     public void addShouldThrowNullPointerExceptionIfFilmIsNull() {
         final NullPointerException nullPointerException = assertThrows(
                 NullPointerException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.addFilm(null);
-                    }
-                }
+                () -> filmController.addFilm(null)
         );
 
         assertEquals("Объект не может быть пустым",
@@ -194,12 +172,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.updateFilm(newFilm1);
-                    }
-                }
+                () -> filmController.updateFilm(newFilm1)
         );
 
         assertEquals("Название фильма не может быть пустым!", validationException.getMessage());
@@ -207,23 +180,19 @@ class FilmorateApplicationTests {
     }
 
     @Test
-    public void updateShouldThrowValidationExceptionIfFilmDescriptionIs200Characters() {
+    public void filmShouldUpdateIfDescriptionIs200Characters() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
                 26), 126);
-        Film newFilm1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
+        Film newFilm1 = new Film(1, "Маска", "Фильм \"Маска\" -  это захватывающая комедия, где" +
+                "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему невероятные суперсилы" +
+                "Фильм смешной и непременно заставит вас улыбнуться.", LocalDate.of(2003, 3,
                 26), 126);
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
         assertEquals(1, filmController.getFilms().size());
-        assertEquals("ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", newFilm1.getDescription());
+        assertEquals("Фильм \"Маска\" -  это захватывающая комедия, где" +
+                "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему невероятные суперсилы" +
+                "Фильм смешной и непременно заставит вас улыбнуться.", newFilm1.getDescription());
     }
 
     @Test
@@ -231,19 +200,17 @@ class FilmorateApplicationTests {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
                 26), 126);
         filmController.addFilm(film1);
-        Film newFilm1 = new Film(1, "Маска", "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы" +
-                "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы", LocalDate.of(2003, 3,
-                26), 126);
+        Film newFilm1 = new Film(1, "Маска", "Фильм Маска - это захватывающая комедийная" +
+                "приключенческая история о скромном банковском служащем по имени Стэнли Ипкисс. Однажды он находит" +
+                "древнюю маску, которая превращает его в эксцентричного супергероя. Стэнли начинает использовать свои" +
+                "новые суперспособности для борьбы с преступностью и покорения сердца красавицы. Но с каждым днем он" +
+                "понимает, что маска имеет свою темную сторону. Фильм полон юмора, экшена и неожиданных поворотов" +
+                "сюжета. Не пропустите эту захватывающую историю о супергерое-неудачнике!",
+                LocalDate.of(2003, 3, 26), 126);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.updateFilm(newFilm1);
-                    }
-                }
+                () -> filmController.updateFilm(newFilm1)
         );
 
         assertEquals("Описание к фильму не может содержать более 200 символов!",
@@ -261,12 +228,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.updateFilm(newFilm1);
-                    }
-                }
+                () -> filmController.updateFilm(newFilm1)
         );
 
         assertEquals("Дата релиза не может быть раньше даты релиза первого фильма",
@@ -312,12 +274,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.updateFilm(newFilm1);
-                    }
-                }
+                () -> filmController.updateFilm(newFilm1)
         );
 
         assertEquals("Продолжительность фильма не может быть отрицаетльной",
@@ -333,12 +290,7 @@ class FilmorateApplicationTests {
 
         final NullPointerException nullPointerException = assertThrows(
                 NullPointerException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        filmController.updateFilm(null);
-                    }
-                }
+                () -> filmController.updateFilm(null)
         );
 
         assertEquals("Объект не может быть пустым",
@@ -365,12 +317,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.addUser(user1);
-                    }
-                }
+                () -> userController.addUser(user1)
         );
 
         assertEquals("Адрес алектронной почты не может быть пустым!", validationException.getMessage());
@@ -384,12 +331,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.addUser(user1);
-                    }
-                }
+                () -> userController.addUser(user1)
         );
 
         assertEquals(0, userController.getUsers().size());
@@ -403,12 +345,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.addUser(user1);
-                    }
-                }
+                () -> userController.addUser(user1)
         );
 
         assertEquals(0, userController.getUsers().size());
@@ -423,12 +360,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.addUser(user1);
-                    }
-                }
+                () -> userController.addUser(user1)
         );
 
         assertEquals(0, userController.getUsers().size());
@@ -475,12 +407,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.addUser(user1);
-                    }
-                }
+                () -> userController.addUser(user1)
         );
 
         assertEquals(0, userController.getUsers().size());
@@ -492,12 +419,7 @@ class FilmorateApplicationTests {
     public void addShouldThrowNullPointerExceptionIfUserIsNull() {
         final NullPointerException nullPointerException = assertThrows(
                 NullPointerException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.addUser(null);
-                    }
-                }
+                () -> userController.addUser(null)
         );
 
         assertEquals(0, userController.getUsers().size());
@@ -530,12 +452,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.updateUser(newUser1);
-                    }
-                }
+                () -> userController.updateUser(newUser1)
         );
 
         assertEquals(1, userController.getUsers().size());
@@ -552,12 +469,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.updateUser(newUser1);
-                    }
-                }
+                () -> userController.updateUser(newUser1)
         );
 
         assertEquals(1, userController.getUsers().size());
@@ -574,12 +486,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.updateUser(newUser1);
-                    }
-                }
+                () -> userController.updateUser(newUser1)
         );
 
         assertEquals(1, userController.getUsers().size());
@@ -597,12 +504,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.updateUser(newUser1);
-                    }
-                }
+                () -> userController.updateUser(newUser1)
         );
 
         assertEquals(1, userController.getUsers().size());
@@ -663,12 +565,7 @@ class FilmorateApplicationTests {
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.updateUser(newUser1);
-                    }
-                }
+                () -> userController.updateUser(newUser1)
         );
 
         assertEquals(1, userController.getUsers().size());
@@ -683,12 +580,7 @@ class FilmorateApplicationTests {
         userController.addUser(user1);
         final NullPointerException nullPointerException = assertThrows(
                 NullPointerException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        userController.updateUser(null);
-                    }
-                }
+                () -> userController.updateUser(null)
         );
 
         assertEquals(1, userController.getUsers().size());
