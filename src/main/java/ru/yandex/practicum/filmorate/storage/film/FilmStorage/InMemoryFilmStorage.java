@@ -21,6 +21,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(FilmController.class);
     private int nextId = 1;
+
     @Override
     public Film addFilm(@RequestBody Film film) {
         if (film != null) {
