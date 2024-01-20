@@ -65,8 +65,8 @@ public class UserService {
             return null;
         }
         Set<User> friendsOfOtherUser = usersFriends.get(otherUser.get());
-        for (User friend: friendsOfUser) {
-            if(friendsOfOtherUser.contains(friend)) {
+        for (User friend : friendsOfUser) {
+            if (friendsOfOtherUser.contains(friend)) {
                 commonFriends.add(friend);
             }
         }
