@@ -13,8 +13,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> NullPointerHandler(final NullPointerException e) {
-        return Map.of("Передан некоректный уникальный номер.", e.getMessage());
+    public Map<String, String> nullPointerHandler(final NullPointerException e) {
+        return Map.of("Объект не найден.", e.getMessage());
     }
 
     @ExceptionHandler
