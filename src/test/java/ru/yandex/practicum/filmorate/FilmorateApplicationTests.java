@@ -27,6 +27,7 @@ class FilmorateApplicationTests {
     public InMemoryUserStorage inMemoryUserStorage;
     public UserService userService;
     public FilmService filmService;
+
     @BeforeEach
     public void setUp() {
         filmController = new FilmController(inMemoryFilmStorage, filmService);
@@ -36,7 +37,7 @@ class FilmorateApplicationTests {
     @Test
     public void checkAddFilmIfValidationIsFine() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         assertEquals(0, filmController.getFilms().size());
 
         filmController.addFilm(film1);
@@ -47,7 +48,7 @@ class FilmorateApplicationTests {
     @Test
     public void addShouldThrowValidationExceptionIfFilmNameIsEmpty() {
         Film film1 = new Film(1, "", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -63,7 +64,7 @@ class FilmorateApplicationTests {
         Film film1 = new Film(1, "Маска", "Фильм \"Маска\" -  это захватывающая комедия, где " +
                 "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему невероятные суперсилы. " +
                 "Фильм смешной и непременно заставит вас улыбнуться.", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
 
         filmController.addFilm(film1);
 
@@ -79,7 +80,7 @@ class FilmorateApplicationTests {
                 "понимает, что маска имеет свою темную сторону. Фильм полон юмора, экшена и неожиданных поворотов " +
                 "сюжета. Не пропустите эту захватывающую историю о супергерое-неудачнике!",
                 LocalDate.of(2003, 3,
-                26), 126);
+                        26), 126, true, 100);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -94,7 +95,7 @@ class FilmorateApplicationTests {
     @Test
     public void addShouldThrowValidationExceptionIfFilmReleaseDateIsWrong() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                27), 126);
+                27), 126, true, 100);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -109,7 +110,7 @@ class FilmorateApplicationTests {
     @Test
     public void shouldAddFilmIfFilmReleaseDateIsMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                28), 126);
+                28), 126, true, 100);
 
         filmController.addFilm(film1);
 
@@ -119,7 +120,7 @@ class FilmorateApplicationTests {
     @Test
     public void shouldAddFilmIfFilmReleaseDateIsAfterThenMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1900, 12,
-                26), 126);
+                26), 126, true, 100);
 
         filmController.addFilm(film1);
 
@@ -129,7 +130,7 @@ class FilmorateApplicationTests {
     @Test
     public void addShouldThrowValidationExceptionIfFilmDurationIsNegative() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), -1);
+                26), -1, true, 100);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -156,10 +157,10 @@ class FilmorateApplicationTests {
     @Test
     public void checkUpdateFilmIfValidationIsFine() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         Film newFilm1 = new Film(1, "Маска", "Один из дучших фильмов с Джимом Керри",
                 LocalDate.of(2003, 3,
-                        26), 126);
+                        26), 126, true, 100);
         assertEquals(0, filmController.getFilms().size());
 
         filmController.addFilm(film1);
@@ -172,9 +173,9 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmNameIsEmpty() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         Film newFilm1 = new Film(1, "", "Фильм на века", LocalDate.of(2004, 3,
-                26), 126);
+                26), 126, true, 100);
         filmController.addFilm(film1);
 
         final ValidationException validationException = assertThrows(
@@ -189,11 +190,11 @@ class FilmorateApplicationTests {
     @Test
     public void filmShouldUpdateIfDescriptionIs200Characters() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         Film newFilm1 = new Film(1, "Маска", "Фильм \"Маска\" -  это захватывающая комедия, где" +
                 "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему невероятные суперсилы" +
                 "Фильм смешной и непременно заставит вас улыбнуться.", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
         assertEquals(1, filmController.getFilms().size());
@@ -205,7 +206,7 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmDescriptionIsMoreThen200Characters() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         filmController.addFilm(film1);
         Film newFilm1 = new Film(1, "Маска", "Фильм Маска - это захватывающая комедийная" +
                 "приключенческая история о скромном банковском служащем по имени Стэнли Ипкисс. Однажды он находит" +
@@ -213,7 +214,7 @@ class FilmorateApplicationTests {
                 "новые суперспособности для борьбы с преступностью и покорения сердца красавицы. Но с каждым днем он" +
                 "понимает, что маска имеет свою темную сторону. Фильм полон юмора, экшена и неожиданных поворотов" +
                 "сюжета. Не пропустите эту захватывающую историю о супергерое-неудачнике!",
-                LocalDate.of(2003, 3, 26), 126);
+                LocalDate.of(2003, 3, 26), 126, true, 100);
 
         final ValidationException validationException = assertThrows(
                 ValidationException.class,
@@ -228,9 +229,9 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmReleaseDateIsWrong() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         Film newFilm1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                27), 126);
+                27), 126, true, 100);
         filmController.addFilm(film1);
 
         final ValidationException validationException = assertThrows(
@@ -246,10 +247,10 @@ class FilmorateApplicationTests {
     @Test
     public void shouldUpdateFilmIfFilmReleaseDateIsMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1895, 12,
-                28), 126);
+                28), 126, true, 100);
         Film newFilm1 = new Film(1, "Маска", "Один из лучших фильмов с джимом Керри",
                 LocalDate.of(1895, 12,
-                        28), 126);
+                        28), 126, true, 100);
 
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
@@ -260,10 +261,10 @@ class FilmorateApplicationTests {
     @Test
     public void shouldUpdateFilmIfFilmReleaseDateIsAfterThenMovieBirthday() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(1900, 12,
-                26), 126);
+                26), 126, true, 100);
         Film newFilm1 = new Film(1, "Маска", "Один из лучших фильмов с джимом Керри",
                 LocalDate.of(1895, 12,
-                        28), 126);
+                        28), 126, true, 100);
 
         filmController.addFilm(film1);
         filmController.updateFilm(newFilm1);
@@ -274,9 +275,9 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowValidationExceptionIfFilmDurationIsNegative() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         Film newFilm1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), -1);
+                26), -1, true, 100);
         filmController.addFilm(film1);
 
         final ValidationException validationException = assertThrows(
@@ -292,7 +293,7 @@ class FilmorateApplicationTests {
     @Test
     public void updateShouldThrowNullPointerExceptionIfFilmIsNull() {
         Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
-                26), 126);
+                26), 126, true, 100);
         filmController.addFilm(film1);
 
         final NullPointerException nullPointerException = assertThrows(
