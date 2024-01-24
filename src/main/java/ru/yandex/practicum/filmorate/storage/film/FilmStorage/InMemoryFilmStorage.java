@@ -41,8 +41,8 @@ public class InMemoryFilmStorage implements FilmStorage {
                 log.error("Была передана неверная продолжительность фильма");
                 throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
             }
-            film.setLiked(false);
-            film.setLikeCount(0);
+            //film.setLiked(false);
+            //film.setLikeCount(0);
             film.setId(nextId++);
             films.put(film.getId(), film);
         } else {
@@ -91,9 +91,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilm(@PathVariable int id) {
-        return films.values().stream()
-                .filter(film -> id == film.getId())
-                .findFirst()
-                .orElseThrow(() -> new NullPointerException("Внимание! Фильма с таким номером не существует!"));
+        if (!films.containsKey(id)) {
+            return null;
+        }
+        return films.get(id);
     }
 }
