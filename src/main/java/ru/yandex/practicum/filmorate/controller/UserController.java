@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.user.UserService.UserService;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.util.List;
 import java.util.Set;
@@ -12,11 +12,11 @@ import java.util.Set;
 @RestController
 public class UserController {
 
-    protected InMemoryUserStorage inMemoryUserStorage;
+    protected UserStorage inMemoryUserStorage;
     protected UserService userService;
 
     @Autowired
-    public UserController(InMemoryUserStorage inMemoryUserStorage, UserService userService) {
+    public UserController(UserStorage inMemoryUserStorage, UserService userService) {
         this.inMemoryUserStorage = inMemoryUserStorage;
         this.userService = userService;
     }
@@ -36,7 +36,7 @@ public class UserController {
         return inMemoryUserStorage.getUsers();
     }
 
-    @GetMapping("/users/user/{id}")
+    @GetMapping("/users/{id}")
     public User getUser(@PathVariable int id) {
         return inMemoryUserStorage.getUser(id);
     }
@@ -54,13 +54,13 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/friends")
-    public Set<User> getFriends(@PathVariable int id) {
-        return userService.getFriends(id);
+    public Set<Integer> getFriendsOfUser(@PathVariable int id) {
+        return inMemoryUserStorage.getFriendsOfUser(id);
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
-    public Set<User> getCommonFriends(@PathVariable int id,
-                                      @PathVariable int otherId) {
+    public Set<Integer> getCommonFriends(@PathVariable int id,
+                                         @PathVariable int otherId) {
         return userService.getCommonFriends(id, otherId);
     }
 }

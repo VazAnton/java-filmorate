@@ -9,10 +9,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -110,9 +107,15 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUser(@PathVariable int id) {
-        return users.values().stream()
-                .filter(user -> id == user.getId())
-                .findFirst()
-                .orElseThrow(() -> new NullPointerException("Внимание! Пользователя с таким номером не существует!"));
+        if (!users.containsKey(id)) {
+            return null;
+        }
+        return users.get(id);
+    }
+
+    @Override
+    public Set<Integer> getFriendsOfUser(@PathVariable int id) {
+        User chosenUser = getUser(id);
+        return chosenUser.getFriendsOfUser();
     }
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.film.FilmService.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
 import java.util.List;
 import java.util.Set;
@@ -12,11 +12,11 @@ import java.util.Set;
 @RestController
 public class FilmController {
 
-    protected InMemoryFilmStorage inMemoryFilmStorage;
+    protected FilmStorage inMemoryFilmStorage;
     protected FilmService filmService;
 
     @Autowired
-    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService) {
+    public FilmController(FilmStorage inMemoryFilmStorage, FilmService filmService) {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
         this.filmService = filmService;
     }
