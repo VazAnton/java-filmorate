@@ -92,7 +92,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getFilm(@PathVariable int id) {
         if (!films.containsKey(id)) {
-            return null;
+            throw new NullPointerException("Внимание фильма с таким номером не существует!");
         }
         return films.get(id);
     }

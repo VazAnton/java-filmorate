@@ -31,6 +31,11 @@ public class FilmController {
         return inMemoryFilmStorage.updateFilm(film);
     }
 
+    @GetMapping("/films/{id}")
+    public Film getFilm(@PathVariable int id) {
+        return inMemoryFilmStorage.getFilm(id);
+    }
+
     @GetMapping("/films")
     public List<Film> getFilms() {
         return inMemoryFilmStorage.getFilms();

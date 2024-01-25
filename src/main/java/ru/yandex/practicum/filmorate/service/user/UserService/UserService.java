@@ -31,26 +31,32 @@ public class UserService {
     }
 
     public void deleteFriend(int id, int friendId) {
-        Set<Integer> friendsOfUser = inMemoryUserStorage.getFriendsOfUser(id);
-        Set<Integer> friendsOfFriend = inMemoryUserStorage.getFriendsOfUser(friendId);
+        User chosenUser = inMemoryUserStorage.getUser(id);
         User friendOfUser = inMemoryUserStorage.getUser(friendId);
-        User friendOfFriend = inMemoryUserStorage.getUser(friendId);
+        Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
+        Set<Integer> friendsOfFriend = friendOfUser.getFriendsOfUser();
         if (friendsOfUser.contains(friendId) && friendsOfFriend.contains(id)) {
             friendsOfUser.remove(friendId);
-            friendOfFriend.setFriendsOfUser(friendsOfUser);
+            chosenUser.setFriendsOfUser(friendsOfUser);
             friendsOfFriend.remove(id);
             friendOfUser.setFriendsOfUser(friendsOfFriend);
         }
     }
 
-    public Set<Integer> getCommonFriends(int id, int otherId) {
-        Set<Integer> commonFriends = new HashSet<>();
-        Set<Integer> friendsOfUser = inMemoryUserStorage.getFriendsOfUser(id);
-        Set<Integer> friendsOfOtherUser = inMemoryUserStorage.getFriendsOfUser(otherId);
-        for (int friendId : friendsOfUser) {
-            if (friendsOfOtherUser.contains(friendId)) {
-                commonFriends.add(friendId);
+    public Set<User> getCommonFriends(int id, int otherId) {
+        Set<User> commonFriends = new HashSet<>();
+        User chosenUser = inMemoryUserStorage.getUser(id);
+        Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
+        try {
+            User otherUser = inMemoryUserStorage.getUser(otherId);
+            Set<Integer> friendsOfOtherUser = otherUser.getFriendsOfUser();
+            for (int friendId : friendsOfUser) {
+                if (friendsOfOtherUser.contains(friendId)) {
+                    commonFriends.add(inMemoryUserStorage.getUser(friendId));
+                }
             }
+        } catch (NullPointerException e) {
+            return commonFriends;
         }
         return commonFriends;
     }

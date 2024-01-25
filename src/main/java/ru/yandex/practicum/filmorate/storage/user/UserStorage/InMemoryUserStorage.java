@@ -108,14 +108,22 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User getUser(@PathVariable int id) {
         if (!users.containsKey(id)) {
-            return null;
+            throw new NullPointerException("Внимание пользователя с таким номером не существует!");
         }
         return users.get(id);
     }
 
     @Override
-    public Set<Integer> getFriendsOfUser(@PathVariable int id) {
-        User chosenUser = getUser(id);
-        return chosenUser.getFriendsOfUser();
+    public Set<User> getFriendsOfUser(@PathVariable int id) {
+        Set<User> friendsOfUser = new HashSet<>();
+        if (!users.containsKey(id)) {
+            throw new NullPointerException("Внимание пользователя с таким номером не существует!");
+        }
+        User chosenUser = users.get(id);
+        Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
+        for (int friendId: numbersOfFriends) {
+           friendsOfUser.add(users.get(friendId));
+        }
+        return friendsOfUser;
     }
 }

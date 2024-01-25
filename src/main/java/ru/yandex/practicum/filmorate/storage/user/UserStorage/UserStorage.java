@@ -15,5 +15,5 @@ public interface UserStorage {
 
     User getUser(int id);
 
-    Set<Integer> getFriendsOfUser(int id);
+    Set<User> getFriendsOfUser(int id);
 }

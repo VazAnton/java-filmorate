@@ -655,7 +655,36 @@ class FilmorateApplicationTests {
         userController.addFriend(1, 2);
 
         assertEquals(1, user1.getFriendsOfUser().size());
+    }
+
+    @Test
+    public void checkGetFriendsOfUserIfUserHaveFriend() {
+        Set<Integer> friendsOfUser1 = new HashSet<>();
+        Set<Integer> friendsOfUser2 = new HashSet<>();
+        User user1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "Вениамин",
+                LocalDate.of(1997, 6, 22), friendsOfUser1);
+        User user2 = new User(2, "Tolik.anabolik@yandex.ru", "Anatolik", "Анатолий",
+                LocalDate.of(1996, 4, 25), friendsOfUser2);
+
+        userController.addUser(user1);
+        userController.addUser(user2);
+        assertEquals(2, userController.getUsers().size());
+        userController.addFriend(1, 2);
+
+        assertEquals(1, userController.getFriendsOfUser(1).size());
         assertEquals(1, userController.getFriendsOfUser(2).size());
+    }
+
+    @Test
+    public void checkGetFriendsOfUserIfUserHaveNotFriend() {
+        Set<Integer> friendsOfUser1 = new HashSet<>();
+        User user1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "Вениамин",
+                LocalDate.of(1997, 6, 22), friendsOfUser1);
+
+        userController.addUser(user1);
+        assertEquals(1, userController.getUsers().size());
+
+        assertEquals(0, userController.getFriendsOfUser(1).size());
     }
 
     @Test
@@ -701,6 +730,18 @@ class FilmorateApplicationTests {
         assertEquals(2, userController.getFriendsOfUser(2).size());
 
         assertEquals(1, userController.getCommonFriends(1, 2).size());
+    }
+
+    @Test
+    public void checkGetCommonFriendsIfOtherUsersNotExist() {
+        Set<Integer> friendsOfUser1 = new HashSet<>();
+        User user1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "Вениамин",
+                LocalDate.of(1997, 6, 22), friendsOfUser1);
+
+        userController.addUser(user1);
+        assertEquals(1, userController.getUsers().size());
+
+        assertEquals(0, userController.getCommonFriends(1, 2).size());
     }
 
     @Test
@@ -803,5 +844,15 @@ class FilmorateApplicationTests {
         filmController.getTopFilms(12);
 
         assertEquals(0, filmController.getTopFilms(12).size());
+    }
+
+    @Test
+    public void getUserShouldThrowNullPointerExceptionIfUserIdNotExist() {
+        assertThrows(NullPointerException.class, () -> userController.getUser(1));
+    }
+
+    @Test
+    public void getFilmShouldThrowNullPointerExceptionIfFilmIdNotExist() {
+        assertThrows(NullPointerException.class, () -> filmController.getFilm(1));
     }
 }
