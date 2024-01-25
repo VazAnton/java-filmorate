@@ -27,10 +27,10 @@ public class UserService {
         user.setFriendsOfUser(friendsOfUser);
         friendsOfFriend.add(id);
         friend.setFriendsOfUser(friendsOfFriend);
-        return friend;
+        return user;
     }
 
-    public void deleteFriend(int id, int friendId) {
+    public User deleteFriend(int id, int friendId) {
         User chosenUser = inMemoryUserStorage.getUser(id);
         User friendOfUser = inMemoryUserStorage.getUser(friendId);
         Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
@@ -41,6 +41,7 @@ public class UserService {
             friendsOfFriend.remove(id);
             friendOfUser.setFriendsOfUser(friendsOfFriend);
         }
+        return chosenUser;
     }
 
     public Set<User> getCommonFriends(int id, int otherId) {

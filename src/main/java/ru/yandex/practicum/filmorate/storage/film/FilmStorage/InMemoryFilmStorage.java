@@ -10,10 +10,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -41,8 +38,10 @@ public class InMemoryFilmStorage implements FilmStorage {
                 log.error("Была передана неверная продолжительность фильма");
                 throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
             }
-            //film.setLiked(false);
-            //film.setLikeCount(0);
+            if (film.getUsersWhoLikeFilm() == null) {
+                Set<Integer> usersWhoLikeFilm = new HashSet<>();
+                film.setUsersWhoLikeFilm(usersWhoLikeFilm);
+            }
             film.setId(nextId++);
             films.put(film.getId(), film);
         } else {

@@ -28,11 +28,12 @@ public class FilmService {
         return chosenFilm;
     }
 
-    public void deleteLike(int id, int userId) {
+    public Film deleteLike(int id, int userId) {
         Film chosenFilm = inMemoryFilmStorage.getFilm(id);
         Set<Integer> likedFilmsOfUsers = chosenFilm.getUsersWhoLikeFilm();
         likedFilmsOfUsers.remove(userId);
         chosenFilm.setUsersWhoLikeFilm(likedFilmsOfUsers);
+        return chosenFilm;
     }
 
     public Set<Film> getTopFilms(Integer count) {

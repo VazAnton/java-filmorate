@@ -48,9 +48,9 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
-    public void deleteFriend(@PathVariable int id,
+    public User deleteFriend(@PathVariable int id,
                              @PathVariable int friendId) {
-        userService.deleteFriend(id, friendId);
+        return userService.deleteFriend(id, friendId);
     }
 
     @GetMapping("/users/{id}/friends")
@@ -60,7 +60,7 @@ public class UserController {
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
     public Set<User> getCommonFriends(@PathVariable int id,
-                                         @PathVariable int otherId) {
+                                      @PathVariable int otherId) {
         return userService.getCommonFriends(id, otherId);
     }
 }

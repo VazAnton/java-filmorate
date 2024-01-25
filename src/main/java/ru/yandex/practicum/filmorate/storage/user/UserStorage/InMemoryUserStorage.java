@@ -48,6 +48,10 @@ public class InMemoryUserStorage implements UserStorage {
                 log.error("Передана некорректная дата рождения пользователя.");
                 throw new ValidationException("День рождения пользователя не может быть больше текущей даты!");
             }
+            if (user.getFriendsOfUser() == null) {
+                Set<Integer> friendsOfUser = new HashSet<>();
+                user.setFriendsOfUser(friendsOfUser);
+            }
             user.setId(nextId++);
             users.put(user.getId(), user);
         } else {
