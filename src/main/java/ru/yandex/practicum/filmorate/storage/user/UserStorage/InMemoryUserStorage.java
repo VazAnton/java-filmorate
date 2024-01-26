@@ -3,7 +3,8 @@ package ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -125,8 +126,8 @@ public class InMemoryUserStorage implements UserStorage {
         }
         User chosenUser = users.get(id);
         Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
-        for (int friendId: numbersOfFriends) {
-           friendsOfUser.add(users.get(friendId));
+        for (int friendId : numbersOfFriends) {
+            friendsOfUser.add(users.get(friendId));
         }
         return friendsOfUser;
     }
