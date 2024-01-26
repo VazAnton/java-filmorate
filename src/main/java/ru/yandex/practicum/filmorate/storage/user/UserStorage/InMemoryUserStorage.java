@@ -120,15 +120,27 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public Set<User> getFriendsOfUser(@PathVariable int id) {
-        Set<User> friendsOfUser = new HashSet<>();
+        Set<User> sortedFriendsOfUser = new HashSet<>();
         if (!users.containsKey(id)) {
             throw new NullPointerException("Внимание пользователя с таким номером не существует!");
         }
         User chosenUser = users.get(id);
-        Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
-        for (int friendId : numbersOfFriends) {
-            friendsOfUser.add(users.get(friendId));
+        if (!chosenUser.getFriendsOfUser().isEmpty()) {
+            List<User> friendsOfUser = new ArrayList<>();
+            Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
+            for (int friendId : numbersOfFriends) {
+                friendsOfUser.add(users.get(friendId));
+            }
+            friendsOfUser.sort((user1, user2) -> {
+                if (user1.getId() < user2.getId()) {
+                    return 1;
+                } else if (user1.getId() > user2.getId()) {
+                    return -1;
+                }
+                return 0;
+            });
+            sortedFriendsOfUser.addAll(friendsOfUser);
         }
-        return friendsOfUser;
+        return sortedFriendsOfUser;
     }
 }
