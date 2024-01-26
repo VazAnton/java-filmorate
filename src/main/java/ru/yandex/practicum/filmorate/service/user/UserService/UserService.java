@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 public class UserService {
@@ -45,7 +46,14 @@ public class UserService {
     }
 
     public Set<User> getCommonFriends(int id, int otherId) {
-        Set<User> commonFriends = new HashSet<>();
+        Set<User> commonFriends = new TreeSet<>((user1, user2) -> {
+            if (user1.getId() < user2.getId()) {
+                return -1;
+            } else if (user1.getId() > user2.getId()) {
+                return 1;
+            }
+            return 0;
+        });
         User chosenUser = inMemoryUserStorage.getUser(id);
         Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
         try {

@@ -37,7 +37,7 @@ class FilmorateApplicationTests {
         inMemoryFilmStorage = new InMemoryFilmStorage();
         inMemoryUserStorage = new InMemoryUserStorage();
         userService = new UserService(inMemoryUserStorage);
-        filmService = new FilmService(inMemoryFilmStorage);
+        filmService = new FilmService(inMemoryFilmStorage, inMemoryUserStorage);
         filmController = new FilmController(inMemoryFilmStorage, filmService);
         userController = new UserController(inMemoryUserStorage, userService);
     }
@@ -854,5 +854,29 @@ class FilmorateApplicationTests {
     @Test
     public void getFilmShouldThrowNullPointerExceptionIfFilmIdNotExist() {
         assertThrows(NullPointerException.class, () -> filmController.getFilm(1));
+    }
+
+    @Test
+    public void likeFilmShouldThrowNullPointerExceptionIfUserIdNotExist() {
+        Set<Integer> usersWhoLikeFilm1 = new HashSet<>();
+        Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
+                26), 126, usersWhoLikeFilm1);
+
+        filmController.addFilm(film1);
+        assertEquals(1, filmController.getFilms().size());
+
+        assertThrows(NullPointerException.class, () -> filmController.like(1, 1));
+    }
+
+    @Test
+    public void deleteLikeFilmShouldThrowNullPointerExceptionIfUserIdNotExist() {
+        Set<Integer> usersWhoLikeFilm1 = new HashSet<>();
+        Film film1 = new Film(1, "Маска", "Фильм на века", LocalDate.of(2003, 3,
+                26), 126, usersWhoLikeFilm1);
+
+        filmController.addFilm(film1);
+        assertEquals(1, filmController.getFilms().size());
+
+        assertThrows(NullPointerException.class, () -> filmController.deleteLike(1, 1));
     }
 }
