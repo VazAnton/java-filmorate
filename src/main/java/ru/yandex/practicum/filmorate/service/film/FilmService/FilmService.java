@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,8 +47,8 @@ public class FilmService {
         return chosenFilm;
     }
 
-    public Set<Film> getTopFilms(Integer count) {
-        Set<Film> topFilms = new HashSet<>();
+    public List<Film> getTopFilms(Integer count) {
+        List<Film> topFilms = new ArrayList<>();
         if (!inMemoryFilmStorage.getFilms().isEmpty()) {
             List<Film> allFilms = inMemoryFilmStorage.getFilms().stream()
                     .sorted((film1, film2) -> {
