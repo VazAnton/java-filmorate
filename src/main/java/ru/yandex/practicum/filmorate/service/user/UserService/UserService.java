@@ -29,7 +29,9 @@ public class UserService {
         Set<Integer> friendsOfUser = user.getFriendsOfUser();
         Set<Integer> friendsOfFriend = friend.getFriendsOfUser();
         friendsOfUser.add(friendId);
+        user.setFriendsOfUser(friendsOfUser);
         friendsOfFriend.add(id);
+        friend.setFriendsOfUser(friendsOfFriend);
         return user;
     }
 
@@ -43,7 +45,9 @@ public class UserService {
         Set<Integer> friendsOfFriend = friendOfUser.getFriendsOfUser();
         if (friendsOfUser.contains(friendId) && friendsOfFriend.contains(id)) {
             friendsOfUser.remove(friendId);
+            chosenUser.setFriendsOfUser(friendsOfUser);
             friendsOfFriend.remove(id);
+            friendOfUser.setFriendsOfUser(friendsOfFriend);
         }
         return chosenUser;
     }
