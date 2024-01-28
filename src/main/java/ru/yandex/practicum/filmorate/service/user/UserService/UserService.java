@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,9 +30,7 @@ public class UserService {
         Set<Integer> friendsOfUser = user.getFriendsOfUser();
         Set<Integer> friendsOfFriend = friend.getFriendsOfUser();
         friendsOfUser.add(friendId);
-        user.setFriendsOfUser(friendsOfUser);
         friendsOfFriend.add(id);
-        friend.setFriendsOfUser(friendsOfFriend);
         return user;
     }
 
@@ -45,9 +44,7 @@ public class UserService {
         Set<Integer> friendsOfFriend = friendOfUser.getFriendsOfUser();
         if (friendsOfUser.contains(friendId) && friendsOfFriend.contains(id)) {
             friendsOfUser.remove(friendId);
-            chosenUser.setFriendsOfUser(friendsOfUser);
             friendsOfFriend.remove(id);
-            friendOfUser.setFriendsOfUser(friendsOfFriend);
         }
         return chosenUser;
     }
@@ -58,7 +55,7 @@ public class UserService {
             throw new ObjectNotFoundException("Пользователя с таким номером не существует");
         }
         User chosenUser = inMemoryUserStorage.getUser(id);
-        Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
+        Set<Integer> friendsOfUser = new HashSet<>(chosenUser.getFriendsOfUser());
         User otherUser = inMemoryUserStorage.getUser(otherId);
         Set<Integer> friendsOfOtherUser = otherUser.getFriendsOfUser();
         friendsOfUser.retainAll(friendsOfOtherUser);
