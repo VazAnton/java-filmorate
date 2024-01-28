@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import java.util.Map;
@@ -11,9 +12,9 @@ import java.util.Map;
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler({NullPointerException.class, ObjectNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> nullPointerHandler(final NullPointerException e) {
+    public Map<String, String> nullPointerAndNotFoundObjectHandler(final RuntimeException e) {
         return Map.of("Объект не найден.", e.getMessage());
     }
 

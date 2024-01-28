@@ -4,40 +4,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.film.FilmService.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
 import java.util.List;
 
 @RestController
 public class FilmController {
 
-    protected FilmStorage inMemoryFilmStorage;
-    protected FilmService filmService;
+    private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmStorage inMemoryFilmStorage, FilmService filmService) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
     @PostMapping("/films")
     public Film addFilm(@RequestBody Film film) {
-        return inMemoryFilmStorage.addFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) {
-        return inMemoryFilmStorage.updateFilm(film);
+        return filmService.updateFilm(film);
     }
 
     @GetMapping("/films/{id}")
     public Film getFilm(@PathVariable int id) {
-        return inMemoryFilmStorage.getFilm(id);
+        return filmService.getFilmOutStorage(id);
     }
 
     @GetMapping("/films")
     public List<Film> getFilms() {
-        return inMemoryFilmStorage.getFilms();
+        return filmService.getFilmsOutStorage();
     }
 
     @PutMapping("/films/{id}/like/{userId}")
@@ -53,7 +50,7 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getTopFilms(@RequestParam(required = false) Integer count) {
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") Integer count) {
         return filmService.getTopFilms(count);
     }
 }

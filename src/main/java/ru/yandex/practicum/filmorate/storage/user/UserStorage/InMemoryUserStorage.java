@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -22,33 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User addUser(@RequestBody User user) {
         if (user != null) {
-            if (user.getEmail().isEmpty()) {
-                log.error("Был передан пустой адрес электронной почты.");
-                throw new ValidationException("Адрес алектронной почты не может быть пустым!");
-            } else if (!user.getEmail().contains("@")) {
-                log.error("Было передан неверный адрес электронной почты.");
-                throw new ValidationException("Адрес алектронной почты должен содержать символ @!");
-            }
-            if (user.getLogin().isEmpty()) {
-                log.error("Был передан пустой логин.");
-                throw new ValidationException("Логин пользователя не может быть пустым!");
-            } else if (user.getLogin().contains(" ")) {
-                log.error("Логин пользователя содержит пробелы.");
-                throw new ValidationException("Логин пользователя не может содержать пробелы!");
-            }
-            try {
-                if (user.getName().isEmpty()) {
-                    log.error("Было передано пустое имя пользователя.");
-                    user.setName(user.getLogin());
-                }
-            } catch (NullPointerException nullPointerException) {
-                log.error("При создании пользователя не было указано его имя.");
-                user.setName(user.getLogin());
-            }
-            if (user.getBirthday().isAfter(LocalDate.now())) {
-                log.error("Передана некорректная дата рождения пользователя.");
-                throw new ValidationException("День рождения пользователя не может быть больше текущей даты!");
-            }
+            validate(user);
             if (user.getFriendsOfUser() == null) {
                 Set<Integer> friendsOfUser = new HashSet<>();
                 user.setFriendsOfUser(friendsOfUser);
@@ -66,33 +41,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User updateUser(@RequestBody User user) {
         if (user != null) {
             User chosenUser = users.get(user.getId());
-            if (user.getEmail().isEmpty()) {
-                log.error("Был передан пустой адрес электронной почты.");
-                throw new ValidationException("Адрес алектронной почты не может быть пустым!");
-            } else if (!user.getEmail().contains("@")) {
-                log.error("Было передан неверный адрес электронной почты.");
-                throw new ValidationException("Адрес алектронной почты должен содержать символ @!");
-            }
-            if (user.getLogin().isEmpty()) {
-                log.error("Был передан пустой логин.");
-                throw new ValidationException("Логин пользователя не может быть пустым!");
-            } else if (user.getLogin().contains(" ")) {
-                log.error("Логин пользователя содержит пробелы.");
-                throw new ValidationException("Логин пользователя не может содержать пробелы!");
-            }
-            try {
-                if (user.getName().isEmpty()) {
-                    log.error("Было передано пустое имя пользователя.");
-                    user.setName(user.getLogin());
-                }
-            } catch (NullPointerException nullPointerException) {
-                log.error("При создании пользователя не было указано его имя.");
-                user.setName(user.getLogin());
-            }
-            if (user.getBirthday().isAfter(LocalDate.now())) {
-                log.error("Передана некорректная дата рождения пользователя.");
-                throw new ValidationException("День рождения пользователя не может быть больше текущей даты!");
-            }
+            validate(user);
             chosenUser.setName(user.getName());
             chosenUser.setEmail(user.getEmail());
             chosenUser.setLogin(user.getLogin());
@@ -105,6 +54,47 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
+    private void validate(User user) {
+        if (user.getEmail() == null) {
+            log.error("Не заполнена электронная почта.");
+            throw new NullPointerException("Адрес электронной почты должно быть заполнено!");
+        }
+        if (user.getEmail().isEmpty()) {
+            log.error("Был передан пустой адрес электронной почты.");
+            throw new ValidationException("Адрес алектронной почты не может быть пустым!");
+        } else if (!user.getEmail().contains("@")) {
+            log.error("Было передан неверный адрес электронной почты.");
+            throw new ValidationException("Адрес алектронной почты должен содержать символ @!");
+        }
+        if (user.getLogin() == null) {
+            log.error("Не заполнен логин.");
+            throw new NullPointerException("Логин должен быть заполнен!");
+        }
+        if (user.getLogin().isEmpty()) {
+            log.error("Был передан пустой логин.");
+            throw new ValidationException("Логин пользователя не может быть пустым!");
+        } else if (user.getLogin().contains(" ")) {
+            log.error("Логин пользователя содержит пробелы.");
+            throw new ValidationException("Логин пользователя не может содержать пробелы!");
+        }
+        if (user.getName() == null) {
+            log.error("При создании пользователя не было указано его имя.");
+            user.setName(user.getLogin());
+        }
+        if (user.getName().isEmpty()) {
+            log.error("Было передано пустое имя пользователя.");
+            user.setName(user.getLogin());
+        }
+        if (user.getBirthday() == null) {
+            log.error("Не заполнена дата рождения.");
+            throw new NullPointerException("Дата рождения должна быть заполнена!");
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            log.error("Передана некорректная дата рождения пользователя.");
+            throw new ValidationException("День рождения пользователя не может быть больше текущей даты!");
+        }
+    }
+
     @Override
     public List<User> getUsers() {
         return new ArrayList<>(users.values());
@@ -113,32 +103,8 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User getUser(@PathVariable int id) {
         if (!users.containsKey(id)) {
-            throw new NullPointerException("Внимание пользователя с таким номером не существует!");
+            throw new ObjectNotFoundException("Внимание пользователя с таким номером не существует!");
         }
         return users.get(id);
-    }
-
-    @Override
-    public List<User> getFriendsOfUser(@PathVariable int id) {
-        List<User> friendsOfUser = new ArrayList<>();
-        if (!users.containsKey(id)) {
-            throw new NullPointerException("Внимание пользователя с таким номером не существует!");
-        }
-        User chosenUser = users.get(id);
-        if (!chosenUser.getFriendsOfUser().isEmpty()) {
-            Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
-            for (int friendId : numbersOfFriends) {
-                friendsOfUser.add(users.get(friendId));
-            }
-            friendsOfUser.sort((user1, user2) -> {
-                if (user1.getId() < user2.getId()) {
-                    return -1;
-                } else if (user1.getId() > user2.getId()) {
-                    return 1;
-                }
-                return 0;
-            });
-        }
-        return friendsOfUser;
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
@@ -38,8 +39,8 @@ class FilmorateApplicationTests {
         inMemoryUserStorage = new InMemoryUserStorage();
         userService = new UserService(inMemoryUserStorage);
         filmService = new FilmService(inMemoryFilmStorage, inMemoryUserStorage);
-        filmController = new FilmController(inMemoryFilmStorage, filmService);
-        userController = new UserController(inMemoryUserStorage, userService);
+        filmController = new FilmController(filmService);
+        userController = new UserController(userService);
     }
 
     @Test
@@ -735,11 +736,15 @@ class FilmorateApplicationTests {
     @Test
     public void checkGetCommonFriendsIfOtherUsersNotExist() {
         Set<Integer> friendsOfUser1 = new HashSet<>();
+        Set<Integer> friendsOfUser2 = new HashSet<>();
         User user1 = new User(1, "veniamin.bestVitamin@mail.ru", "Venya", "Вениамин",
                 LocalDate.of(1997, 6, 22), friendsOfUser1);
+        User user2 = new User(2, "Tolik.anabolik@yandex.ru", "Anatolik", "Анатолий",
+                LocalDate.of(1996, 4, 25), friendsOfUser2);
 
         userController.addUser(user1);
-        assertEquals(1, userController.getUsers().size());
+        userController.addUser(user2);
+        assertEquals(2, userController.getUsers().size());
 
         assertEquals(0, userController.getCommonFriends(1, 2).size());
     }
@@ -782,7 +787,7 @@ class FilmorateApplicationTests {
         assertEquals(1, filmController.getFilms().size());
         filmController.like(1, 1);
 
-        assertEquals(1, film1.getUsersWhoLikeFilm().size());
+        assertEquals(1, film1.getLikes().size());
     }
 
     @Test
@@ -799,10 +804,10 @@ class FilmorateApplicationTests {
         filmController.addFilm(film1);
         assertEquals(1, filmController.getFilms().size());
         filmController.like(1, 1);
-        assertEquals(1, film1.getUsersWhoLikeFilm().size());
+        assertEquals(1, film1.getLikes().size());
         filmController.deleteLike(1, 1);
 
-        assertEquals(0, film1.getUsersWhoLikeFilm().size());
+        assertEquals(0, film1.getLikes().size());
     }
 
     @Test
@@ -833,8 +838,8 @@ class FilmorateApplicationTests {
         filmController.like(1, 1);
         filmController.like(1, 2);
         filmController.like(2, 3);
-        assertEquals(2, film1.getUsersWhoLikeFilm().size());
-        assertEquals(1, film2.getUsersWhoLikeFilm().size());
+        assertEquals(2, film1.getLikes().size());
+        assertEquals(1, film2.getLikes().size());
 
         assertEquals(2, filmController.getTopFilms(2).size());
     }
@@ -848,12 +853,12 @@ class FilmorateApplicationTests {
 
     @Test
     public void getUserShouldThrowNullPointerExceptionIfUserIdNotExist() {
-        assertThrows(NullPointerException.class, () -> userController.getUser(1));
+        assertThrows(ObjectNotFoundException.class, () -> userController.getUser(1));
     }
 
     @Test
     public void getFilmShouldThrowNullPointerExceptionIfFilmIdNotExist() {
-        assertThrows(NullPointerException.class, () -> filmController.getFilm(1));
+        assertThrows(ObjectNotFoundException.class, () -> filmController.getFilm(1));
     }
 
     @Test
@@ -865,7 +870,7 @@ class FilmorateApplicationTests {
         filmController.addFilm(film1);
         assertEquals(1, filmController.getFilms().size());
 
-        assertThrows(NullPointerException.class, () -> filmController.like(1, 1));
+        assertThrows(ObjectNotFoundException.class, () -> filmController.like(1, 1));
     }
 
     @Test
@@ -877,6 +882,6 @@ class FilmorateApplicationTests {
         filmController.addFilm(film1);
         assertEquals(1, filmController.getFilms().size());
 
-        assertThrows(NullPointerException.class, () -> filmController.deleteLike(1, 1));
+        assertThrows(ObjectNotFoundException.class, () -> filmController.deleteLike(1, 1));
     }
 }

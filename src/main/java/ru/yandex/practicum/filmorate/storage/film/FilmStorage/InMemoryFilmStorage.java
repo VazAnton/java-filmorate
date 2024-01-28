@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -18,29 +19,15 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(FilmController.class);
     private int nextId = 1;
+    private final LocalDate firstFilmRelease = LocalDate.of(1895, 12, 28);
 
     @Override
     public Film addFilm(@RequestBody Film film) {
         if (film != null) {
-            if (film.getName().isEmpty()) {
-                log.error("Было передано пустое название фильмаю");
-                throw new ValidationException("Название фильма не может быть пустым!");
-            }
-            if (film.getDescription().length() > 200) {
-                log.error("Было передано слишком длинное описание фильма.");
-                throw new ValidationException("Описание к фильму не может содержать более 200 символов!");
-            }
-            if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-                log.error("Введена некорректная дата релиза");
-                throw new ValidationException("Дата релиза не может быть раньше даты релиза первого фильма");
-            }
-            if (film.getDuration() < 0) {
-                log.error("Была передана неверная продолжительность фильма");
-                throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
-            }
-            if (film.getUsersWhoLikeFilm() == null) {
+            validate(film);
+            if (film.getLikes() == null) {
                 Set<Integer> usersWhoLikeFilm = new HashSet<>();
-                film.setUsersWhoLikeFilm(usersWhoLikeFilm);
+                film.setLikes(usersWhoLikeFilm);
             }
             film.setId(nextId++);
             films.put(film.getId(), film);
@@ -55,22 +42,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film updateFilm(@RequestBody Film film) {
         if (film != null && films.containsKey(film.getId())) {
             Film chosenFilm = films.get(film.getId());
-            if (film.getName().isEmpty()) {
-                log.error("Было передано пустое название фильмаю");
-                throw new ValidationException("Название фильма не может быть пустым!");
-            }
-            if (film.getDescription().length() > 200) {
-                log.error("Было передано слишком длинное описание фильма.");
-                throw new ValidationException("Описание к фильму не может содержать более 200 символов!");
-            }
-            if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-                log.error("Введена некорректная дата релиза");
-                throw new ValidationException("Дата релиза не может быть раньше даты релиза первого фильма");
-            }
-            if (film.getDuration() < 0) {
-                log.error("Была передана неверная продолжительность фильма");
-                throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
-            }
+            validate(film);
             chosenFilm.setName(film.getName());
             chosenFilm.setDescription(film.getDescription());
             chosenFilm.setReleaseDate(film.getReleaseDate());
@@ -83,6 +55,37 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
+    private void validate(Film film) {
+        if (film.getName() == null) {
+            log.error("Не заполнено название фильма.");
+            throw new NullPointerException("Название фильма должно быть заполнено");
+        }
+        if (film.getName().isEmpty()) {
+            log.error("Было передано пустое название фильмаю");
+            throw new ValidationException("Название фильма не может быть пустым!");
+        }
+        if (film.getDescription() == null) {
+            log.error("Не заполнено описание к фильму.");
+            throw new ObjectNotFoundException("Описание к фильму должно быть заполнено!");
+        }
+        if (film.getDescription().length() > 200) {
+            log.error("Было передано слишком длинное описание фильма.");
+            throw new ValidationException("Описание к фильму не может содержать более 200 символов!");
+        }
+        if (film.getReleaseDate() == null) {
+            log.error("Не указана дата выхода фильма.");
+            throw new ObjectNotFoundException("Дата фильма должна быть указана при создании!");
+        }
+        if (film.getReleaseDate().isBefore(firstFilmRelease)) {
+            log.error("Введена некорректная дата релиза");
+            throw new ValidationException("Дата релиза не может быть раньше даты релиза первого фильма");
+        }
+        if (film.getDuration() < 0) {
+            log.error("Была передана неверная продолжительность фильма");
+            throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
+        }
+    }
+
     @Override
     public List<Film> getFilms() {
         return new ArrayList<>(films.values());
@@ -91,7 +94,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getFilm(@PathVariable int id) {
         if (!films.containsKey(id)) {
-            throw new NullPointerException("Внимание фильма с таким номером не существует!");
+            throw new ObjectNotFoundException("Внимание фильма с таким номером не существует!");
         }
         return films.get(id);
     }
