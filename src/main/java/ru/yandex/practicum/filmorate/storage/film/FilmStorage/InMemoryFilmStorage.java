@@ -56,33 +56,23 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     private void validate(Film film) {
-        if (film.getName() == null) {
+        if (film.getName() == null || film.getName().isEmpty()) {
             log.error("Не заполнено название фильма.");
-            throw new NullPointerException("Название фильма должно быть заполнено");
+            throw new ValidationException("Название фильма должно быть заполнено!");
         }
-        if (film.getName().isEmpty()) {
-            log.error("Было передано пустое название фильмаю");
-            throw new ValidationException("Название фильма не может быть пустым!");
+        if (film.getDescription() == null || film.getDescription().length() > 200) {
+            log.error("Указана некоректная длина описания фильма.");
+            throw new ValidationException("Описание к фильму должно быть заполнено и не может содержать более 200 " +
+                    "символов!");
         }
-        if (film.getDescription() == null) {
-            log.error("Не заполнено описание к фильму.");
-            throw new ObjectNotFoundException("Описание к фильму должно быть заполнено!");
-        }
-        if (film.getDescription().length() > 200) {
-            log.error("Было передано слишком длинное описание фильма.");
-            throw new ValidationException("Описание к фильму не может содержать более 200 символов!");
-        }
-        if (film.getReleaseDate() == null) {
-            log.error("Не указана дата выхода фильма.");
-            throw new ObjectNotFoundException("Дата фильма должна быть указана при создании!");
-        }
-        if (film.getReleaseDate().isBefore(firstFilmRelease)) {
-            log.error("Введена некорректная дата релиза");
-            throw new ValidationException("Дата релиза не может быть раньше даты релиза первого фильма");
+        if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(firstFilmRelease)) {
+            log.error("Дата выхода фильма введена некорректно.");
+            throw new ValidationException("Дата релиза должна быть указана и не может быть раньше даты релиза первого " +
+                    "фильма!");
         }
         if (film.getDuration() < 0) {
-            log.error("Была передана неверная продолжительность фильма");
-            throw new ValidationException("Продолжительность фильма не может быть отрицаетльной");
+            log.error("Была передана неверная продолжительность фильма.");
+            throw new ValidationException("Продолжительность фильма не может быть отрицаетльной!");
         }
     }
 

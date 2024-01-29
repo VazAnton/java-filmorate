@@ -12,9 +12,9 @@ import java.util.Map;
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
 public class ErrorHandler {
 
-    @ExceptionHandler({NullPointerException.class, ObjectNotFoundException.class})
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> nullPointerAndNotFoundObjectHandler(final RuntimeException e) {
+    public Map<String, String> notFoundObjectHandler(final ObjectNotFoundException e) {
         return Map.of("Объект не найден.", e.getMessage());
     }
 

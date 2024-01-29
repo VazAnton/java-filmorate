@@ -55,43 +55,28 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     private void validate(User user) {
-        if (user.getEmail() == null) {
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
             log.error("Не заполнена электронная почта.");
-            throw new NullPointerException("Адрес электронной почты должно быть заполнено!");
-        }
-        if (user.getEmail().isEmpty()) {
-            log.error("Был передан пустой адрес электронной почты.");
-            throw new ValidationException("Адрес алектронной почты не может быть пустым!");
+            throw new ValidationException("Поле с адресом алектронной почты не может быть пустым!");
         } else if (!user.getEmail().contains("@")) {
             log.error("Было передан неверный адрес электронной почты.");
             throw new ValidationException("Адрес алектронной почты должен содержать символ @!");
         }
-        if (user.getLogin() == null) {
+        if (user.getLogin() == null || user.getLogin().isEmpty()) {
             log.error("Не заполнен логин.");
-            throw new NullPointerException("Логин должен быть заполнен!");
-        }
-        if (user.getLogin().isEmpty()) {
-            log.error("Был передан пустой логин.");
-            throw new ValidationException("Логин пользователя не может быть пустым!");
+            throw new ValidationException("Логин пользователя должен быть заполнен!");
         } else if (user.getLogin().contains(" ")) {
             log.error("Логин пользователя содержит пробелы.");
             throw new ValidationException("Логин пользователя не может содержать пробелы!");
         }
-        if (user.getName() == null) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             log.error("При создании пользователя не было указано его имя.");
             user.setName(user.getLogin());
         }
-        if (user.getName().isEmpty()) {
-            log.error("Было передано пустое имя пользователя.");
-            user.setName(user.getLogin());
-        }
-        if (user.getBirthday() == null) {
-            log.error("Не заполнена дата рождения.");
-            throw new NullPointerException("Дата рождения должна быть заполнена!");
-        }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
+        if (user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Передана некорректная дата рождения пользователя.");
-            throw new ValidationException("День рождения пользователя не может быть больше текущей даты!");
+            throw new ValidationException("День рождения пользователя должен быть указан и не может быть больше " +
+                    "текущей даты!");
         }
     }
 

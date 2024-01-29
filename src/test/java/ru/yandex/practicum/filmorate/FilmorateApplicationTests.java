@@ -66,7 +66,7 @@ class FilmorateApplicationTests {
                 () -> filmController.addFilm(film1)
         );
 
-        assertEquals("Название фильма не может быть пустым!", validationException.getMessage());
+        assertEquals("Название фильма должно быть заполнено!", validationException.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
 
@@ -100,7 +100,7 @@ class FilmorateApplicationTests {
                 () -> filmController.addFilm(film1)
         );
 
-        assertEquals("Описание к фильму не может содержать более 200 символов!",
+        assertEquals("Описание к фильму должно быть заполнено и не может содержать более 200 символов!",
                 validationException.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
@@ -116,7 +116,7 @@ class FilmorateApplicationTests {
                 () -> filmController.addFilm(film1)
         );
 
-        assertEquals("Дата релиза не может быть раньше даты релиза первого фильма",
+        assertEquals("Дата релиза должна быть указана и не может быть раньше даты релиза первого фильма!",
                 validationException.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
@@ -154,7 +154,7 @@ class FilmorateApplicationTests {
                 () -> filmController.addFilm(film1)
         );
 
-        assertEquals("Продолжительность фильма не может быть отрицаетльной",
+        assertEquals("Продолжительность фильма не может быть отрицаетльной!",
                 validationException.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
@@ -202,7 +202,7 @@ class FilmorateApplicationTests {
                 () -> filmController.updateFilm(newFilm1)
         );
 
-        assertEquals("Название фильма не может быть пустым!", validationException.getMessage());
+        assertEquals("Название фильма должно быть заполнено!", validationException.getMessage());
         assertEquals(1, filmController.getFilms().size());
     }
 
@@ -242,7 +242,7 @@ class FilmorateApplicationTests {
                 () -> filmController.updateFilm(newFilm1)
         );
 
-        assertEquals("Описание к фильму не может содержать более 200 символов!",
+        assertEquals("Описание к фильму должно быть заполнено и не может содержать более 200 символов!",
                 validationException.getMessage());
         assertEquals(1, filmController.getFilms().size());
     }
@@ -261,7 +261,7 @@ class FilmorateApplicationTests {
                 () -> filmController.updateFilm(newFilm1)
         );
 
-        assertEquals("Дата релиза не может быть раньше даты релиза первого фильма",
+        assertEquals("Дата релиза должна быть указана и не может быть раньше даты релиза первого фильма!",
                 validationException.getMessage());
         assertEquals(1, filmController.getFilms().size());
     }
@@ -310,7 +310,7 @@ class FilmorateApplicationTests {
                 () -> filmController.updateFilm(newFilm1)
         );
 
-        assertEquals("Продолжительность фильма не может быть отрицаетльной",
+        assertEquals("Продолжительность фильма не может быть отрицаетльной!",
                 validationException.getMessage());
         assertEquals(1, filmController.getFilms().size());
     }
@@ -356,7 +356,7 @@ class FilmorateApplicationTests {
                 () -> userController.addUser(user1)
         );
 
-        assertEquals("Адрес алектронной почты не может быть пустым!", validationException.getMessage());
+        assertEquals("Поле с адресом алектронной почты не может быть пустым!", validationException.getMessage());
         assertEquals(0, userController.getUsers().size());
     }
 
@@ -387,7 +387,7 @@ class FilmorateApplicationTests {
         );
 
         assertEquals(0, userController.getUsers().size());
-        assertEquals("Логин пользователя не может быть пустым!",
+        assertEquals("Логин пользователя должен быть заполнен!",
                 validationException.getMessage());
     }
 
@@ -454,7 +454,7 @@ class FilmorateApplicationTests {
         );
 
         assertEquals(0, userController.getUsers().size());
-        assertEquals("День рождения пользователя не может быть больше текущей даты!",
+        assertEquals("День рождения пользователя должен быть указан и не может быть больше текущей даты!",
                 validationException.getMessage());
     }
 
@@ -501,7 +501,7 @@ class FilmorateApplicationTests {
         );
 
         assertEquals(1, userController.getUsers().size());
-        assertEquals("Адрес алектронной почты не может быть пустым!", validationException.getMessage());
+        assertEquals("Поле с адресом алектронной почты не может быть пустым!", validationException.getMessage());
     }
 
     @Test
@@ -537,7 +537,7 @@ class FilmorateApplicationTests {
         );
 
         assertEquals(1, userController.getUsers().size());
-        assertEquals("Логин пользователя не может быть пустым!",
+        assertEquals("Логин пользователя должен быть заполнен!",
                 validationException.getMessage());
     }
 
@@ -621,7 +621,7 @@ class FilmorateApplicationTests {
         );
 
         assertEquals(1, userController.getUsers().size());
-        assertEquals("День рождения пользователя не может быть больше текущей даты!",
+        assertEquals("День рождения пользователя должен быть указан и не может быть больше текущей даты!",
                 validationException.getMessage());
     }
 

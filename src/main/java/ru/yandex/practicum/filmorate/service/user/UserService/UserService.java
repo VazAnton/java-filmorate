@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
@@ -22,9 +21,6 @@ public class UserService {
     }
 
     public User addFriend(int id, int friendId) {
-        if (inMemoryUserStorage.getUser(id) == null || inMemoryUserStorage.getUser(friendId) == null) {
-            throw new ObjectNotFoundException("Пользователя с таким номером не существует");
-        }
         User user = inMemoryUserStorage.getUser(id);
         User friend = inMemoryUserStorage.getUser(friendId);
         Set<Integer> friendsOfUser = user.getFriendsOfUser();
@@ -35,9 +31,6 @@ public class UserService {
     }
 
     public User deleteFriend(int id, int friendId) {
-        if (inMemoryUserStorage.getUser(id) == null || inMemoryUserStorage.getUser(friendId) == null) {
-            throw new ObjectNotFoundException("Пользователя с таким номером не существует");
-        }
         User chosenUser = inMemoryUserStorage.getUser(id);
         User friendOfUser = inMemoryUserStorage.getUser(friendId);
         Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
@@ -51,9 +44,6 @@ public class UserService {
 
     public List<User> getCommonFriends(int id, int otherId) {
         List<User> commonFriends = new ArrayList<>();
-        if (inMemoryUserStorage.getUser(id) == null || inMemoryUserStorage.getUser(otherId) == null) {
-            throw new ObjectNotFoundException("Пользователя с таким номером не существует");
-        }
         User chosenUser = inMemoryUserStorage.getUser(id);
         Set<Integer> friendsOfUser = new HashSet<>(chosenUser.getFriendsOfUser());
         User otherUser = inMemoryUserStorage.getUser(otherId);
@@ -67,9 +57,6 @@ public class UserService {
 
     public List<User> getFriendsOfUser(int id) {
         List<User> friendsOfUser = new ArrayList<>();
-        if (inMemoryUserStorage.getUser(id) == null) {
-            throw new ObjectNotFoundException("Внимание пользователя с таким номером не существует!");
-        }
         User chosenUser = inMemoryUserStorage.getUser(id);
         if (!chosenUser.getFriendsOfUser().isEmpty()) {
             Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
