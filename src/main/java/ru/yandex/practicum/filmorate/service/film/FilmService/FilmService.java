@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class FilmService {
@@ -59,5 +58,9 @@ public class FilmService {
 
     public Optional<Rating> getRating(int id) {
         return filmStorage.getRating(id);
+    }
+
+    public List<Rating> getRatings() {
+        return filmStorage.getRatings();
     }
 }

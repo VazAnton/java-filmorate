@@ -71,4 +71,9 @@ public class FilmController {
     public Optional<Rating> getRating(@PathVariable int id) {
         return filmService.getRating(id);
     }
+
+    @GetMapping("/films/ratings")
+    public List<Rating> getRatings() {
+        return filmService.getRatings();
+    }
 }
