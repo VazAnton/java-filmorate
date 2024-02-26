@@ -2,86 +2,62 @@ package ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
 
-    private final FilmStorage inMemoryFilmStorage;
-    private final UserStorage inMemoryUserStorage;
+    private final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(FilmStorage inMemoryFilmStorage, UserStorage inMemoryUserStorage) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
-        this.inMemoryUserStorage = inMemoryUserStorage;
+    public FilmService(FilmStorage filmStorage) {
+        this.filmStorage = filmStorage;
     }
 
-    public Film like(int id, int userId) {
-        Film chosenFilm = inMemoryFilmStorage.getFilm(id);
-        Set<Integer> usersWhoLikeFilm = chosenFilm.getLikes();
-        if (inMemoryUserStorage.getUser(userId) == null) {
-            throw new ObjectNotFoundException("Пользователя с таким номером не существует!");
-        }
-        usersWhoLikeFilm.add(userId);
-        return chosenFilm;
+    public void like(int id, int userId) {
+        filmStorage.like(id, userId);
     }
 
-    public Film deleteLike(int id, int userId) {
-        Film chosenFilm = inMemoryFilmStorage.getFilm(id);
-        Set<Integer> likedFilmsOfUsers = chosenFilm.getLikes();
-        if (inMemoryUserStorage.getUser(userId) == null) {
-            throw new ObjectNotFoundException("Пользователя с таким номером не существует!");
-        }
-        likedFilmsOfUsers.remove(userId);
-        return chosenFilm;
+    public void deleteLike(int id, int userId) {
+        filmStorage.deleteLike(id, userId);
     }
 
     public List<Film> getTopFilms(Integer count) {
-        List<Film> topFilms = new ArrayList<>();
-        if (!inMemoryFilmStorage.getFilms().isEmpty()) {
-            List<Film> allFilms = inMemoryFilmStorage.getFilms().stream()
-                    .sorted((film1, film2) -> {
-                        if (film1.getLikes().size() > film2.getLikes().size()) {
-                            return -1;
-                        } else if (film1.getLikes().size() < film2.getLikes().size()) {
-                            return 1;
-                        }
-                        return 0;
-                    })
-                    .collect(Collectors.toList());
-            if (count < 0) {
-                throw new IllegalArgumentException("Было передано отрицательное значение count");
-            }
-            if (!allFilms.isEmpty()) {
-                for (int i = 0; i < count && i < allFilms.size(); i++) {
-                    topFilms.add(allFilms.get(i));
-                }
-            }
-        }
-        return topFilms;
+        return filmStorage.getTopFilms(count);
     }
 
     public Film addFilm(Film film) {
-        return inMemoryFilmStorage.addFilm(film);
+        return filmStorage.addFilm(film);
     }
 
     public Film updateFilm(Film film) {
-        return inMemoryFilmStorage.updateFilm(film);
+        return filmStorage.updateFilm(film);
     }
 
-    public Film getFilmOutStorage(int id) {
-        return inMemoryFilmStorage.getFilm(id);
+    public Optional<Film> getFilmOutStorage(int id) {
+        return filmStorage.getFilm(id);
     }
 
     public List<Film> getFilmsOutStorage() {
-        return inMemoryFilmStorage.getFilms();
+        return filmStorage.getFilms();
+    }
+
+    public Optional<Genre> getGenre(int id) {
+        return filmStorage.getGenre(id);
+    }
+
+    public List<Genre> getGenres() {
+        return filmStorage.getGenres();
+    }
+
+    public Optional<Rating> getRating(int id) {
+        return filmStorage.getRating(id);
     }
 }

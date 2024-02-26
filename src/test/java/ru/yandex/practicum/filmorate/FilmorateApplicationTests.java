@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate;
+/*package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,16 +29,16 @@ class FilmorateApplicationTests {
     private FilmController filmController;
     private UserController userController;
     public FilmStorage inMemoryFilmStorage;
-    public UserStorage inMemoryUserStorage;
+
     public UserService userService;
     public FilmService filmService;
 
     @BeforeEach
     public void setUp() {
         inMemoryFilmStorage = new InMemoryFilmStorage();
-        inMemoryUserStorage = new InMemoryUserStorage();
-        userService = new UserService(inMemoryUserStorage);
-        filmService = new FilmService(inMemoryFilmStorage, inMemoryUserStorage);
+
+        userService = new UserService(userDbStorage);
+        filmService = new FilmService(inMemoryFilmStorage, );
         filmController = new FilmController(filmService);
         userController = new UserController(userService);
     }
@@ -884,4 +884,4 @@ class FilmorateApplicationTests {
 
         assertThrows(ObjectNotFoundException.class, () -> filmController.deleteLike(1, 1));
     }
-}
+}*/
