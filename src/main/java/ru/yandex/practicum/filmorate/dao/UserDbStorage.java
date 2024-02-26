@@ -109,7 +109,7 @@ public class UserDbStorage implements UserStorage {
             users.put(id, user);
             return Optional.of(user);
         }
-        throw new EmptyResultDataAccessException("Внимание! Пользователя с таким номером не существует!", 1);
+        return Optional.empty();
     }
 
     @Override
