@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,7 +33,7 @@ public class UserService {
         return userStorage.getFriendsOfUser(id);
     }
 
-    public Optional<User> getUser(int id) {
+    public User getUser(int id) {
         return userStorage.getUser(id);
     }
 

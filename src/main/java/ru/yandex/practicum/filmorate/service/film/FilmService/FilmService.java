@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FilmService {
@@ -20,12 +19,12 @@ public class FilmService {
         this.filmStorage = filmStorage;
     }
 
-    public void like(int id, int userId) {
-        filmStorage.like(id, userId);
+    public boolean like(int id, int userId) {
+        return filmStorage.like(id, userId);
     }
 
-    public void deleteLike(int id, int userId) {
-        filmStorage.deleteLike(id, userId);
+    public boolean deleteLike(int id, int userId) {
+        return filmStorage.deleteLike(id, userId);
     }
 
     public List<Film> getTopFilms(Integer count) {
@@ -40,7 +39,7 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public Optional<Film> getFilmOutStorage(int id) {
+    public Film getFilmOutStorage(int id) {
         return filmStorage.getFilm(id);
     }
 
@@ -48,7 +47,7 @@ public class FilmService {
         return filmStorage.getFilms();
     }
 
-    public Optional<Genre> getGenre(int id) {
+    public Genre getGenre(int id) {
         return filmStorage.getGenre(id);
     }
 
@@ -56,7 +55,7 @@ public class FilmService {
         return filmStorage.getGenres();
     }
 
-    public Optional<Rating> getRating(int id) {
+    public Rating getRating(int id) {
         return filmStorage.getRating(id);
     }
 

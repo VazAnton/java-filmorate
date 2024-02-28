@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.service.film.FilmService.FilmService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class FilmController {
@@ -31,7 +30,7 @@ public class FilmController {
     }
 
     @GetMapping("/films/{id}")
-    public Optional<Film> getFilm(@PathVariable int id) {
+    public Film getFilm(@PathVariable int id) {
         return filmService.getFilmOutStorage(id);
     }
 
@@ -41,15 +40,15 @@ public class FilmController {
     }
 
     @PutMapping("/films/{id}/like/{userId}")
-    public void like(@PathVariable int id,
-                     @PathVariable int userId) {
-        filmService.like(id, userId);
+    public boolean like(@PathVariable int id,
+                        @PathVariable int userId) {
+        return filmService.like(id, userId);
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
-    public void deleteLike(@PathVariable int id,
-                           @PathVariable int userId) {
-        filmService.deleteLike(id, userId);
+    public boolean deleteLike(@PathVariable int id,
+                              @PathVariable int userId) {
+        return filmService.deleteLike(id, userId);
     }
 
     @GetMapping("/films/popular")
@@ -63,12 +62,12 @@ public class FilmController {
     }
 
     @GetMapping("/films/genres/{id}")
-    public Optional<Genre> getGenre(@PathVariable int id) {
+    public Genre getGenre(@PathVariable int id) {
         return filmService.getGenre(id);
     }
 
     @GetMapping("/films/ratings/{id}")
-    public Optional<Rating> getRating(@PathVariable int id) {
+    public Rating getRating(@PathVariable int id) {
         return filmService.getRating(id);
     }
 

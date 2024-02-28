@@ -2,13 +2,13 @@ package ru.yandex.practicum.filmorate.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public class FilmDbStorage implements FilmStorage {
@@ -140,21 +139,21 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        if (getFilm(film.getId()).isPresent()) {
-            validate(film);
-            jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
-                            "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
-                    film.getDuration(), film.getMpa().getId(), film.getId());
-            if (film.getGenres() != null) {
-                setGenre(film);
-            }
-            return film;
+        if (getFilm(film.getId()) == null) {
+            throw new ObjectNotFoundException("Внимание! Фильма с таким номером не существует!");
         }
-        throw new EmptyResultDataAccessException("Внимание! Фильма с таким номером не существует!", 0);
+        validate(film);
+        jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
+                        "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
+                film.getDuration(), film.getMpa().getId(), film.getId());
+        if (film.getGenres() != null) {
+            setGenre(film);
+        }
+        return film;
     }
 
     @Override
-    public Optional<Film> getFilm(int id) {
+    public Film getFilm(int id) {
         Film film = jdbcTemplate.queryForObject("SELECT f.film_id, " +
                 "f.name AS film_name, " +
                 "f.description, " +
@@ -169,10 +168,10 @@ public class FilmDbStorage implements FilmStorage {
                 "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
                 "WHERE f.film_id = ?;", this::createFilm, id);
-        if (film != null) {
-            return Optional.of(film);
+        if (film == null) {
+            throw new ObjectNotFoundException("ВНимание! Фильма с таким номером не существует!");
         }
-        throw new EmptyResultDataAccessException("Внимание! Фильма с таким номером не существует!", 1);
+        return film;
     }
 
     @Override
@@ -194,14 +193,14 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Optional<Rating> getRating(int id) {
+    public Rating getRating(int id) {
         Rating chosenRating = jdbcTemplate.queryForObject("SELECT* " +
                         "FROM ratings WHERE rating_id = ?",
                 getRatingMapper(), id);
-        if (chosenRating != null) {
-            return Optional.of(chosenRating);
+        if (chosenRating == null) {
+            throw new ObjectNotFoundException("Внимание! Рейтинга с таким номером не существует!");
         }
-        throw new EmptyResultDataAccessException("Внимание! Рейтинга с указанным номером не существует!", 1);
+        return chosenRating;
     }
 
     @Override
@@ -210,13 +209,13 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Optional<Genre> getGenre(int id) {
+    public Genre getGenre(int id) {
         Genre chosenGenre = jdbcTemplate.queryForObject("SELECT* FROM genres WHERE genre_id = ?",
                 FilmDbStorage.getGenreMapper(), id);
-        if (chosenGenre != null) {
-            return Optional.of(chosenGenre);
+        if (chosenGenre == null) {
+            throw new ObjectNotFoundException("Внимание! Жанра с таким номером не существует!");
         }
-        throw new EmptyResultDataAccessException("Внимание! Жанра с указанным номером не существует!", 1);
+        return chosenGenre;
     }
 
     private List<Genre> setGenre(Film film) {
@@ -249,13 +248,15 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public void like(int id, int userId) {
+    public boolean like(int id, int userId) {
         jdbcTemplate.update("INSERT INTO likes (film_id, user_id) VALUES (?, ?);", id, userId);
+        return true;
     }
 
     @Override
-    public void deleteLike(int id, int userId) {
+    public boolean deleteLike(int id, int userId) {
         jdbcTemplate.update("DELETE FROM likes WHERE user_id = ? AND film_id = ?;", userId, id);
+        return true;
     }
 
     @Override

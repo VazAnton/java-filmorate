@@ -2,13 +2,13 @@ package ru.yandex.practicum.filmorate.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public class UserDbStorage implements UserStorage {
@@ -77,13 +76,12 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User updateUser(@RequestBody User user) {
-        if (user != null && users.containsKey(getUser(user.getId()).get().getId())) {
+        if (user != null) {
             validate(user);
             jdbcTemplate.update("UPDATE users set email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?",
                     user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
-            return user;
         }
-        throw new EmptyResultDataAccessException("Внимание! Пользователя с таким номером не существует!", 0);
+        return user;
     }
 
     @Override
@@ -102,20 +100,20 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> getUser(@PathVariable int id) {
+    public User getUser(@PathVariable int id) {
         User user = jdbcTemplate.queryForObject("SELECT* FROM users WHERE user_id = ?",
                 UserDbStorage.getUserMapper(), id);
-        if (user != null) {
-            users.put(id, user);
-            return Optional.of(user);
+        if (user == null) {
+            throw new ObjectNotFoundException("Внимание! Пользователя с таким номером не существует!");
         }
-        return Optional.empty();
+        users.put(id, user);
+        return user;
     }
 
     @Override
     public User addFriend(@PathVariable int id, int friendId) {
-        User user = getUser(id).get();
-        User friend = getUser(friendId).get();
+        User user = getUser(id);
+        User friend = getUser(friendId);
         jdbcTemplate.update("INSERT INTO friends (user_id, friend_id) VALUES (?, ?)", id, friendId);
         if (getFriendsOfUser(id).contains(friend) && getFriendsOfUser(friendId).contains(user)) {
             jdbcTemplate.update("UPDATE friends set status_of_friendship = TRUE WHERE user_id = ? AND user_id = ?",
@@ -129,11 +127,9 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User deleteFriend(int id, int friendId) {
-        User chosenUser = getUser(id).get();
-        User friendOfUser = getUser(friendId).get();
-        if (getFriendsOfUser(id).contains(friendOfUser)) {
-            jdbcTemplate.update("DELETE FROM friends WHERE friend_id=? AND user_id = ?;", friendId, id);
-        }
+        User chosenUser = getUser(id);
+        User friendOfUser = getUser(friendId);
+        jdbcTemplate.update("DELETE FROM friends WHERE friend_id=? AND user_id = ?;", friendId, id);
         return chosenUser;
     }
 

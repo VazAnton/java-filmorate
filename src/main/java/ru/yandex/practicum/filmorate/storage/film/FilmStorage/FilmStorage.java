@@ -5,7 +5,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FilmStorage {
 
@@ -15,19 +14,19 @@ public interface FilmStorage {
 
     List<Film> getFilms();
 
-    Optional<Film> getFilm(int id);
+    Film getFilm(int id);
 
-    void like(int id, int userId);
+    boolean like(int id, int userId);
 
-    void deleteLike(int id, int userId);
+    boolean deleteLike(int id, int userId);
 
     List<Film> getTopFilms(Integer count);
 
-    Optional<Genre> getGenre(int id);
+    Genre getGenre(int id);
 
     List<Genre> getGenres();
 
-    Optional<Rating> getRating(int id);
+    Rating getRating(int id);
 
     List<Rating> getRatings();
 }
