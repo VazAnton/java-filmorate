@@ -6,13 +6,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private static final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
-    private final Map<Integer, User> users = new HashMap<>();
+    //private final Map<Integer, User> users = new HashMap<>();
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -74,7 +72,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        if (user != null) {
+        if (user != null && getUser(user.getId()) != null) {
             validate(user);
             jdbcTemplate.update("UPDATE users set email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?",
                     user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
@@ -99,13 +97,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUser(int id) {
-        User user = jdbcTemplate.queryForObject("SELECT* FROM users WHERE user_id = ?",
+        return jdbcTemplate.queryForObject("SELECT* FROM users WHERE user_id = ?",
                 UserDbStorage.getUserMapper(), id);
-        if (user == null) {
-            throw new ObjectNotFoundException("Внимание! Пользователя с таким номером не существует!");
-        }
-        users.put(id, user);
-        return user;
     }
 
     @Override

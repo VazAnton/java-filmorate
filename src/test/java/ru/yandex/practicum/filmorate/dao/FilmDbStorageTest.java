@@ -30,7 +30,6 @@ class FilmDbStorageTest {
     public void checkAddFilmIfFilmCanPassedValidation() {
         FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
         testedFilm = Film.builder()
-                .id(1)
                 .name("Маска")
                 .description("Фильм Маска -  это захватывающая комедия, где " +
                         "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +

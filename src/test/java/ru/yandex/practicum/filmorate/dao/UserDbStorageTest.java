@@ -200,7 +200,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Super_Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -226,7 +226,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Bicycle")
                 .email("")
@@ -248,7 +248,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Bicycle")
                 .email(null)
@@ -270,7 +270,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik.yandex.ru")
@@ -292,7 +292,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login(null)
                 .email("broken.velik@yandex.ru")
@@ -314,7 +314,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("")
                 .email("broken.velik.yandex.ru")
@@ -336,7 +336,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Bicy cle")
                 .email("broken.velik.yandex.ru")
@@ -358,7 +358,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik.yandex.ru")
@@ -380,7 +380,7 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User updatedUser = User.builder()
-                .id(1)
+                .id(testedUser.getId())
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik.yandex.ru")

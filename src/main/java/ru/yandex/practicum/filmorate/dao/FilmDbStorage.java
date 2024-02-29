@@ -94,8 +94,9 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film createFilm(ResultSet rs, int rowNum) throws SQLException {
+        int rating_id = rs.getInt("rating_id");
         SqlRowSet ratingRow = jdbcTemplate.queryForRowSet("SELECT*" +
-                "FROM ratings");
+                "FROM ratings WHERE rating_id = ?", rating_id);
         SqlRowSet genresRow = jdbcTemplate.queryForRowSet("SELECT f.film_id, " +
                 "g.genre_id, " +
                 "g.name AS genre_name " +
@@ -127,7 +128,7 @@ public class FilmDbStorage implements FilmStorage {
                             "description", film.getDescription(),
                             "release_date", film.getReleaseDate(),
                             "duration", film.getDuration(),
-                            "mpa", film.getMpa().getId()
+                            "rating_id", film.getMpa().getId()
                     )).intValue();
             film.setId(id);
             if (film.getGenres() != null) {
@@ -139,15 +140,14 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        if (getFilm(film.getId()) == null) {
-            throw new ObjectNotFoundException("Внимание! Фильма с таким номером не существует!");
-        }
-        validate(film);
-        jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
-                        "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
-                film.getDuration(), film.getMpa().getId(), film.getId());
-        if (film.getGenres() != null) {
-            setGenre(film);
+        if (film != null && getFilm(film.getId()) != null) {
+            validate(film);
+            jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
+                            "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
+                    film.getDuration(), film.getMpa().getId(), film.getId());
+            if (film.getGenres() != null) {
+                setGenre(film);
+            }
         }
         return film;
     }
@@ -159,7 +159,7 @@ public class FilmDbStorage implements FilmStorage {
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +
-                "r.rating_id, " +
+                "f.rating_id, " +
                 "r.name AS rating_name, " +
                 "g.genre_id, " +
                 "g.name AS genre_name " +
@@ -181,7 +181,7 @@ public class FilmDbStorage implements FilmStorage {
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +
-                "r.rating_id, " +
+                "f.rating_id, " +
                 "r.name AS rating_name, " +
                 "g.genre_id, " +
                 "g.name AS genre_name " +
@@ -249,13 +249,19 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public boolean like(int id, int userId) {
-        jdbcTemplate.update("INSERT INTO likes (film_id, user_id) VALUES (?, ?);", id, userId);
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        if (getFilm(id) != null && userDbStorage.getUser(userId) != null) {
+            jdbcTemplate.update("INSERT INTO likes (film_id, user_id) VALUES (?, ?);", id, userId);
+        }
         return true;
     }
 
     @Override
     public boolean deleteLike(int id, int userId) {
-        jdbcTemplate.update("DELETE FROM likes WHERE user_id = ? AND film_id = ?;", userId, id);
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        if (getFilm(id) != null && userDbStorage.getUser(userId) != null) {
+            jdbcTemplate.update("DELETE FROM likes WHERE user_id = ? AND film_id = ?;", userId, id);
+        }
         return true;
     }
 
@@ -270,18 +276,21 @@ public class FilmDbStorage implements FilmStorage {
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +
-                "r.rating_id, " +
+                "f.rating_id, " +
                 "r.name AS rating_name, " +
-                "g.genre_id, " +
-                "g.name AS genre_name " +
+                "(SELECT GROUP_CONCAT(genre_id) " +
+                "FROM film_genre AS fg " +
+                "WHERE film_id =f.film_id) AS genre_id, " +
+                "(SELECT GROUP_CONCAT(g.name) " +
+                "FROM genres AS g " +
+                "WHERE genre_id IN(SELECT g.genre_id " +
+                "FROM film_genre AS fi_g " +
+                "WHERE film_id=f.film_id)) AS genre_name " +
                 "FROM films AS f " +
-                "LEFT OUTER JOIN film_genre AS fg ON f.film_id=fg.film_id " +
-                "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
-                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id  " +
-                "WHERE f.film_id IN(SELECT film_id " +
-                "FROM likes " +
-                "GROUP BY film_id " +
-                "ORDER BY COUNT(user_id) DESC);", this::createFilm);
+                "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
+                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                "GROUP BY f.film_id " +
+                "ORDER BY COUNT(l.user_id) DESC, f.film_id;", this::createFilm);
         if (!allFilms.isEmpty()) {
             for (int i = 0; i < count && i < allFilms.size(); i++) {
                 topFilms.add(allFilms.get(i));
