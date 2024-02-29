@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -20,22 +19,16 @@ class UserDbStorageTest {
 
     final JdbcTemplate jdbcTemplate;
     User testedUser = User.builder().build();
-    UserDbStorage userDbStorage;
 
     @Autowired
     public UserDbStorageTest(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @BeforeEach
-    public void setUp() {
-        userDbStorage = new UserDbStorage(jdbcTemplate);
-    }
-
     @Test
     public void checkAddUserIfUserCanPasseValidation() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -44,7 +37,7 @@ class UserDbStorageTest {
 
         userDbStorage.addUser(testedUser);
 
-        assertThat(userDbStorage.getUser(1))
+        assertThat(userDbStorage.getUser(testedUser.getId()))
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(testedUser);
@@ -52,8 +45,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCanPasseValidationButHisNameIsEmpty() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -68,8 +61,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseEmailIsEmpty() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("")
@@ -83,8 +76,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseEmailIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email(null)
@@ -98,8 +91,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseEmailNotContainsSpecialSymbol() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik.yandex.ru")
@@ -113,8 +106,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseLoginIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login(null)
                 .email("broken.velik@yandex.ru")
@@ -128,8 +121,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseLoginIsEmpty() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("")
                 .email("broken.velik.yandex.ru")
@@ -143,8 +136,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseLoginContainsBlanks() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicy cle")
                 .email("broken.velik.yandex.ru")
@@ -158,8 +151,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseBirthdayIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik.yandex.ru")
@@ -173,8 +166,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserCantPasseValidationBecauseBirthdayMoreThenNow() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik.yandex.ru")
@@ -188,6 +181,7 @@ class UserDbStorageTest {
 
     @Test
     public void checkAddUserIfUserIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = null;
 
         userDbStorage.addUser(null);
@@ -197,8 +191,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCanPasseValidation() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -223,8 +217,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseEmailIsEmpty() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -245,8 +239,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseEmailIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -267,8 +261,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseEmailNotContainsSpecialSymbol() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -289,8 +283,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseLoginIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -311,8 +305,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseLoginIsEmpty() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -333,8 +327,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseLoginContainsBlanks() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -355,8 +349,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseBirthdayIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -377,8 +371,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserCantPasseValidationBecauseBirthdayMoreThenNow() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -399,8 +393,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkUpdateUserIfUserIsNull() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -415,8 +409,8 @@ class UserDbStorageTest {
 
     @Test
     public void checkGetUserIfUserIsFine() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -434,9 +428,9 @@ class UserDbStorageTest {
 
     @Test
     public void checkGetFriendsOfUserIfUserHaveNotFriends() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         List<User> friends = new ArrayList<>();
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -454,9 +448,9 @@ class UserDbStorageTest {
 
     @Test
     public void checkGetFriendsOfUserIfUserHaveFriends() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         List<User> friends = new ArrayList<>();
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -464,7 +458,6 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User anotherUser = User.builder()
-                .id(2)
                 .name("Сергей")
                 .login("Seryoga")
                 .email("voyu.na_lunu@yandex.ru")
@@ -484,9 +477,9 @@ class UserDbStorageTest {
 
     @Test
     public void checkDeleteFriendsIfUserHaveFriends() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         List<User> friends = new ArrayList<>();
         testedUser = User.builder()
-                .id(1)
                 .name("Валерий")
                 .login("Bicycle")
                 .email("broken.velik@yandex.ru")
@@ -494,7 +487,6 @@ class UserDbStorageTest {
                 .build();
         userDbStorage.addUser(testedUser);
         User anotherUser = User.builder()
-                .id(2)
                 .name("Сергей")
                 .login("Seryoga")
                 .email("voyu.na_lunu@yandex.ru")

@@ -6,8 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -56,7 +54,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public User addUser(@RequestBody User user) {
+    public User addUser(User user) {
         if (user != null) {
             validate(user);
             SimpleJdbcInsert userInsert = new SimpleJdbcInsert(jdbcTemplate)
@@ -75,7 +73,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(User user) {
         if (user != null) {
             validate(user);
             jdbcTemplate.update("UPDATE users set email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?",
@@ -100,7 +98,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public User getUser(@PathVariable int id) {
+    public User getUser(int id) {
         User user = jdbcTemplate.queryForObject("SELECT* FROM users WHERE user_id = ?",
                 UserDbStorage.getUserMapper(), id);
         if (user == null) {
@@ -111,7 +109,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public User addFriend(@PathVariable int id, int friendId) {
+    public User addFriend(int id, int friendId) {
         User user = getUser(id);
         User friend = getUser(friendId);
         jdbcTemplate.update("INSERT INTO friends (user_id, friend_id) VALUES (?, ?)", id, friendId);
