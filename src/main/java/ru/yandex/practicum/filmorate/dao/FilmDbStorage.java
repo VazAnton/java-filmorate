@@ -94,9 +94,9 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film createFilm(ResultSet rs, int rowNum) throws SQLException {
-        int rating_id = rs.getInt("rating_id");
+        int ratingId = rs.getInt("rating_id");
         SqlRowSet ratingRow = jdbcTemplate.queryForRowSet("SELECT*" +
-                "FROM ratings WHERE rating_id = ?", rating_id);
+                "FROM ratings WHERE rating_id = ?", ratingId);
         SqlRowSet genresRow = jdbcTemplate.queryForRowSet("SELECT f.film_id, " +
                 "g.genre_id, " +
                 "g.name AS genre_name " +
