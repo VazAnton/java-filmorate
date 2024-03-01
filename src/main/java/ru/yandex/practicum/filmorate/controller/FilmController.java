@@ -56,22 +56,22 @@ public class FilmController {
         return filmService.getTopFilms(count);
     }
 
-    @GetMapping("/films/genres")
+    @GetMapping("/genres")
     public List<Genre> getGenres() {
         return filmService.getGenres();
     }
 
-    @GetMapping("/films/genres/{id}")
+    @GetMapping("/genres/{id}")
     public Genre getGenre(@PathVariable int id) {
         return filmService.getGenre(id);
     }
 
-    @GetMapping("/films/ratings/{id}")
+    @GetMapping("/mpa/{id}")
     public Rating getRating(@PathVariable int id) {
         return filmService.getRating(id);
     }
 
-    @GetMapping("/films/ratings")
+    @GetMapping("/mpa")
     public List<Rating> getRatings() {
         return filmService.getRatings();
     }

@@ -161,13 +161,14 @@ public class FilmDbStorage implements FilmStorage {
                 "f.duration, " +
                 "f.rating_id, " +
                 "r.name AS rating_name, " +
-                "g.genre_id, " +
-                "g.name AS genre_name " +
+                "GROUP_CONCAT(g.genre_id) AS genre_id, " +
+                "GROUP_CONCAT(g.name) AS genre_name " +
                 "FROM films AS f " +
                 "LEFT OUTER JOIN film_genre AS fg ON f.film_id=fg.film_id " +
                 "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                "WHERE f.film_id = ?;", this::createFilm, id);
+                "WHERE f.film_id = ?" +
+                "GROUP BY f.film_id;", this::createFilm, id);
         if (film == null) {
             throw new ObjectNotFoundException("ВНимание! Фильма с таким номером не существует!");
         }
@@ -183,8 +184,8 @@ public class FilmDbStorage implements FilmStorage {
                 "f.duration, " +
                 "f.rating_id, " +
                 "r.name AS rating_name, " +
-                "g.genre_id, " +
-                "g.name AS genre_name " +
+                "GROUP_CONCAT(g.genre_id) AS genre_id, " +
+                "GROUP_CONCAT(g.name) AS genre_name " +
                 "FROM films AS f " +
                 "LEFT OUTER JOIN film_genre AS fg ON f.film_id=fg.film_id " +
                 "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
@@ -192,7 +193,6 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.film_id;", this::createFilm);
     }
 
-    @Override
     public Rating getRating(int id) {
         Rating chosenRating = jdbcTemplate.queryForObject("SELECT* " +
                         "FROM ratings WHERE rating_id = ?",
