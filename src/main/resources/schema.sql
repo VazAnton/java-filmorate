@@ -47,8 +47,8 @@ CONSTRAINT duration_check CHECK(duration > 0)
 
 CREATE TABLE IF NOT EXISTS film_genre
 (
-film_id INTEGER REFERENCES films(film_id),
-genre_id INTEGER REFERENCES genres(genre_id),
+film_id INTEGER REFERENCES films(film_id) ON DELETE CASCADE,
+genre_id INTEGER REFERENCES genres(genre_id) ON DELETE CASCADE,
 PRIMARY KEY (film_id, genre_id)
 );
 

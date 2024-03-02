@@ -74,13 +74,13 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private List<Genre> createGenres(SqlRowSet genresRow) throws SQLException {
-        if (genresRow.next()) {
-            List<Genre> genres = new ArrayList<>();
+        List<Genre> genres = new ArrayList<>();
+        while (genresRow.next()) {
             String genreIds = genresRow.getString("genre_id");
             String genreNames = genresRow.getString("name");
-            if (genreIds != null && genreNames != null) {
+            if (genreIds != null) {
                 String[] ids = genreIds.split(",");
-                String[] names = genreIds.split(",");
+                String[] names = genreNames.split(",");
                 for (int i = 0; i < ids.length; i++) {
                     genres.add(Genre.builder()
                             .id(Integer.parseInt(ids[i]))
@@ -88,22 +88,21 @@ public class FilmDbStorage implements FilmStorage {
                             .build());
                 }
             }
-            return genres;
         }
-        throw new SQLException();
+        return genres;
     }
 
     private Film createFilm(ResultSet rs, int rowNum) throws SQLException {
-        int ratingId = rs.getInt("rating_id");
-        SqlRowSet ratingRow = jdbcTemplate.queryForRowSet("SELECT*" +
-                "FROM ratings WHERE rating_id = ?", ratingId);
-        SqlRowSet genresRow = jdbcTemplate.queryForRowSet("SELECT f.film_id, " +
-                "g.genre_id, " +
-                "g.name AS genre_name " +
+        SqlRowSet ratingRow = jdbcTemplate.queryForRowSet("SELECT r.* " +
                 "FROM films AS f " +
-                "LEFT OUTER JOIN film_genre AS fg ON f.film_id=fg.film_id " +
-                "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
-                "GROUP BY f.film_id;");
+                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                "WHERE r.rating_id=f.rating_id;");
+        SqlRowSet genresRow = jdbcTemplate.queryForRowSet("SELECT g.* " +
+                "FROM genres AS g " +
+                "WHERE g.genre_id IN(SELECT fg.genre_id " +
+                "FROM film_genre AS fg " +
+                "LEFT OUTER JOIN films AS f ON f.film_id=fg.film_id " +
+                "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id)");
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("name"))
@@ -131,9 +130,7 @@ public class FilmDbStorage implements FilmStorage {
                             "rating_id", film.getMpa().getId()
                     )).intValue();
             film.setId(id);
-            if (film.getGenres() != null) {
-                setGenre(film);
-            }
+            setGenre(film);
         }
         return film;
     }
@@ -145,9 +142,7 @@ public class FilmDbStorage implements FilmStorage {
             jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
                             "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
                     film.getDuration(), film.getMpa().getId(), film.getId());
-            if (film.getGenres() != null) {
-                setGenre(film);
-            }
+            setGenre(film);
         }
         return film;
     }
@@ -218,7 +213,10 @@ public class FilmDbStorage implements FilmStorage {
         return chosenGenre;
     }
 
-    private List<Genre> setGenre(Film film) {
+    private void setGenre(Film film) {
+        if (film.getGenres() == null) {
+            return;
+        }
         List<Genre> genres = new ArrayList<>(film.getGenres());
         genres.sort((genre1, genre2) -> genre1.getId() - genre2.getId());
         removeGenre(film.getId());
@@ -235,7 +233,6 @@ public class FilmDbStorage implements FilmStorage {
                         return genres.size();
                     }
                 });
-        return genres;
     }
 
     private void removeGenre(int filmId) {
