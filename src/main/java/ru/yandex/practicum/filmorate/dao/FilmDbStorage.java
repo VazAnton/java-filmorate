@@ -147,7 +147,7 @@ public class FilmDbStorage implements FilmStorage {
                     film.getDuration(), film.getMpa().getId(), film.getId());
             setGenre(film);
         }
-        return film;
+        return getFilm(film.getId());
     }
 
     @Override
