@@ -73,11 +73,11 @@ public class FilmDbStorage implements FilmStorage {
         throw new SQLException();
     }
 
-    private List<Genre> createGenres(SqlRowSet genresRow) throws SQLException {
+    private List<Genre> createGenres(SqlRowSet genreRow) throws SQLException {
         List<Genre> genres = new ArrayList<>();
-        while (genresRow.next()) {
-            String genreIds = genresRow.getString("genre_id");
-            String genreNames = genresRow.getString("name");
+        while (genreRow.next()) {
+            String genreIds = genreRow.getString("genre_id");
+            String genreNames = genreRow.getString("name");
             if (genreIds != null) {
                 String[] ids = genreIds.split(",");
                 String[] names = genreNames.split(",");
@@ -93,16 +93,19 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film createFilm(ResultSet rs, int rowNum) throws SQLException {
-        SqlRowSet ratingRow = jdbcTemplate.queryForRowSet("SELECT r.* " +
+        SqlRowSet ratingRow = jdbcTemplate.queryForRowSet("SELECT f.rating_id AS rating_id, " +
+                "r.name AS name " +
                 "FROM films AS f " +
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                "WHERE r.rating_id=f.rating_id;");
-        SqlRowSet genresRow = jdbcTemplate.queryForRowSet("SELECT g.* " +
+                "WHERE r.rating_id=f.rating_id AND f.film_id = ?;", rs.getInt("film_id"));
+        SqlRowSet genresRow = jdbcTemplate.queryForRowSet("SELECT g.genre_id AS genre_id, " +
+                "g.name AS name  " +
                 "FROM genres AS g " +
                 "WHERE g.genre_id IN(SELECT fg.genre_id " +
                 "FROM film_genre AS fg " +
                 "LEFT OUTER JOIN films AS f ON f.film_id=fg.film_id " +
-                "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id)");
+                "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
+                "WHERE fg.film_id=f.film_id AND f.film_id = ?);", rs.getInt("film_id"));
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("name"))
@@ -150,12 +153,12 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film getFilm(int id) {
         Film film = jdbcTemplate.queryForObject("SELECT f.film_id, " +
-                "f.name AS film_name, " +
+                "f.name , " +
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +
-                "f.rating_id, " +
-                "r.name AS rating_name, " +
+                "f.rating_id AS rating_id, " +
+                "r.name AS rating_name , " +
                 "GROUP_CONCAT(g.genre_id) AS genre_id, " +
                 "GROUP_CONCAT(g.name) AS genre_name " +
                 "FROM films AS f " +
@@ -173,14 +176,14 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getFilms() {
         return jdbcTemplate.query("SELECT f.film_id, " +
-                "f.name AS film_name, " +
+                "f.name , " +
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +
                 "f.rating_id, " +
-                "r.name AS rating_name, " +
+                "r.name , " +
                 "GROUP_CONCAT(g.genre_id) AS genre_id, " +
-                "GROUP_CONCAT(g.name) AS genre_name " +
+                "GROUP_CONCAT(g.name) AS name " +
                 "FROM films AS f " +
                 "LEFT OUTER JOIN film_genre AS fg ON f.film_id=fg.film_id " +
                 "LEFT OUTER JOIN genres AS g ON fg.genre_id=g.genre_id " +
@@ -213,14 +216,14 @@ public class FilmDbStorage implements FilmStorage {
         return chosenGenre;
     }
 
-    private void setGenre(Film film) {
+    private List<Genre> setGenre(Film film) {
         if (film.getGenres() == null) {
-            return;
+            return new ArrayList<>();
         }
         List<Genre> genres = new ArrayList<>(film.getGenres());
         genres.sort((genre1, genre2) -> genre1.getId() - genre2.getId());
         removeGenre(film.getId());
-        jdbcTemplate.batchUpdate("INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?);",
+        jdbcTemplate.batchUpdate("MERGE INTO film_genre (film_id, genre_id) VALUES (?, ?);",
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -233,6 +236,7 @@ public class FilmDbStorage implements FilmStorage {
                         return genres.size();
                     }
                 });
+        return genres;
     }
 
     private void removeGenre(int filmId) {
