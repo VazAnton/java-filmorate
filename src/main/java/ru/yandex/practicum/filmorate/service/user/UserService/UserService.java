@@ -5,81 +5,47 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserService {
 
-    private final UserStorage inMemoryUserStorage;
+    private final UserStorage userStorage;
 
     @Autowired
-    public UserService(UserStorage inMemoryUserStorage) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
+    public UserService(UserStorage userStorage) {
+        this.userStorage = userStorage;
     }
 
     public User addFriend(int id, int friendId) {
-        User user = inMemoryUserStorage.getUser(id);
-        User friend = inMemoryUserStorage.getUser(friendId);
-        Set<Integer> friendsOfUser = user.getFriendsOfUser();
-        Set<Integer> friendsOfFriend = friend.getFriendsOfUser();
-        friendsOfUser.add(friendId);
-        friendsOfFriend.add(id);
-        return user;
+        return userStorage.addFriend(id, friendId);
     }
 
     public User deleteFriend(int id, int friendId) {
-        User chosenUser = inMemoryUserStorage.getUser(id);
-        User friendOfUser = inMemoryUserStorage.getUser(friendId);
-        Set<Integer> friendsOfUser = chosenUser.getFriendsOfUser();
-        Set<Integer> friendsOfFriend = friendOfUser.getFriendsOfUser();
-        if (friendsOfUser.contains(friendId) && friendsOfFriend.contains(id)) {
-            friendsOfUser.remove(friendId);
-            friendsOfFriend.remove(id);
-        }
-        return chosenUser;
+        return userStorage.deleteFriend(id, friendId);
     }
 
     public List<User> getCommonFriends(int id, int otherId) {
-        List<User> commonFriends = new ArrayList<>();
-        User chosenUser = inMemoryUserStorage.getUser(id);
-        Set<Integer> friendsOfUser = new HashSet<>(chosenUser.getFriendsOfUser());
-        User otherUser = inMemoryUserStorage.getUser(otherId);
-        Set<Integer> friendsOfOtherUser = otherUser.getFriendsOfUser();
-        friendsOfUser.retainAll(friendsOfOtherUser);
-        for (int commonFriendId : friendsOfUser) {
-            commonFriends.add(inMemoryUserStorage.getUser(commonFriendId));
-        }
-        return commonFriends;
+        return userStorage.getCommonFriends(id, otherId);
     }
 
     public List<User> getFriendsOfUser(int id) {
-        List<User> friendsOfUser = new ArrayList<>();
-        User chosenUser = inMemoryUserStorage.getUser(id);
-        if (!chosenUser.getFriendsOfUser().isEmpty()) {
-            Set<Integer> numbersOfFriends = chosenUser.getFriendsOfUser();
-            for (int friendId : numbersOfFriends) {
-                friendsOfUser.add(inMemoryUserStorage.getUser(friendId));
-            }
-        }
-        return friendsOfUser;
+        return userStorage.getFriendsOfUser(id);
     }
 
-    public User getUserOutStorage(int id) {
-        return inMemoryUserStorage.getUser(id);
+    public User getUser(int id) {
+        return userStorage.getUser(id);
     }
 
     public User addUser(User user) {
-        return inMemoryUserStorage.addUser(user);
+        return userStorage.addUser(user);
     }
 
     public User updateUser(User user) {
-        return inMemoryUserStorage.updateUser(user);
+        return userStorage.updateUser(user);
     }
 
     public List<User> getUsersOutStorage() {
-        return inMemoryUserStorage.getUsers();
+        return userStorage.getUsers();
     }
 }

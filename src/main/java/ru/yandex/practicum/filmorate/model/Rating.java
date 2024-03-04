@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-
+@Data
 @AllArgsConstructor
 @Builder
-@Data
-public class User {
+public class Rating {
     private int id;
-    private String email;
-    private String login;
     private String name;
-    private LocalDate birthday;
 }

@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-
+@Data
 @AllArgsConstructor
 @Builder
-@Data
-public class User {
-    private int id;
-    private String email;
-    private String login;
+public class Genre {
+    private Integer id;
     private String name;
-    private LocalDate birthday;
 }
