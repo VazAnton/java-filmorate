@@ -151,6 +151,15 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
+    public boolean removeFilmById(int id) {
+        if (getFilm(id) != null) {
+            jdbcTemplate.update("DELETE FROM films WHERE film_id = ?", id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Film getFilm(int id) {
         Film film = jdbcTemplate.queryForObject("SELECT f.film_id, " +
                 "f.name , " +
