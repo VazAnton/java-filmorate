@@ -314,4 +314,24 @@ class FilmDbStorageTest {
         assertNotNull(filmDbStorage.getGenres());
         assertEquals(5, filmDbStorage.getRatings().size());
     }
+
+    @Test
+    public void checkDeleteFilm() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedFilm = Film.builder()
+                .name("Маска")
+                .description("Фильм Маска -  это захватывающая комедия, где " +
+                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
+                        "невероятные суперсилы. " +
+                        "Фильм смешной и непременно заставит вас улыбнуться.")
+                .duration(126)
+                .releaseDate(LocalDate.of(2003, 3,
+                        26))
+                .mpa(Rating.builder().id(4).build())
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        assertEquals(1, filmDbStorage.getFilms().size());
+
+        assertTrue(filmDbStorage.deleteFilmById(testedFilm.getId()));
+    }
 }

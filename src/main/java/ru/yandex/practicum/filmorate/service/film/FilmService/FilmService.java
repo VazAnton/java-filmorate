@@ -62,4 +62,8 @@ public class FilmService {
     public List<Rating> getRatings() {
         return filmStorage.getRatings();
     }
+
+    public boolean deleteFilmById(int id) {
+        return filmStorage.deleteFilmById(id);
+    }
 }

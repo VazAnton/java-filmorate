@@ -29,4 +29,6 @@ public interface FilmStorage {
     Rating getRating(int id);
 
     List<Rating> getRatings();
+
+    boolean deleteFilmById(int id);
 }
