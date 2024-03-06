@@ -150,6 +150,8 @@ public class FilmDbStorage implements FilmStorage {
         return getFilm(film.getId());
     }
 
+    //коммент
+
     @Override
     public Film getFilm(int id) {
         Film film = jdbcTemplate.queryForObject("SELECT f.film_id, " +
