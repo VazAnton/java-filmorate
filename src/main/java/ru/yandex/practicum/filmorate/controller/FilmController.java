@@ -75,4 +75,10 @@ public class FilmController {
     public List<Rating> getRatings() {
         return filmService.getRatings();
     }
+
+    @DeleteMapping("/films/{id}")
+    public boolean deleteFilmById(@PathVariable int id) {
+        return filmService.deleteFilmById(id);
+    }
+
 }

@@ -503,4 +503,19 @@ class UserDbStorageTest {
                 .usingRecursiveComparison()
                 .isEqualTo(friends);
     }
+
+    @Test
+    public void checkDeleteUser() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        testedUser = User.builder()
+                .name("Валерий")
+                .login("Bicycle")
+                .email("broken.velik@yandex.ru")
+                .birthday(LocalDate.of(1999, 5, 22))
+                .build();
+        userDbStorage.addUser(testedUser);
+        assertEquals(1, userDbStorage.getUsers().size());
+
+        assertTrue(userDbStorage.deleteUserById(testedUser.getId()));
+    }
 }

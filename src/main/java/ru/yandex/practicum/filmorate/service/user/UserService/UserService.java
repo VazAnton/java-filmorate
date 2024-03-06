@@ -48,4 +48,8 @@ public class UserService {
     public List<User> getUsersOutStorage() {
         return userStorage.getUsers();
     }
+
+    public boolean deleteUserById(int id) {
+        return userStorage.deleteUserById(id);
+    }
 }
