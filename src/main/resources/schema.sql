@@ -29,9 +29,10 @@ CONSTRAINT login_not_empty_check CHECK(login <> '')
 
 CREATE TABLE IF NOT EXISTS friends
 (
-user_id INTEGER REFERENCES users(user_id),
-friend_id INTEGER REFERENCES users(user_id),
-status_of_friendship BOOLEAN NOT NULL DEFAULT FALSE
+user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+friend_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+status_of_friendship BOOLEAN NOT NULL DEFAULT FALSE,
+PRIMARY KEY(user_id, friend_id)
 );
 
 CREATE TABLE IF NOT EXISTS films
