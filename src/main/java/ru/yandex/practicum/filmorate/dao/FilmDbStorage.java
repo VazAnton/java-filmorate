@@ -308,4 +308,31 @@ public class FilmDbStorage implements FilmStorage {
         }
         return topFilms;
     }
+
+    @Override
+    public List<Film> likeFilms(int userId){
+        getFilm(userId);
+        String query = "SELECT f.film_id, " +
+                "f.name AS film_name, " +
+                "f.description, " +
+                "f.release_date, " +
+                "f.duration, " +
+                "f.rating_id, " +
+                "r.name AS rating_name, " +
+                "(SELECT GROUP_CONCAT(genre_id) " +
+                "FROM film_genre AS fg " +
+                "WHERE film_id =f.film_id) AS genre_id, " +
+                "(SELECT GROUP_CONCAT(g.name) " +
+                "FROM genres AS g " +
+                "WHERE genre_id IN(SELECT g.genre_id " +
+                "FROM film_genre AS fi_g " +
+                "WHERE film_id=f.film_id)) AS genre_name " +
+                "FROM films AS f " +
+                "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
+                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                "Where f.film_id IN (Select film_id from likes where user_id = ?) "+
+                "GROUP BY f.film_id " +
+                "ORDER BY COUNT(l.user_id) DESC, f.film_id;";
+        return jdbcTemplate.query(query, this::createFilm, userId);
+    }
 }

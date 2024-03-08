@@ -31,4 +31,6 @@ public interface FilmStorage {
     List<Rating> getRatings();
 
     boolean deleteFilmById(int id);
+
+    List<Film> likeFilms(int userId);
 }
