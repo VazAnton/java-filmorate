@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -81,4 +82,35 @@ public class FilmController {
         return filmService.deleteFilmById(id);
     }
 
+    @PostMapping("/directors")
+    public Director addDirector(@RequestBody Director director) {
+        return filmService.addDirector(director);
+    }
+
+    @PutMapping("/directors")
+    public Director updateDirector(@RequestBody Director director) {
+        return filmService.updateDirector(director);
+    }
+
+    @GetMapping("/directors")
+    public List<Director> getDirectors() {
+        return filmService.getDirectors();
+    }
+
+    @GetMapping("/directors/{id}")
+    public Director getDirector(@PathVariable int id) {
+        return filmService.getDirector(id);
+    }
+
+    @DeleteMapping("/directors/{id}")
+    public boolean deleteDirector(@PathVariable int id) {
+        return filmService.deleteDirector(id);
+    }
+
+    @GetMapping("/films/director/{directorId}")
+    public List<Film> getFilmsOfDirector(@PathVariable int directorId,
+                                         @RequestParam(required = false) String year,
+                                         @RequestParam(required = false) String likes) {
+        return filmService.getFilmsOfDirector(directorId, year, likes);
+    }
 }
