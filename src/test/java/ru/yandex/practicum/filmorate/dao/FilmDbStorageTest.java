@@ -6,10 +6,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -259,6 +262,12 @@ class FilmDbStorageTest {
     public void checkGetTopFilms() {
         FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        List<Genre> genre=new ArrayList<>();
+        Genre a=Genre.builder()
+                .name("A")
+                .id(2)
+                .build();
+        genre.add(a);
         testedFilm = Film.builder()
                 .name("Маска")
                 .description("Фильм Маска -  это захватывающая комедия, где " +
@@ -269,6 +278,7 @@ class FilmDbStorageTest {
                 .releaseDate(LocalDate.of(2003, 3,
                         26))
                 .mpa(Rating.builder().id(4).build())
+                .genres(genre)
                 .build();
         filmDbStorage.addFilm(testedFilm);
         Film anotherFilm = Film.builder()
@@ -277,6 +287,7 @@ class FilmDbStorageTest {
                 .duration(194)
                 .releaseDate(LocalDate.of(1998, 2, 20))
                 .mpa(Rating.builder().id(5).build())
+                .genres(genre)
                 .build();
         filmDbStorage.addFilm(anotherFilm);
         testedUser = User.builder()
@@ -292,13 +303,14 @@ class FilmDbStorageTest {
                 .email("voyu.na_lunu@yandex.ru")
                 .birthday(LocalDate.of(1997, 6, 13))
                 .build();
+
         userDbStorage.addUser(anotherUser);
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
-
-        assertNotNull(filmDbStorage.getTopFilms(2));
-        assertEquals(2, filmDbStorage.getTopFilms(2).size());
+        List <Film>nFilm= filmDbStorage.getTopFilms(10,2,1998);
+        assertNotNull(filmDbStorage.getTopFilms(10,2,1998));
+        assertEquals(1, filmDbStorage.getTopFilms(2,2,1998).size());
     }
 
     @Test
