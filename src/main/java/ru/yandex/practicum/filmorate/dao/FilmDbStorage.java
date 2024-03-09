@@ -283,29 +283,35 @@ public class FilmDbStorage implements FilmStorage {
         String param;
         String bound = " LIMIT " + count;
 
-        String sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, " +
-                "fm.rating_id, m.NAME as mpa_name FROM films f " +
+        String sql = "SELECT f.film_id," +
+                " f.name," +
+                " f.description," +
+                " f.release_date," +
+                " f.duration," +
+                " f.rating_id, " +
+                //"fm.rating_id, " +
+                "m.NAME as mpa_name FROM films f " +
                 "LEFT JOIN (SELECT * FROM ratings) fm ON f.rating_id = fm.rating_id " +
                 "LEFT  JOIN likes AS l ON f.film_id=l.film_id " +
                 "LEFT JOIN (SELECT * FROM FILM_GENRE) fg ON f.film_id = fg.FILM_ID " +
                 "LEFT JOIN ratings m ON m.rating_id = fm.rating_id ";//+
         if (genreId > 0 && year > 0) {
-            param = " WHERE fg.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC ";
+            param = " WHERE fg.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id ";
         } else if (genreId > 0 && year == 0) {
-            param = " WHERE fg.genre_id = " + genreId + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC ";
+            param = " WHERE fg.genre_id = " + genreId + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
         } else if (genreId == 0 && year > 0) {
-            param = " WHERE YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC ";
+            param = " WHERE YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
         } else {
-            param = "GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC ";
+            param = "GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC, f.film_id";
         }
 
         List<Film> allFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);
 
-        if (allFilms.isEmpty()) {
-            log.info("No films found in database");
-            return allFilms;
-        }
-        log.info("Total films found in database: " + allFilms.size());
+        //  if (allFilms.isEmpty()) {
+        //      log.info("No films found in database");
+        //      return allFilms;
+        //  }
+        //  log.info("Total films found in database: " + allFilms.size());
         List<Film> topFilms = new ArrayList<>();
         if (!allFilms.isEmpty()) {
             for (int i = 0; i < count && i < allFilms.size(); i++) {
