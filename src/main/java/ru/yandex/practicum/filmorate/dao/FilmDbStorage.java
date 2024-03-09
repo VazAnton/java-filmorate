@@ -280,7 +280,7 @@ public class FilmDbStorage implements FilmStorage {
         if (count < 0) {
             throw new IllegalArgumentException("Было передано отрицательное значение count");
         }
-        String param;
+        //String param;
         String bound = " LIMIT " + count;
 
         //    String sql = "SELECT f.film_id," +
@@ -312,19 +312,20 @@ public class FilmDbStorage implements FilmStorage {
                 "WHERE film_id=f.film_id)) AS genre_name " +
                 "FROM films AS f " +
                 "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
-                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id ";
+                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                "GROUP BY f.film_id " +
+                "ORDER BY COUNT(l.user_id) DESC, f.film_id;";//, this::createFilm);
+        //  if (genreId > 0 && year > 0) {
+        //    param = " WHERE g.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id ";
+        //} else if (genreId > 0 && year == 0) {
+        //  param = " WHERE g.genre_id = " + genreId + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
+        // } else if (genreId == 0 && year > 0) {
+        //   param = " WHERE YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
+        //} else {
+        //  param = "GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC, f.film_id";
+        //}
 
-        if (genreId > 0 && year > 0) {
-            param = " WHERE g.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id ";
-        } else if (genreId > 0 && year == 0) {
-            param = " WHERE g.genre_id = " + genreId + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
-        } else if (genreId == 0 && year > 0) {
-            param = " WHERE YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
-        } else {
-            param = "GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC, f.film_id";
-        }
-
-        List<Film> allFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);
+        List<Film> allFilms = jdbcTemplate.query(sql, this::createFilm);
 
         //  if (allFilms.isEmpty()) {
         //      log.info("No films found in database");
