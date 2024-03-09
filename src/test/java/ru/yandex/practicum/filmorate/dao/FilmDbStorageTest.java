@@ -269,18 +269,18 @@ class FilmDbStorageTest {
                 .build();
         genre.add(a);
         List<Genre> genre1 = new ArrayList<>();
-        Genre B = Genre.builder()
+        Genre b = Genre.builder()
                 .name("B")
                 .id(1)
                 .build();
-        genre1.add(B);
+        genre1.add(b);
 
         List<Genre> genre3 = new ArrayList<>();
-        Genre C = Genre.builder()
+        Genre c = Genre.builder()
                 .name("C")
                 .id(3)
                 .build();
-        genre3.add(C);
+        genre3.add(c);
         testedFilm = Film.builder()
                 .name("Маска")
                 .description("Фильм Маска -  это захватывающая комедия, где ")
