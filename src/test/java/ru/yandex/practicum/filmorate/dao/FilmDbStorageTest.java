@@ -3,13 +3,14 @@ package ru.yandex.practicum.filmorate.dao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Rating;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +21,7 @@ class FilmDbStorageTest {
     final JdbcTemplate jdbcTemplate;
     Film testedFilm = Film.builder().build();
     User testedUser = User.builder().build();
+    Director testedDirector = Director.builder().build();
 
     @Autowired
     public FilmDbStorageTest(JdbcTemplate jdbcTemplate) {
@@ -333,5 +335,145 @@ class FilmDbStorageTest {
         assertEquals(1, filmDbStorage.getFilms().size());
 
         assertTrue(filmDbStorage.deleteFilmById(testedFilm.getId()));
+    }
+
+    @Test
+    public void addDirectorShouldThrowValidationExceptionIfDirectorNameIsNull() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedDirector = Director.builder()
+                .name(null)
+                .build();
+
+        assertThrows(ValidationException.class, () -> filmDbStorage.addDirector(testedDirector));
+    }
+
+    @Test
+    public void addDirectorShouldThrowValidationExceptionIfDirectorNameIsBlank() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedDirector = Director.builder()
+                .name(" ")
+                .build();
+
+        assertThrows(ValidationException.class, () -> filmDbStorage.addDirector(testedDirector));
+    }
+
+    @Test
+    public void checkAddDirectorIfDirectorCanPassValidation() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedDirector = Director.builder()
+                .name("Квентин Тарантино")
+                .build();
+
+        filmDbStorage.addDirector(testedDirector);
+
+        assertThat(filmDbStorage.getDirector(testedDirector.getId()))
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(testedDirector);
+    }
+
+    @Test
+    public void checkUpdateDirectorIfDirectorCanPassValidation() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedDirector = Director.builder()
+                .name("Квентин Тарантино")
+                .build();
+        filmDbStorage.addDirector(testedDirector);
+        Director updatedDirector = Director.builder()
+                .id(1)
+                .name("Тарантино")
+                .build();
+
+        assertThat(filmDbStorage.updateDirector(updatedDirector))
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(filmDbStorage.getDirector(testedDirector.getId()));
+    }
+
+    @Test
+    public void checkGetDirectors() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedDirector = Director.builder()
+                .name("Квентин Тарантино")
+                .build();
+        filmDbStorage.addDirector(testedDirector);
+        Director anotherDirector = Director.builder()
+                .name("Вес Крейвен")
+                .build();
+        filmDbStorage.addDirector(anotherDirector);
+
+        assertEquals(2, filmDbStorage.getDirectors().size());
+    }
+
+    @Test
+    public void checkDeleteDirectorIfDirectorExists() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedDirector = Director.builder()
+                .name("Квентин Тарантино")
+                .build();
+        filmDbStorage.addDirector(testedDirector);
+
+        assertTrue(filmDbStorage.deleteDirector(testedDirector.getId()));
+    }
+
+    @Test
+    public void deleteDirectorShouldThrowEmptyResultExceptionIfDirectorNotExists() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        assertEquals(0, filmDbStorage.getDirectors().size());
+
+        assertThrows(EmptyResultDataAccessException.class, () -> filmDbStorage.deleteDirector(1));
+    }
+
+    @Test
+    public void checkUpdateFilmIfFilmHaveNewDirector() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        List<Genre> filmGenres = new ArrayList<>();
+        Genre genre2 = Genre.builder()
+                .id(2)
+                .build();
+        Genre genre6 = Genre.builder()
+                .id(6)
+                .build();
+        filmGenres.add(genre2);
+        filmGenres.add(genre6);
+        testedDirector = Director.builder()
+                .name("Квентин Тарантино")
+                .build();
+        filmDbStorage.addDirector(testedDirector);
+        testedFilm = Film.builder()
+                .name("Бешеные псы")
+                .description("Фильм рассказывает историю группы грабителей, " +
+                        "которая после неудачного ограбления убегает в скромный склад, " +
+                        "где происходит настоящая драма.")
+                .duration(100)
+                .releaseDate(LocalDate.of(1992, 8, 10))
+                .mpa(Rating.builder()
+                        .id(5)
+                        .build())
+                .genres(filmGenres)
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        assertFalse(filmDbStorage.getFilms().isEmpty());
+        Film film1Updated = Film.builder()
+                .id(testedFilm.getId())
+                .name("Бешеные псы")
+                .description("Фильм рассказывает историю группы грабителей, " +
+                        "которая после неудачного ограбления убегает в скромный склад, " +
+                        "где происходит настоящая драма.")
+                .duration(100)
+                .releaseDate(LocalDate.of(1992, 8, 10))
+                .mpa(Rating.builder()
+                        .id(5)
+                        .build())
+                .genres(filmGenres)
+                .directors(List.of(filmDbStorage.getDirector(testedDirector.getId())))
+                .build();
+
+        filmDbStorage.updateFilm(film1Updated);
+
+        assertThat(filmDbStorage.updateFilm(film1Updated))
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(filmDbStorage.getFilm(film1Updated.getId()));
     }
 }

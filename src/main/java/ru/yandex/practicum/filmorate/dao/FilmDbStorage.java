@@ -36,7 +36,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private void validateFilm(Film film) {
-        if (film.getName() == null || film.getName().isEmpty()) {
+        if (film.getName() == null || film.getName().isBlank()) {
             log.error("Не заполнено название фильма.");
             throw new ValidationException("Название фильма должно быть заполнено!");
         }
@@ -57,7 +57,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private void validateDirector(Director director) {
-        if (director.getName() == null || director.getName().isEmpty()) {
+        if (director.getName() == null || director.getName().isBlank()) {
             log.error("Не заполнено имя режиссера.");
             throw new ValidationException("Имя режиссера должно быть указано!");
         }
@@ -249,7 +249,7 @@ public class FilmDbStorage implements FilmStorage {
 
     public Rating getRating(int id) {
         Rating chosenRating = jdbcTemplate.queryForObject("SELECT* " +
-                        "FROM ratings WHERE rating_id = ?",
+                        "FROM ratings WHERE rating_id = ?;",
                 getRatingMapper(), id);
         if (chosenRating == null) {
             throw new ObjectNotFoundException("Внимание! Рейтинга с таким номером не существует!");
@@ -259,12 +259,12 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Rating> getRatings() {
-        return jdbcTemplate.query("SELECT* FROM ratings", getRatingMapper());
+        return jdbcTemplate.query("SELECT* FROM ratings;", getRatingMapper());
     }
 
     @Override
     public Genre getGenre(int id) {
-        Genre chosenGenre = jdbcTemplate.queryForObject("SELECT* FROM genres WHERE genre_id = ?",
+        Genre chosenGenre = jdbcTemplate.queryForObject("SELECT* FROM genres WHERE genre_id = ?;",
                 FilmDbStorage.getGenreMapper(), id);
         if (chosenGenre == null) {
             throw new ObjectNotFoundException("Внимание! Жанра с таким номером не существует!");
@@ -273,12 +273,12 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private List<Genre> setGenre(Film film) {
+        removeGenre(film.getId());
         if (film.getGenres() == null) {
             return new ArrayList<>();
         }
         List<Genre> genres = new ArrayList<>(film.getGenres());
         genres.sort((genre1, genre2) -> genre1.getId() - genre2.getId());
-        removeGenre(film.getId());
         jdbcTemplate.batchUpdate("MERGE INTO film_genre (film_id, genre_id) VALUES (?, ?);",
                 new BatchPreparedStatementSetter() {
                     @Override
@@ -296,12 +296,12 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private List<Director> setDirectors(Film film) {
+        removeDirector(film.getId());
         if (film.getDirectors() == null) {
             return new ArrayList<>();
         }
         List<Director> filmDirectors = new ArrayList<>(film.getDirectors());
         filmDirectors.sort((director1, director2) -> director1.getId() - director2.getId());
-        removeDirector(film.getId());
         jdbcTemplate.batchUpdate("INSERT INTO film_director (film_id, director_id) VALUES (?, ?);",
                 new BatchPreparedStatementSetter() {
                     @Override
@@ -319,16 +319,16 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private void removeDirector(int filmId) {
-        jdbcTemplate.update("DELETE FROM film_director WHERE film_id = ?", filmId);
+        jdbcTemplate.update("DELETE FROM film_director WHERE film_id = ?;", filmId);
     }
 
     private void removeGenre(int filmId) {
-        jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?", filmId);
+        jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?;", filmId);
     }
 
     @Override
     public List<Genre> getGenres() {
-        return jdbcTemplate.query("SELECT* FROM genres", FilmDbStorage.getGenreMapper());
+        return jdbcTemplate.query("SELECT* FROM genres;", FilmDbStorage.getGenreMapper());
     }
 
     @Override
@@ -391,9 +391,7 @@ public class FilmDbStorage implements FilmStorage {
                     .withTableName("directors")
                     .usingGeneratedKeyColumns("director_id");
             int id = simpleDirectorInsert.executeAndReturnKey(
-                    Map.of("id", director.getId(),
-                            "name", director.getName())
-            ).intValue();
+                    Map.of("name", director.getName())).intValue();
             director.setId(id);
         }
         return director;
@@ -411,91 +409,94 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Director getDirector(int id) {
-        return jdbcTemplate.queryForObject("SELECT* FROM directors WHERE director_id = ?", getDirectorMapper(), id);
+        return jdbcTemplate.queryForObject("SELECT* FROM directors WHERE director_id = ?;", getDirectorMapper(), id);
     }
 
     @Override
     public List<Director> getDirectors() {
-        return jdbcTemplate.query("SELECT* FROM directors", getDirectorMapper());
+        return jdbcTemplate.query("SELECT* FROM directors;", getDirectorMapper());
     }
 
     @Override
     public boolean deleteDirector(int id) {
         if (getDirector(id) != null) {
-            jdbcTemplate.update("DELETE FROM directors WHERE director_id = ?", id);
+            jdbcTemplate.update("DELETE FROM directors WHERE director_id = ?;", id);
             return true;
         }
         return false;
     }
 
     @Override
-    public List<Film> getFilmsOfDirector(int directorId, String year, String likes) {
-        if (year != null && likes == null) {
-            return jdbcTemplate.query("SELECT f.film_id, " +
-                    "f.name AS film_name, " +
-                    "f.description, " +
-                    "EXTRACT(YEAR FROM f.release_date) AS release_year, " +
-                    "f.duration, " +
-                    "f.rating_id, " +
-                    "r.name AS rating_name, " +
-                    "(SELECT GROUP_CONCAT(genre_id) " +
-                    "FROM film_genre AS fg " +
-                    "WHERE film_id =f.film_id) AS genre_id, " +
-                    "(SELECT GROUP_CONCAT(g.name) " +
-                    "FROM genres AS g " +
-                    "WHERE genre_id IN(SELECT g.genre_id " +
-                    "FROM film_genre AS fi_g " +
-                    "WHERE film_id=f.film_id)) AS genre_name, " +
-                    "(SELECT GROUP_CONCAT(director_id) " +
-                    "FROM film_director AS fd " +
-                    "WHERE film_id=f.film_id) AS director_id, " +
-                    "(SELECT GROUP_CONCAT(d.name) " +
-                    "FROM directors AS d " +
-                    "WHERE director_id IN(SELECT d.director_id " +
-                    "FROM film_director AS fd " +
-                    "WHERE film_id=f.film_id)) AS name " +
-                    "FROM films AS f " +
-                    "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
-                    "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                    "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
-                    "WHERE director_id = ? " +
-                    "GROUP BY f.film_id " +
-                    "ORDER BY release_year DESC, f.film_id;", this::createFilm, directorId);
-        }
-        if (likes != null && year == null) {
-            return jdbcTemplate.query("SELECT f.film_id, " +
-                    "f.name AS film_name, " +
-                    "f.description, " +
-                    "f.release_date, " +
-                    "f.duration, " +
-                    "f.rating_id, " +
-                    "r.name AS rating_name, " +
-                    "(SELECT GROUP_CONCAT(genre_id) " +
-                    "FROM film_genre AS fg " +
-                    "WHERE film_id =f.film_id) AS genre_id, " +
-                    "(SELECT GROUP_CONCAT(g.name) " +
-                    "FROM genres AS g " +
-                    "WHERE genre_id IN(SELECT g.genre_id " +
-                    "FROM film_genre AS fi_g " +
-                    "WHERE film_id=f.film_id)) AS genre_name, " +
-                    "(SELECT GROUP_CONCAT(director_id) " +
-                    "FROM film_director AS fd " +
-                    "WHERE film_id=f.film_id) AS director_id, " +
-                    "(SELECT GROUP_CONCAT(d.name) " +
-                    "FROM directors AS d " +
-                    "WHERE director_id IN(SELECT d.director_id " +
-                    "FROM film_director AS fd " +
-                    "WHERE film_id=f.film_id)) AS name " +
-                    "FROM films AS f " +
-                    "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
-                    "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                    "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
-                    "WHERE director_id = ? " +
-                    "GROUP BY f.film_id " +
-                    "ORDER BY COUNT(l.user_id) DESC, f.film_id;", this::createFilm, directorId);
+    public List<Film> getFilmsOfDirector(int directorId, String sortBy) {
+        getDirector(directorId);
+        if (sortBy != null) {
+            if (sortBy.equals("year")) {
+                return jdbcTemplate.query("SELECT f.film_id, " +
+                        "f.name , " +
+                        "f.description, " +
+                        "f.release_date, " +
+                        "f.duration, " +
+                        "f.rating_id, " +
+                        "r.name AS rating_name, " +
+                        "(SELECT GROUP_CONCAT(genre_id) " +
+                        "FROM film_genre AS fg " +
+                        "WHERE film_id =f.film_id) AS genre_id, " +
+                        "(SELECT GROUP_CONCAT(g.name) " +
+                        "FROM genres AS g " +
+                        "WHERE genre_id IN(SELECT g.genre_id " +
+                        "FROM film_genre AS fi_g " +
+                        "WHERE film_id=f.film_id)) AS genre_name, " +
+                        "(SELECT GROUP_CONCAT(director_id) " +
+                        "FROM film_director AS fd " +
+                        "WHERE film_id=f.film_id) AS director_id, " +
+                        "(SELECT GROUP_CONCAT(d.name) " +
+                        "FROM directors AS d " +
+                        "WHERE director_id IN(SELECT d.director_id " +
+                        "FROM film_director AS fd " +
+                        "WHERE film_id=f.film_id)) AS name " +
+                        "FROM films AS f " +
+                        "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
+                        "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                        "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
+                        "WHERE director_id = ? " +
+                        "GROUP BY f.film_id " +
+                        "ORDER BY EXTRACT(YEAR FROM f.release_date) DESC, f.film_id;", this::createFilm, directorId);
+            }
+            if (sortBy.equals("likes")) {
+                return jdbcTemplate.query("SELECT f.film_id, " +
+                        "f.name , " +
+                        "f.description, " +
+                        "f.release_date, " +
+                        "f.duration, " +
+                        "f.rating_id, " +
+                        "r.name AS rating_name, " +
+                        "(SELECT GROUP_CONCAT(genre_id) " +
+                        "FROM film_genre AS fg " +
+                        "WHERE film_id =f.film_id) AS genre_id, " +
+                        "(SELECT GROUP_CONCAT(g.name) " +
+                        "FROM genres AS g " +
+                        "WHERE genre_id IN(SELECT g.genre_id " +
+                        "FROM film_genre AS fi_g " +
+                        "WHERE film_id=f.film_id)) AS genre_name, " +
+                        "(SELECT GROUP_CONCAT(director_id) " +
+                        "FROM film_director AS fd " +
+                        "WHERE film_id=f.film_id) AS director_id, " +
+                        "(SELECT GROUP_CONCAT(d.name) " +
+                        "FROM directors AS d " +
+                        "WHERE director_id IN(SELECT d.director_id " +
+                        "FROM film_director AS fd " +
+                        "WHERE film_id=f.film_id)) AS name " +
+                        "FROM films AS f " +
+                        "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
+                        "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                        "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
+                        "WHERE director_id = ? " +
+                        "GROUP BY f.film_id " +
+                        "ORDER BY COUNT(l.user_id) DESC, f.film_id;", this::createFilm, directorId);
+            }
         }
         return jdbcTemplate.query("SELECT f.film_id, " +
-                "f.name AS film_name, " +
+                "f.name , " +
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +

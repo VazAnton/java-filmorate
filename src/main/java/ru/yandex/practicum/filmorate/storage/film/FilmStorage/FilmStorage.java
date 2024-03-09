@@ -43,5 +43,5 @@ public interface FilmStorage {
 
     boolean deleteDirector(int id);
 
-    List<Film> getFilmsOfDirector(int directorId, String year, String likes);
+    List<Film> getFilmsOfDirector(int directorId, String sortBy);
 }
