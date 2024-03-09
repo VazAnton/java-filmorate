@@ -344,13 +344,13 @@ class FilmDbStorageTest {
         nFilm = filmDbStorage.getTopFilms(10, 0, 2014);
 
         filmDbStorage.like(anotherFilmTwo.getId(), anotherUser.getId());
-        nFilm = filmDbStorage.getTopFilms(10, 3, 0);
+        nFilm = filmDbStorage.getTopFilms(10, 0, 0);
 
         filmDbStorage.like(anotherFilmTwo.getId(), anotherUserTwo.getId());
         nFilm = filmDbStorage.getTopFilms(10, 0, 0);
 
-        assertNotNull(filmDbStorage.getTopFilms(10, 3, 1998));
-        assertEquals(1, filmDbStorage.getTopFilms(2, 3, 1998).size());
+        assertNotNull(filmDbStorage.getTopFilms(10, 0, 1998));
+        assertEquals(1, filmDbStorage.getTopFilms(2, 0, 1998).size());
     }
 
     @Test
