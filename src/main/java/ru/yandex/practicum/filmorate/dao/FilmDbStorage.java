@@ -292,6 +292,7 @@ public class FilmDbStorage implements FilmStorage {
                 "fm.NAME as mpa_name FROM films f " +
                 "LEFT JOIN (SELECT * FROM ratings) fm ON f.rating_id = fm.rating_id " +
                 "LEFT JOIN likes AS l ON f.film_id=l.film_id " +
+                "LEFT JOIN (SELECT * FROM film_director) fd ON fd.film_id = f.FILM_ID " +
                 "LEFT JOIN (SELECT * FROM FILM_GENRE) fg ON f.film_id = fg.FILM_ID ";
         if (genreId > 0 && year > 0) {
             param = " WHERE fg.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + " GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id ";
