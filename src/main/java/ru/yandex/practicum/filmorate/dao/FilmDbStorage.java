@@ -460,7 +460,7 @@ public class FilmDbStorage implements FilmStorage {
                         "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
                         "WHERE director_id = ? " +
                         "GROUP BY f.film_id " +
-                        "ORDER BY EXTRACT(YEAR FROM f.release_date) DESC, f.film_id;", this::createFilm, directorId);
+                        "ORDER BY EXTRACT(YEAR FROM f.release_date) ASC, f.film_id;", this::createFilm, directorId);
             }
             if (sortBy.equals("likes")) {
                 return jdbcTemplate.query("SELECT f.film_id, " +
