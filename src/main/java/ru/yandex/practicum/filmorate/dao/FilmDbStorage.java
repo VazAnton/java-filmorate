@@ -299,14 +299,19 @@ public class FilmDbStorage implements FilmStorage {
             param = "GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC ";
         }
 
-        List<Film> topFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);
+        List<Film> allFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);
 
-        if (topFilms.isEmpty()) {
+        if (allFilms.isEmpty()) {
             log.info("No films found in database");
-            return topFilms;
+            return allFilms;
         }
-        log.info("Total films found in database: " + topFilms.size());
-
+        log.info("Total films found in database: " + allFilms.size());
+        List<Film> topFilms = new ArrayList<>();
+        if (!allFilms.isEmpty()) {
+            for (int i = 0; i < count && i < allFilms.size(); i++) {
+                topFilms.add(allFilms.get(i));
+            }
+        }
         return topFilms;
     }
 }

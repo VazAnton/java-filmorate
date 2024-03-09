@@ -268,17 +268,27 @@ class FilmDbStorageTest {
                 .id(2)
                 .build();
         genre.add(a);
+        List<Genre> genre1 = new ArrayList<>();
+        Genre B = Genre.builder()
+                .name("B")
+                .id(1)
+                .build();
+        genre1.add(B);
+
+        List<Genre> genre3 = new ArrayList<>();
+        Genre C = Genre.builder()
+                .name("C")
+                .id(3)
+                .build();
+        genre3.add(C);
         testedFilm = Film.builder()
                 .name("Маска")
-                .description("Фильм Маска -  это захватывающая комедия, где " +
-                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
-                        "невероятные суперсилы. " +
-                        "Фильм смешной и непременно заставит вас улыбнуться.")
+                .description("Фильм Маска -  это захватывающая комедия, где ")
                 .duration(126)
                 .releaseDate(LocalDate.of(2003, 3,
                         26))
                 .mpa(Rating.builder().id(4).build())
-                .genres(genre)
+                .genres(genre1)
                 .build();
         filmDbStorage.addFilm(testedFilm);
         Film anotherFilm = Film.builder()
@@ -287,9 +297,19 @@ class FilmDbStorageTest {
                 .duration(194)
                 .releaseDate(LocalDate.of(1998, 2, 20))
                 .mpa(Rating.builder().id(5).build())
-                .genres(genre)
+                .genres(genre3)
                 .build();
         filmDbStorage.addFilm(anotherFilm);
+        Film anotherFilmTwo = Film.builder()
+                .name("Реальные упыри")
+                .description("Фильм про вампиров, смешной")
+                .duration(184)
+                .releaseDate(LocalDate.of(2014, 2, 20))
+                .mpa(Rating.builder().id(5).build())
+                .genres(genre)
+                .build();
+        filmDbStorage.addFilm(anotherFilmTwo);
+
         testedUser = User.builder()
                 .name("Валерий")
                 .login("Bicycle")
@@ -303,15 +323,34 @@ class FilmDbStorageTest {
                 .email("voyu.na_lunu@yandex.ru")
                 .birthday(LocalDate.of(1997, 6, 13))
                 .build();
-
         userDbStorage.addUser(anotherUser);
+        User anotherUserTwo = User.builder()
+                .name("Андрей")
+                .login("Andrey")
+                .email("voyu.na@yandex.ru")
+                .birthday(LocalDate.of(1988, 6, 13))
+                .build();
+        userDbStorage.addUser(anotherUserTwo);
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
-        filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
-        filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
-
         List<Film> nFilm = filmDbStorage.getTopFilms(10, 0, 0);
-        assertNotNull(filmDbStorage.getTopFilms(10, 2, 1998));
-        assertEquals(1, filmDbStorage.getTopFilms(2, 2, 1998).size());
+
+        filmDbStorage.like(anotherFilm.getId(), anotherUserTwo.getId());
+        nFilm = filmDbStorage.getTopFilms(10, 0, 0);
+
+        filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
+        nFilm = filmDbStorage.getTopFilms(10, 0, 1998);
+
+        filmDbStorage.like(anotherFilmTwo.getId(), testedUser.getId());
+        nFilm = filmDbStorage.getTopFilms(10, 0, 2014);
+
+        filmDbStorage.like(anotherFilmTwo.getId(), anotherUser.getId());
+        nFilm = filmDbStorage.getTopFilms(10, 3, 0);
+
+        filmDbStorage.like(anotherFilmTwo.getId(), anotherUserTwo.getId());
+        nFilm = filmDbStorage.getTopFilms(10, 0, 0);
+
+        assertNotNull(filmDbStorage.getTopFilms(10, 3, 1998));
+        assertEquals(1, filmDbStorage.getTopFilms(2, 3, 1998).size());
     }
 
     @Test
