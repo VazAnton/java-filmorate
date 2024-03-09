@@ -281,7 +281,8 @@ public class FilmDbStorage implements FilmStorage {
             throw new IllegalArgumentException("Было передано отрицательное значение count");
         }
         String param;
-        String bound= " LIMIT " + count;;
+        String bound = " LIMIT " + count;
+        ;
         String sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, " +
                 "fm.rating_id, m.NAME as mpa_name FROM films f " +
                 "LEFT JOIN (SELECT * FROM ratings) fm ON f.rating_id = fm.rating_id " +

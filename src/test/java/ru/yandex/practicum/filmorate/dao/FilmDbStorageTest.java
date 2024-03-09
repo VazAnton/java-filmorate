@@ -262,8 +262,8 @@ class FilmDbStorageTest {
     public void checkGetTopFilms() {
         FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
-        List<Genre> genre=new ArrayList<>();
-        Genre a=Genre.builder()
+        List<Genre> genre = new ArrayList<>();
+        Genre a = Genre.builder()
                 .name("A")
                 .id(2)
                 .build();
@@ -308,9 +308,9 @@ class FilmDbStorageTest {
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
-        List <Film>nFilm= filmDbStorage.getTopFilms(10,2,1998);
-        assertNotNull(filmDbStorage.getTopFilms(10,2,1998));
-        assertEquals(1, filmDbStorage.getTopFilms(2,2,1998).size());
+        List<Film> nFilm = filmDbStorage.getTopFilms(10, 2, 1998);
+        assertNotNull(filmDbStorage.getTopFilms(10, 2, 1998));
+        assertEquals(1, filmDbStorage.getTopFilms(2, 2, 1998).size());
     }
 
     @Test
