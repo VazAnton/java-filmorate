@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -65,5 +66,29 @@ public class FilmService {
 
     public boolean deleteFilmById(int id) {
         return filmStorage.deleteFilmById(id);
+    }
+
+    public Director addDirector(Director director) {
+        return filmStorage.addDirector(director);
+    }
+
+    public Director updateDirector(Director director) {
+        return filmStorage.updateDirector(director);
+    }
+
+    public Director getDirector(int id) {
+        return filmStorage.getDirector(id);
+    }
+
+    public List<Director> getDirectors() {
+        return filmStorage.getDirectors();
+    }
+
+    public boolean deleteDirector(int id) {
+        return filmStorage.deleteDirector(id);
+    }
+
+    public List<Film> getFilmsOfDirector(int directorId, String sortBy) {
+        return filmStorage.getFilmsOfDirector(directorId, sortBy);
     }
 }
