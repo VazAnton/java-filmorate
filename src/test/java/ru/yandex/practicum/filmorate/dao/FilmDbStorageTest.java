@@ -344,7 +344,7 @@ class FilmDbStorageTest {
         nFilm = filmDbStorage.getTopFilms(10, 0, 2014);
 
         filmDbStorage.like(anotherFilmTwo.getId(), anotherUser.getId());
-        nFilm = filmDbStorage.getTopFilms(10, 0, 0);
+        nFilm = filmDbStorage.getTopFilms(10, 2, 0);
 
         filmDbStorage.like(anotherFilmTwo.getId(), anotherUserTwo.getId());
         nFilm = filmDbStorage.getTopFilms(10, 0, 0);
