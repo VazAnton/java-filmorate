@@ -282,20 +282,21 @@ public class FilmDbStorage implements FilmStorage {
         }
         String param;
         String bound = " LIMIT " + count;
-        ;
+
         String sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, " +
                 "fm.rating_id, m.NAME as mpa_name FROM films f " +
                 "LEFT JOIN (SELECT * FROM ratings) fm ON f.rating_id = fm.rating_id " +
+                "LEFT  JOIN likes AS l ON f.film_id=l.film_id " +
                 "LEFT JOIN (SELECT * FROM FILM_GENRE) fg ON f.film_id = fg.FILM_ID " +
-                "LEFT JOIN ratings m ON m.rating_id = fm.rating_id ";
+                "LEFT JOIN ratings m ON m.rating_id = fm.rating_id ";//+
         if (genreId > 0 && year > 0) {
-            param = " WHERE fg.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + " ORDER BY rating_id DESC ";
+            param = " WHERE fg.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC ";
         } else if (genreId > 0 && year == 0) {
-            param = " WHERE fg.genre_id = " + genreId + " ORDER BY rating_id DESC ";
+            param = " WHERE fg.genre_id = " + genreId + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC ";
         } else if (genreId == 0 && year > 0) {
-            param = " WHERE YEAR(f.release_date) = " + year + " ORDER BY rating_id DESC ";
+            param = " WHERE YEAR(f.release_date) = " + year + "GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC ";
         } else {
-            param = " ORDER BY rating_id DESC ";
+            param = "GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC ";
         }
 
         List<Film> topFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);

@@ -308,7 +308,8 @@ class FilmDbStorageTest {
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
-        List<Film> nFilm = filmDbStorage.getTopFilms(10, 2, 1998);
+
+        List<Film> nFilm = filmDbStorage.getTopFilms(10, 0, 0);
         assertNotNull(filmDbStorage.getTopFilms(10, 2, 1998));
         assertEquals(1, filmDbStorage.getTopFilms(2, 2, 1998).size());
     }

@@ -1,0 +1,4919 @@
+# sprint12/add-most-populars
+
+###
+# group: users
+# @name User create
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "dolore",
+  "name": "Nick Name",
+  "email": "mail@mail.ru",
+  "birthday": "1946-08-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has user create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test user 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test user 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('email');
+
+    //     pm.expect(jsonData.email, '"email" must be "mail@mail.ru"').to.eql('mail@mail.ru');
+
+    // });
+
+    // pm.test("Test user 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Nick Name"').to.eql('Nick Name');
+
+    // });
+
+    // pm.test("Test user 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('login');
+
+    //     pm.expect(jsonData.login, '"login" field must be "dolore"').to.eql('dolore');    
+
+    // });
+
+    // pm.test("Test user 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('birthday');
+
+    //     pm.expect(jsonData.birthday, '"birthday" field must be "1946-08-20"').to.eql('1946-08-20');
+
+    // });
+%}
+
+###
+# group: users
+# @name User create Fail login
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "dolore ullamco",
+  "email": "yandex@mail.ru",
+  "birthday": "2446-08-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    //
+%}
+
+###
+# group: users
+# @name User create Fail email
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "dolore ullamco",
+  "name": "",
+  "email": "mail.ru",
+  "birthday": "1980-08-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+%}
+
+###
+# group: users
+# @name User create Fail birthday
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "dolore",
+  "name": "",
+  "email": "test@mail.ru",
+  "birthday": "2446-08-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+%}
+
+###
+# group: users
+# @name User update
+PUT {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "id": 1,
+  "email": "mail@yandex.ru",
+  "birthday": "1976-09-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Has user update response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test user 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test user 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('email');
+
+    //     pm.expect(jsonData.email, '"email" must be "mail@yandex.ru"').to.eql('mail@yandex.ru');
+
+    // });
+
+    // pm.test("Test user 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "est adipisicing"').to.eql('est adipisicing');
+
+    // });
+
+    // pm.test("Test user 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('login');
+
+    //     pm.expect(jsonData.login, '"login" field must be "doloreUpdate"').to.eql('doloreUpdate');    
+
+    // });
+
+    // pm.test("Test user 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('birthday');
+
+    //     pm.expect(jsonData.birthday, '"birthday" field must be "1976-09-20"').to.eql('1976-09-20');
+
+    // });
+%}
+
+###
+# group: users
+# @name User update unknown
+PUT {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "id": 9999,
+  "email": "mail@yandex.ru",
+  "birthday": "1976-09-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([404]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+%}
+
+###
+# group: users
+# @name User get All
+GET {{baseUrl}}/users
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list user response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test user[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test user[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "mail@yandex.ru"').to.eql('mail@yandex.ru');
+
+    // });
+
+    // pm.test("Test user[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "est adipisicing"').to.eql('est adipisicing');
+
+    // });
+
+    // pm.test("Test user[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "doloreUpdate"').to.eql('doloreUpdate');    
+
+    // });
+
+    // pm.test("Test user[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "1976-09-20"').to.eql('1976-09-20');
+
+    // });
+
+    // 
+
+    //
+%}
+
+###
+# group: user
+# @name Friend Create
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "friend",
+  "name": "friend adipisicing",
+  "email": "friend@mail.ru",
+  "birthday": "1976-08-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has user create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test user 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test user 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('email');
+
+    //     pm.expect(jsonData.email, '"email" must be "friend@mail.ru"').to.eql('friend@mail.ru');
+
+    // });
+
+    // pm.test("Test user 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "friend adipisicing"').to.eql('friend adipisicing');
+
+    // });
+
+    // pm.test("Test user 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('login');
+
+    //     pm.expect(jsonData.login, '"login" field must be "friend"').to.eql('friend');    
+
+    // });
+
+    // pm.test("Test user 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('birthday');
+
+    //     pm.expect(jsonData.birthday, '"birthday" field must be "1976-08-20"').to.eql('1976-08-20');
+
+    // });
+%}
+
+###
+# group: user
+# @name Common Friend Create
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: */*
+
+{
+  "login": "common",
+  "name": "",
+  "email": "friend@common.ru",
+  "birthday": "2000-08-20"
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has user create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test user 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test user 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('email');
+
+    //     pm.expect(jsonData.email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test user 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test user 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('login');
+
+    //     pm.expect(jsonData.login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test user 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('birthday');
+
+    //     pm.expect(jsonData.birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: user
+# @name User get by id=1
+GET {{baseUrl}}/users/{{id}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Has user get response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test user 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test user 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('email');
+
+    //     pm.expect(jsonData.email, '"email" must be "mail@yandex.ru"').to.eql('mail@yandex.ru');
+
+    // });
+
+    // pm.test("Test user 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "est adipisicing"').to.eql('est adipisicing');
+
+    // });
+
+    // pm.test("Test user 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('login');
+
+    //     pm.expect(jsonData.login, '"login" field must be "doloreUpdate"').to.eql('doloreUpdate');    
+
+    // });
+
+    // pm.test("Test user 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('birthday');
+
+    //     pm.expect(jsonData.birthday, '"birthday" field must be "1976-09-20"').to.eql('1976-09-20');
+
+    // });
+%}
+
+###
+# group: user
+# @name User get unknown with id=9999
+GET {{baseUrl}}/users/{{id_1}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.response.to.have.status(404);
+
+    // });
+%}
+
+###
+# group: user
+# @name Friend get user id=2
+GET {{baseUrl}}/users/{{id_2}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Has user get response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test user 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test user 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('email');
+
+    //     pm.expect(jsonData.email, '"email" must be "friend@mail.ru"').to.eql('friend@mail.ru');
+
+    // });
+
+    // pm.test("Test user 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "friend adipisicing"').to.eql('friend adipisicing');
+
+    // });
+
+    // pm.test("Test user 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('login');
+
+    //     pm.expect(jsonData.login, '"login" field must be "friend"').to.eql('friend');    
+
+    // });
+
+    // pm.test("Test user 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('birthday');
+
+    //     pm.expect(jsonData.birthday, '"birthday" field must be "1976-08-20"').to.eql('1976-08-20');
+
+    // });
+%}
+
+###
+# group: friend
+# @name User get friends common empty
+GET {{baseUrl}}/users/{{id_3}}/friends/common/{{otherId}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list user response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be empty').to.eql(0);
+
+    // });
+%}
+
+###
+# group: friend
+# @name User id=1 add friend id=2
+PUT {{baseUrl}}/users/{{id_4}}/friends/{{friendId}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,204]);
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name User id=1 add friend unknown id=-1
+PUT {{baseUrl}}/users/{{id_5}}/friends/{{friendId_1}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.response.to.have.status(404);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+%}
+
+###
+# group: friend
+# @name User id=1 get friends
+GET {{baseUrl}}/users/{{id_6}}/friends
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(2);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@mail.ru"').to.eql('friend@mail.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "friend adipisicing"').to.eql('friend adipisicing');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "friend"').to.eql('friend');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "1976-08-20"').to.eql('1976-08-20');
+
+    // });
+
+    // 
+
+    //
+%}
+
+###
+# group: friend
+# @name User id=2 get friends
+GET {{baseUrl}}/users/{{id_7}}/friends
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 0').to.eql(0);
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name Empty Common friends to user id=1 with user id=2
+GET {{baseUrl}}/users/{{id_8}}/friends/common/{{otherId_1}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list common user response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be empty').to.eql(0);
+
+    // });
+%}
+
+###
+# group: friend
+# @name User id=1 add  friend id=3
+PUT {{baseUrl}}/users/{{id_9}}/friends/{{friendId_2}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,204]);
+
+    // });
+%}
+
+###
+# group: friend
+# @name User id=1 get 2 friends
+GET {{baseUrl}}/users/{{id_10}}/friends
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(2);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@mail.ru"').to.eql('friend@mail.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "friend adipisicing"').to.eql('friend adipisicing');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "friend"').to.eql('friend');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "1976-08-20"').to.eql('1976-08-20');
+
+    // });
+
+    // 
+
+    // pm.test("Test friend[1] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[1].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test friend[1] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('email');
+
+    //     pm.expect(jsonData[1].email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test friend[1] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[1].name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test friend[1] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('login');
+
+    //     pm.expect(jsonData[1].login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test friend[1] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[1].birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name User id=2 add  friend id=3
+PUT {{baseUrl}}/users/{{id_11}}/friends/{{friendId_3}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,204]);
+
+    // });
+%}
+
+###
+# group: friend
+# @name User id=2 get 1 friend
+GET {{baseUrl}}/users/{{id_12}}/friends
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name Common friend to user id=1 with user id=2
+GET {{baseUrl}}/users/{{id_13}}/friends/common/{{otherId_2}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list common friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name User id=1 remove friend id=2
+DELETE {{baseUrl}}/users/{{id_14}}/friends/{{friendId_4}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,204]);
+
+    // });
+%}
+
+###
+# group: friend
+# @name User id=1 get common with user id=2
+GET {{baseUrl}}/users/{{id_15}}/friends/common/{{otherId_3}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list common friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name User id=2 get common with user id=1
+GET {{baseUrl}}/users/{{id_16}}/friends/common/{{otherId_4}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list common friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: friend
+# @name User id=1 get 1 friend
+GET {{baseUrl}}/users/{{id_17}}/friends
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list friend response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test friend[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test friend[0] 'email' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('email');
+
+    //     pm.expect(jsonData[0].email, '"email" must be "friend@common.ru"').to.eql('friend@common.ru');
+
+    // });
+
+    // pm.test("Test friend[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "common"').to.eql('common');
+
+    // });
+
+    // pm.test("Test friend[0] 'login' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('login');
+
+    //     pm.expect(jsonData[0].login, '"login" field must be "common"').to.eql('common');    
+
+    // });
+
+    // pm.test("Test friend[0] 'birthday' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('birthday');
+
+    //     pm.expect(jsonData[0].birthday, '"birthday" field must be "2000-08-20"').to.eql('2000-08-20');
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film get All
+GET {{baseUrl}}/films
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 0').to.eql(0);
+
+    // });
+%}
+
+###
+# group: films
+# @name Film id=1 create
+POST {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "name": "nisi eiusmod",
+  "description": "adipisicing",
+  "releaseDate": "1967-03-25",
+  "duration": 100,
+  "mpa": {
+    "id": 1
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has film create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "nisi eiusmod"').to.eql('nisi eiusmod');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "adipisicing"').to.eql('adipisicing');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1967-03-25"').to.eql('1967-03-25');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 100').to.eql(100);    
+
+    // });
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 1').to.eql(1);    
+
+    // });
+
+    // 
+
+    //
+%}
+
+###
+# group: films
+# @name Film create Fail name
+POST {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "name": "",
+  "description": "Description",
+  "releaseDate": "1900-03-25",
+  "duration": 200,
+  "mpa": {
+    "id": 1
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film create Fail description
+POST {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "name": "Film name",
+  "description": "Пятеро друзей ( комик-группа «Шарло»), приезжают в город Бризуль. Здесь они хотят разыскать господина Огюста Куглова, который задолжал им деньги, а именно 20 миллионов. о Куглов, который за время «своего отсутствия», стал кандидатом Коломбани.",
+  "releaseDate": "1900-03-25",
+  "duration": 200,
+  "mpa": {
+    "id": 1
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film create Fail releaseDate
+POST {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "name": "Name",
+  "description": "Description",
+  "releaseDate": "1890-03-25",
+  "duration": 200,
+  "mpa": {
+    "id": 1
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film create Fail duration
+POST {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "name": "Name",
+  "description": "Descrition",
+  "releaseDate": "1980-03-25",
+  "duration": -200,
+  "mpa": {
+    "id": 1
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 500 or 400", function () {
+
+    //      pm.expect(pm.response.code).to.be.oneOf([500,400]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film update
+PUT {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "id": 1,
+  "name": "Film Updated",
+  "releaseDate": "1989-04-17",
+  "description": "New film update decription",
+  "duration": 190,
+  "rate": 4,
+  "mpa": {
+    "id": 2
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Has film update response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 2').to.eql(2);    
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film update unknown
+PUT {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "id": 9999,
+  "name": "Film Updated",
+  "releaseDate": "1989-04-17",
+  "description": "New film update decription",
+  "duration": 190,
+  "rate": 4,
+  "mpa": {
+    "id": 1
+  }
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([404]);
+
+    // });
+
+    // pm.test("Has error response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    //
+%}
+
+###
+# group: films
+# @name Film get All
+GET {{baseUrl}}/films
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film[0] 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 2').to.eql(2);    
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "PG"').to.eql("PG");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 0 genres').to.eql(0);
+
+    // });
+
+    // 
+
+    //
+%}
+
+###
+# group: films
+# @name Film get Popular
+GET {{baseUrl}}/films/popular
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film[0] 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 2').to.eql(2);    
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "PG"').to.eql("PG");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 0 genres').to.eql(0);
+
+    // });
+
+    // 
+
+    //
+%}
+
+###
+# group: film
+# @name Film id=2 create
+POST {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "name": "New film",
+  "releaseDate": "1999-04-30",
+  "description": "New film about friends",
+  "duration": 120,
+  "rate": 4,
+  "mpa": {
+    "id": 3
+  },
+  "genres": [
+    {
+      "id": 1
+    }
+  ]
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has film create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 3').to.eql(3);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 1 genre').to.eql(1);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    // });
+
+    // 
+
+    // 
+
+    //
+%}
+
+###
+# group: film
+# @name Film id=1 get
+GET {{baseUrl}}/films/{{id_18}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film 'mpa' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 2').to.eql(2);    
+
+    //     pm.expect(jsonData.mpa).to.have.property('name');
+
+    //     pm.expect(jsonData.mpa.name, '"mpa.name" field must be "PG"').to.eql("PG");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 0 genres').to.eql(0);
+
+    // });
+
+    // 
+
+    //
+%}
+
+###
+# group: film
+# @name Film id=9999 get not found
+GET {{baseUrl}}/films/{{id_19}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.response.to.have.status(404);
+
+    // });
+%}
+
+###
+# group: like
+# @name Film id=2 add Like from user id=1
+PUT {{baseUrl}}/films/{{id_20}}/like/{{userId}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,204]);
+
+    // });
+%}
+
+###
+# group: like
+# @name Film most popular film
+GET {{baseUrl}}/films/popular?
+    count=1
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film[0] 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    //
+%}
+
+###
+# group: like
+# @name Film id=2 add Like from user id=1
+DELETE {{baseUrl}}/films/{{id_21}}/like/{{userId_1}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,204]);
+
+    // });
+%}
+
+###
+# group: like
+# @name Film get all popular film
+GET {{baseUrl}}/films/popular
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 2').to.eql(2);
+
+    // });
+
+    //
+%}
+
+###
+# group: like
+# @name Film id=2 remove Like from user id=-2  not found
+DELETE {{baseUrl}}/films/{{id_22}}/like/{{userId_2}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.response.to.have.status(404);
+
+    // });
+%}
+
+###
+# group: MPA
+# @name Mpa id=1 get
+GET {{baseUrl}}/mpa/{{id_23}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get MPA response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // 
+
+    // pm.test("Test MPA 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test MPA 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "G"').to.eql('G');
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/users/{{id_24}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/users/{{id_25}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/users/{{id_26}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/users/{{id_27}}
+
+###
+# group: MPA
+# @name Mpa  id=9999 get not found
+GET {{baseUrl}}/mpa/{{id_28}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.response.to.have.status(404);
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/users/{{id_29}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/users/{{id_30}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/users/{{id_31}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/users/{{id_32}}
+
+###
+# group: MPA
+# @name Mpa  get All
+GET {{baseUrl}}/mpa
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list MPA response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 5').to.eql(5);
+
+    // });
+
+    // pm.test("Test MPA[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test MPA[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "G"').to.eql('G');
+
+    // });
+
+    // pm.test("Test MPA[1] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[1].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test MPA[1] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[1].name, '"name" must be "PG"').to.eql('PG');
+
+    // });
+
+    // pm.test("Test MPA[2] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[2]).to.have.property('id');
+
+    //     pm.expect(jsonData[2].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test MPA[2] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[2]).to.have.property('name');
+
+    //     pm.expect(jsonData[2].name, '"name" must be "PG-13"').to.eql('PG-13');
+
+    // });
+
+    // pm.test("Test MPA[3] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[3]).to.have.property('id');
+
+    //     pm.expect(jsonData[3].id, '"id" must be 4').to.eql(4);
+
+    // });
+
+    // pm.test("Test MPA[3] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[3]).to.have.property('name');
+
+    //     pm.expect(jsonData[3].name, '"name" must be "R"').to.eql('R');
+
+    // });
+
+    // pm.test("Test MPA[4] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[4]).to.have.property('id');
+
+    //     pm.expect(jsonData[4].id, '"id" must be 5').to.eql(5);
+
+    // });
+
+    // pm.test("Test MPA[4] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[4]).to.have.property('name');
+
+    //     pm.expect(jsonData[4].name, '"name" must be "NC-17"').to.eql('NC-17');
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/users
+
+###
+# group: Genre
+# @name Genre id=1 get
+GET {{baseUrl}}/genres/{{id_33}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get genre response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // 
+
+    // pm.test("Test genre 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test genre 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Комедия"').to.eql('Комедия');
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/users/{{id_34}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/users/{{id_35}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/users/{{id_36}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/users/{{id_37}}
+
+###
+# group: Genre
+# @name Genre get unknown
+GET {{baseUrl}}/genres/{{id_38}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 404", function () {
+
+    //     pm.response.to.have.status(404);
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/users/{{id_39}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/users/{{id_40}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/users/{{id_41}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/users/{{id_42}}
+
+###
+# group: Genre
+# @name Genre All
+GET {{baseUrl}}/genres
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list genre response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 6').to.eql(6);
+
+    // });
+
+    // pm.test("Test genre[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test genre[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "Комедия"').to.eql('Комедия');
+
+    // });
+
+    // pm.test("Test genre[1] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[1].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test genre[1] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[1].name, '"name" must be "Драма"').to.eql('Драма');
+
+    // });
+
+    // pm.test("Test genre[2] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[2]).to.have.property('id');
+
+    //     pm.expect(jsonData[2].id, '"id" must be 3').to.eql(3);
+
+    // });
+
+    // pm.test("Test genre[2] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[2]).to.have.property('name');
+
+    //     pm.expect(jsonData[2].name, '"name" must be "Мультфильм"').to.eql('Мультфильм');
+
+    // });
+
+    // pm.test("Test genre[3] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[3]).to.have.property('id');
+
+    //     pm.expect(jsonData[3].id, '"id" must be 4').to.eql(4);
+
+    // });
+
+    // pm.test("Test genre[3] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[3]).to.have.property('name');
+
+    //     pm.expect(jsonData[3].name, '"name" must be "Триллер"').to.eql('Триллер');
+
+    // });
+
+    // pm.test("Test genre[4] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[4]).to.have.property('id');
+
+    //     pm.expect(jsonData[4].id, '"id" must be 5').to.eql(5);
+
+    // });
+
+    // pm.test("Test genre[4] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[4]).to.have.property('name');
+
+    //     pm.expect(jsonData[4].name, '"name" must be "Документальный"').to.eql('Документальный');
+
+    // });
+
+    // pm.test("Test genre[5] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[5]).to.have.property('id');
+
+    //     pm.expect(jsonData[5].id, '"id" must be 6').to.eql(6);
+
+    // });
+
+    // pm.test("Test genre[5] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[5]).to.have.property('name');
+
+    //     pm.expect(jsonData[5].name, '"name" must be "Боевик"').to.eql('Боевик');
+
+    // });
+
+    // 
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/users
+
+###
+# group: Genre
+# @name Film id=1 update genre
+PUT {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "id": 1,
+  "name": "Film Updated",
+  "releaseDate": "1989-04-17",
+  "description": "New film update decription",
+  "duration": 190,
+  "rate": 4,
+  "mpa": {
+    "id": 5
+  },
+  "genres": [
+    {
+      "id": 2
+    }
+  ]
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Has film update response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 5').to.eql(5);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 1 genre').to.eql(1);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 2').to.eql(2);    
+
+    // });
+
+    // 
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films
+
+###
+# group: Genre
+# @name Film id=1 get with genre
+GET {{baseUrl}}/films/{{id_43}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film 'mpa' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 5').to.eql(5);    
+
+    //     pm.expect(jsonData.mpa).to.have.property('name');
+
+    //     pm.expect(jsonData.mpa.name, '"mpa.name" field must be "PG"').to.eql("NC-17");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 1 genre').to.eql(1);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 2').to.eql(2);    
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData.genres[0].name, '"genres[0].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/{{id_44}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/{{id_45}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/{{id_46}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/{{id_47}}
+
+###
+# group: Genre
+# @name Film All with genre
+GET {{baseUrl}}/films
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List length must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film[0] 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 5').to.eql(5);    
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "NC-17"').to.eql("NC-17");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 1 genre').to.eql(1);
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[0].id, '"genres[0].id" field must be 2').to.eql(2);    
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[0].name, '"genres[0].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+
+    // 
+
+    // pm.test("Test film[1] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[1].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[1] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[1].name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film[1] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('description');
+
+    //     pm.expect(jsonData[1].description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film[1] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[1].releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film[1] 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('duration');
+
+    //     pm.expect(jsonData[1].duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[1].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[1].mpa.id, '"mpa.id" field must be 3').to.eql(3);    
+
+    //     pm.expect(jsonData[1].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[1].mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film[1] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[1]).to.have.property('genres');
+
+    //     pm.expect(jsonData[1].genres.length, '"genres" field must be have 1 genre').to.eql(1);
+
+    //     pm.expect(jsonData[1].genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[1].genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData[1].genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[1].genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');});
+
+    // 
+
+    // 
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/{{id_48}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/{{id_49}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/{{id_50}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/{{id_51}}
+
+###
+# group: Genre
+# @name Film id=1 update remove  genre
+PUT {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "id": 1,
+  "name": "Film Updated",
+  "releaseDate": "1989-04-17",
+  "description": "New film update decription",
+  "duration": 190,
+  "rate": 4,
+  "mpa": {
+    "id": 5
+  },
+  "genres": []
+}
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Has film update response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 5').to.eql(5);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 0 genre').to.eql(0);
+
+    // });
+
+    // 
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films
+
+###
+# group: Genre
+# @name Film id=1 get without genre
+GET {{baseUrl}}/films/{{id_52}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 1').to.eql(1);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "Film Updated"').to.eql('Film Updated');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film update decription"').to.eql('New film update decription');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1989-04-17"').to.eql('1989-04-17');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 190').to.eql(190);    
+
+    // });
+
+    // pm.test("Test film 'mpa' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 5').to.eql(5);    
+
+    //     pm.expect(jsonData.mpa).to.have.property('name');
+
+    //     pm.expect(jsonData.mpa.name, '"mpa.name" field must be "PG"').to.eql("NC-17");    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     if (jsonData.genres != null) {
+
+    //         pm.expect(jsonData.genres.length, '"genres" field must be have 0 genre').to.eql(0);
+
+    //     }
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/{{id_53}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/{{id_54}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/{{id_55}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/{{id_56}}
+
+###
+# group: Genre
+# @name Film id=2 genres update
+PUT {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "id": 2,
+  "name": "New film",
+  "releaseDate": "1999-04-30",
+  "description": "New film about friends",
+  "duration": 120,
+  "mpa": {
+    "id": 3
+  },
+  "genres": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    }
+  ]
+}
+
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has film create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 3').to.eql(3);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 3 genres').to.eql(3);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 1').to.eql(1);
+
+    //     pm.expect(jsonData.genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData.genres[2]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[2].id, '"genres[2].id" field must be 3').to.eql(3);
+
+    // });
+
+    // 
+
+    // 
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films
+
+###
+# group: Genre
+# @name Film id=2  get with genres
+GET {{baseUrl}}/films/{{id_57}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData.mpa).to.have.property('name');
+
+    //     pm.expect(jsonData.mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 3 genres').to.eql(3);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData.genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');
+
+    //     pm.expect(jsonData.genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData.genres[1]).to.have.property('name');
+
+    //     pm.expect(jsonData.genres[1].name, '"genres[1].name" field must be "Драма"').to.eql('Драма');
+
+    //     pm.expect(jsonData.genres[2]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[2].id, '"genres[2].id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData.genres[2]).to.have.property('name');
+
+    //     pm.expect(jsonData.genres[2].name, '"genres[2].name" field must be "Мультфильм"').to.eql('Мультфильм');
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/{{id_58}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/{{id_59}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/{{id_60}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/{{id_61}}
+
+###
+# group: Genre
+# @name Film id=2  genres update with duplicate
+PUT {{baseUrl}}/films
+Content-Type: application/json
+Accept: */*
+
+{
+  "id": 2,
+  "name": "New film",
+  "releaseDate": "1999-04-30",
+  "description": "New film about friends",
+  "duration": 120,
+  "mpa": {
+    "id": 3
+  },
+  "genres": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 1
+    }
+  ]
+}
+
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200 or 201", function () {
+
+    //     pm.expect(pm.response.code).to.be.oneOf([200,201]);
+
+    // });
+
+    // pm.test("Has film create response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 3').to.eql(3);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 2 genres').to.eql(2);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 1').to.eql(1);
+
+    //     pm.expect(jsonData.genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    // });
+
+    // 
+
+    // 
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films
+
+###
+# group: Genre
+# @name Film id=2  get with genre  without duplicate
+GET {{baseUrl}}/films/{{id_62}}
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Get film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    // });
+
+    // pm.test("Test film 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('id');
+
+    //     pm.expect(jsonData.id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('name');
+
+    //     pm.expect(jsonData.name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('description');
+
+    //     pm.expect(jsonData.description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData.releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('duration');
+
+    //     pm.expect(jsonData.duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('mpa');
+
+    //     pm.expect(jsonData.mpa).to.have.property('id');
+
+    //     pm.expect(jsonData.mpa.id, '"mpa.id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData.mpa).to.have.property('name');
+
+    //     pm.expect(jsonData.mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");
+
+    // });
+
+    // 
+
+    // pm.test("Test film 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData).to.have.property('genres');
+
+    //     pm.expect(jsonData.genres.length, '"genres" field must be have 2 genres').to.eql(2);
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData.genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData.genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');
+
+    //     pm.expect(jsonData.genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData.genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData.genres[1]).to.have.property('name');
+
+    //     pm.expect(jsonData.genres[1].name, '"genres[1].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/{{id_63}}
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/{{id_64}}
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/{{id_65}}
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/{{id_66}}
+
+###
+# group: most-populars
+# @name Film get Popular with genre id=1
+GET {{baseUrl}}/films/popular?
+    genreId=1
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");
+
+    // });
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 2 genres').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[1].name, '"genres[1].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+
+    // pm.test("Test film[0] 'directors' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('directors');
+
+    //     pm.expect(jsonData[0].directors.length, '"directors" field must be have 0 director').to.eql(0);
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
+
+###
+# group: most-populars
+# @name Film get Popular with genre id=2
+GET {{baseUrl}}/films/popular?
+    genreId=2
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");
+
+    // });
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 2 genres').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[1].name, '"genres[1].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+
+    // pm.test("Test film[0] 'directors' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('directors');
+
+    //     pm.expect(jsonData[0].directors.length, '"directors" field must be have 0 director').to.eql(0);
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
+
+###
+# group: most-populars
+# @name Film get Popular with genre id=3 not exist
+GET {{baseUrl}}/films/popular?
+    genreId=3
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 0').to.eql(0);
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
+
+###
+# group: most-populars
+# @name Film get Popular with year=1999
+GET {{baseUrl}}/films/popular?
+    year=1999
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");
+
+    // });
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 2 genres').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[1].name, '"genres[1].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+
+    // pm.test("Test film[0] 'directors' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('directors');
+
+    //     pm.expect(jsonData[0].directors.length, '"directors" field must be have 0 director').to.eql(0);
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
+
+###
+# group: most-populars
+# @name Film get Popular with year=2000 not exits
+GET {{baseUrl}}/films/popular?
+    year=2000
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 0').to.eql(0);
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
+
+###
+# group: most-populars
+# @name Film get Popular with genre id=1 and year=1999
+GET {{baseUrl}}/films/popular?
+    year=1999&
+    genreId=1
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 1').to.eql(1);
+
+    // });
+
+    // 
+
+    // pm.test("Test film[0] 'id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].id, '"id" must be 2').to.eql(2);
+
+    // });
+
+    // pm.test("Test film[0] 'name' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].name, '"name" must be "New film"').to.eql('New film');
+
+    // });
+
+    // pm.test("Test film[0] 'description' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('description');
+
+    //     pm.expect(jsonData[0].description, '"description" must be "New film about friends"').to.eql('New film about friends');
+
+    // });
+
+    // pm.test("Test film[0] 'releaseDate' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('releaseDate');
+
+    //     pm.expect(jsonData[0].releaseDate, '"releaseDate" field must be "1999-04-30"').to.eql('1999-04-30');
+
+    // });
+
+    // pm.test("Test film 'duration' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('duration');
+
+    //     pm.expect(jsonData[0].duration, '"duration" field must be 100').to.eql(120);    
+
+    // });
+
+    // pm.test("Test film[0] 'mpa.id' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('mpa');
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('id');
+
+    //     pm.expect(jsonData[0].mpa.id, '"mpa.id" field must be 3').to.eql(3);
+
+    //     pm.expect(jsonData[0].mpa).to.have.property('name');
+
+    //     pm.expect(jsonData[0].mpa.name, '"mpa.name" field must be "PG-13"').to.eql("PG-13");
+
+    // });
+
+    // pm.test("Test film[0] 'genres' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('genres');
+
+    //     pm.expect(jsonData[0].genres.length, '"genres" field must be have 2 genres').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[0].id, '"genres[0].id" field must be 1').to.eql(1);    
+
+    //     pm.expect(jsonData[0].genres[0]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[0].name, '"genres[0].name" field must be "Комедия"').to.eql('Комедия');
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('id');
+
+    //     pm.expect(jsonData[0].genres[1].id, '"genres[1].id" field must be 2').to.eql(2);
+
+    //     pm.expect(jsonData[0].genres[1]).to.have.property('name');
+
+    //     pm.expect(jsonData[0].genres[1].name, '"genres[1].name" field must be "Драма"').to.eql('Драма');
+
+    // });
+
+    // pm.test("Test film[0] 'directors' field", function () {
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData[0]).to.have.property('directors');
+
+    //     pm.expect(jsonData[0].directors.length, '"directors" field must be have 0 director').to.eql(0);
+
+    // });
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
+
+###
+# group: most-populars
+# @name Film get Popular with genre id=2 and year=2000 not exits
+GET {{baseUrl}}/films/popular?
+    year=2000&
+    genreId=2
+Accept: */*
+
+> {%
+    // TODO: migrate to HTTP Client Response handler API
+    // pm.test("Status code is 200", function () {
+
+    //     pm.response.to.be.ok;
+
+    // });
+
+    // pm.test("Test list popular film response", function () {
+
+    //     pm.response.to.be.withBody;
+
+    //     pm.response.to.be.json;
+
+    //     var jsonData = pm.response.json();
+
+    //     pm.expect(jsonData.length, 'List popular length must be 0').to.eql(0);
+
+    // });
+
+    //
+%}
+
+<> ./sprint_responses/ok.200.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/not_found.404.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/conflict.409.txt
+// {{baseUrl}}/films/popular
+<> ./sprint_responses/internal_server_error.500.txt
+// {{baseUrl}}/films/popular
