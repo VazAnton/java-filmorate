@@ -350,31 +350,42 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getTopFilms(Integer count) {
+    public List<Film> getTopFilms(Integer count, Integer genreId, Integer year) {
         if (count < 0) {
             throw new IllegalArgumentException("Было передано отрицательное значение count");
         }
+        String param;
+        String bound = " LIMIT " + count;
+
+        String sql = "SELECT f.film_id," +
+                " f.name," +
+                " f.description," +
+                " f.release_date," +
+                " f.duration," +
+                " f.rating_id, " +
+                "fm.NAME as mpa_name FROM films f " +
+                "LEFT JOIN (SELECT * FROM ratings) fm ON f.rating_id = fm.rating_id " +
+                "LEFT JOIN likes AS l ON f.film_id=l.film_id " +
+                "LEFT JOIN (SELECT * FROM film_director) fd ON fd.film_id = f.FILM_ID " +
+                "LEFT JOIN (SELECT * FROM FILM_GENRE) fg ON f.film_id = fg.FILM_ID ";
+        if (genreId > 0 && year > 0) {
+            param = " WHERE fg.genre_id = " + genreId + " AND YEAR(f.release_date) = " + year + " GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id ";
+        } else if (genreId > 0 && year == 0) {
+            param = " WHERE fg.genre_id = " + genreId + " GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
+        } else if (genreId == 0 && year > 0) {
+            param = " WHERE YEAR(f.release_date) = " + year + " GROUP BY f.film_id ORDER BY COUNT(l.user_id) DESC, f.film_id";
+        } else {
+            param = " GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC, f.film_id";
+        }
+
+        List<Film> allFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);
+
+        //  if (allFilms.isEmpty()) {
+        //      log.info("No films found in database");
+        //      return allFilms;
+        //  }
+        //  log.info("Total films found in database: " + allFilms.size());
         List<Film> topFilms = new ArrayList<>();
-        List<Film> allFilms = jdbcTemplate.query("SELECT f.film_id, " +
-                "f.name AS film_name, " +
-                "f.description, " +
-                "f.release_date, " +
-                "f.duration, " +
-                "f.rating_id, " +
-                "r.name AS rating_name, " +
-                "(SELECT GROUP_CONCAT(genre_id) " +
-                "FROM film_genre AS fg " +
-                "WHERE film_id =f.film_id) AS genre_id, " +
-                "(SELECT GROUP_CONCAT(g.name) " +
-                "FROM genres AS g " +
-                "WHERE genre_id IN(SELECT g.genre_id " +
-                "FROM film_genre AS fi_g " +
-                "WHERE film_id=f.film_id)) AS genre_name " +
-                "FROM films AS f " +
-                "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
-                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                "GROUP BY f.film_id " +
-                "ORDER BY COUNT(l.user_id) DESC, f.film_id;", this::createFilm);
         if (!allFilms.isEmpty()) {
             for (int i = 0; i < count && i < allFilms.size(); i++) {
                 topFilms.add(allFilms.get(i));
