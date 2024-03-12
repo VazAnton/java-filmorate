@@ -182,7 +182,7 @@ class FilmDbStorageTest {
                 .build();
         filmDbStorage.addFilm(testedFilm);
         Film updatedFilm = Film.builder()
-                .id(1)
+                .id(testedFilm.getId())
                 .name("Маска")
                 .description("Фильм Маска -  это захватывающая комедия, где " +
                         "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
@@ -194,12 +194,10 @@ class FilmDbStorageTest {
                 .mpa(Rating.builder().id(4).build())
                 .build();
 
-        filmDbStorage.updateFilm(updatedFilm);
-
         assertThat(filmDbStorage.updateFilm(updatedFilm))
                 .isNotNull()
                 .usingRecursiveComparison()
-                .isEqualTo(filmDbStorage.updateFilm(updatedFilm));
+                .isEqualTo(filmDbStorage.getFilm(updatedFilm.getId()));
     }
 
     @Test

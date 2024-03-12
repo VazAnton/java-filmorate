@@ -356,7 +356,6 @@ public class FilmDbStorage implements FilmStorage {
         }
         String param;
         String bound = " LIMIT " + count;
-
         String sql = "SELECT f.film_id," +
                 " f.name," +
                 " f.description," +
@@ -377,14 +376,7 @@ public class FilmDbStorage implements FilmStorage {
         } else {
             param = " GROUP BY f.film_id ORDER BY COUNT(l.user_id)  DESC, f.film_id";
         }
-
         List<Film> allFilms = jdbcTemplate.query(sql + param + bound, this::createFilm);
-
-        //  if (allFilms.isEmpty()) {
-        //      log.info("No films found in database");
-        //      return allFilms;
-        //  }
-        //  log.info("Total films found in database: " + allFilms.size());
         List<Film> topFilms = new ArrayList<>();
         if (!allFilms.isEmpty()) {
             for (int i = 0; i < count && i < allFilms.size(); i++) {
