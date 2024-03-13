@@ -150,8 +150,6 @@ public class FilmDbStorage implements FilmStorage {
         return getFilm(film.getId());
     }
 
-    //коммент
-
     @Override
     public boolean deleteFilmById(int id) {
         if (getFilm(id) != null) {
