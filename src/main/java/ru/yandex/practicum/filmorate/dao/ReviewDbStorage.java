@@ -14,6 +14,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -101,8 +102,10 @@ public class ReviewDbStorage implements ReviewStorage {
     }
 
     @Override
-    public Review getReviewOfFilm(int filmId) {
-        return null;
+    public List<Review> getReviewOfFilm(int filmId) {
+        String sql = "SELECT * FROM REVIEWS WHERE FILM_ID = ? " +
+                "ORDER BY USEFUL DESC LIMIT ?";
+        return jdbcTemplate.query(sql, getReviewMapper(), filmId);
     }
 
     @Override
@@ -142,11 +145,26 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean addDislikeOfReview(int id, int userId) {
-        return false;
+        if (jdbcTemplate.update("INSERT INTO REVIEWS (REVIEW_ID, USER_ID, IS_LIKE) " +
+                "VALUES (?, ?, ?)", id, userId, false) > 0) {
+            jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL - 1 WHERE REVIEW_ID = ?", id);
+            log.info("Пользователь с ID = {} добавил дизлайк для отзыва ID = {}.", userId, id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean deleteDislikeOfReview(int id, int userId) {
-        return false;
+
+        if (jdbcTemplate.update("DELETE FROM REVIEWS WHERE REVIEW_ID = ? AND USER_ID = ?", id, userId) < 1) {
+            log.info("Ошибка при удалении дизлайка для отзыва ID = {} от пользователя с ID = {}.", id, userId);
+            throw new ValidationException("Ошибка при удалении дизлайка для отзыва ID = %d от пользователя с ID = %d.");
+        } else {
+            jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL + 1 WHERE REVIEW_ID = ?", id);
+            log.info("Пользователь с ID = {} удалил дизлайк для отзыва ID = {}.", userId, id);
+            return true;
+        }
     }
 }

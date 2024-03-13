@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.review.ReviewStorage.ReviewStorage;
 
+import java.util.List;
+
 @Service
 public class ReviewService {
 
@@ -27,7 +29,7 @@ public class ReviewService {
         return reviewStorage.getReview(id);
     }
 
-    public Review getReviewOfFilm(int filmId) {
+    public List<Review> getReviewOfFilm(int filmId) {
         return reviewStorage.getReviewOfFilm(filmId);
     }
 
