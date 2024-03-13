@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
@@ -121,7 +123,21 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean deleteLikeOfReview(int id, int userId) {
-        return false;
+        String sqlQuery = "SELECT* FROM REVIEWS WHERE review_id = ? AND user_id = ?";
+        SqlRowSet reviewRows = jdbcTemplate.queryForRowSet(sqlQuery, id, userId);
+        if (reviewRows.next()) {
+            int i = jdbcTemplate.update("UPDATE REVIEWS SET useful = useful-? WHERE review_id = ? AND user_id = ?",
+                    1, id, userId);
+            if (i != 0) {
+                log.info("Удален лайк у отзыва " + id);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            log.info("Лайк отзыва " + id + " не найден");
+            throw new ObjectNotFoundException("Лайк отзыва " + id + " не найден");
+        }
     }
 
     @Override
