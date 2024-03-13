@@ -525,4 +525,42 @@ public class FilmDbStorage implements FilmStorage {
                 "WHERE director_id = ? " +
                 "GROUP BY f.film_id;", this::createFilm, directorId);
     }
+
+    @Override
+    public List<Film> getFilmsByNameOrNameAndDirector(String query, String by) {
+        if (query == null || by == null) {
+            log.error("Не заданы параметры поиска по названию фильмов и по режиссёру");
+            throw new ObjectNotFoundException("Не заданы параметры поиска: запрос или фильтр - " + query + " by " + by);
+        }
+
+        if (!(by.equals("director") || by.equals("title") || by.equals("director,title") || by.equals("title,director"))) {
+            log.error("Ошибка: некорректно задан фильтр для поиска по названию фильмов и по режиссёру");
+            throw new ObjectNotFoundException("Неизвестный фильтр для поиска по названию фильмов и по режиссёру - " + by);
+        }
+        String sqlRequest = "SELECT f.film_id, " +
+                "f.name , " +
+                "f.description, " +
+                "f.release_date, " +
+                "f.duration, " +
+                "f.rating_id, " +
+                "r.name AS rating_name, " +
+                "(SELECT GROUP_CONCAT(genre_id) FROM film_genre AS fg WHERE film_id=f.film_id) AS genre_id, " +
+                "(SELECT GROUP_CONCAT(g.name) FROM genres AS g WHERE genre_id IN(SELECT g.genre_id FROM film_genre AS fi_g WHERE film_id=f.film_id)) AS genre_name, " +
+                "(SELECT GROUP_CONCAT(director_id) FROM film_director AS fd WHERE film_id=f.film_id) AS director_id, " +
+                "(SELECT GROUP_CONCAT(d.name) FROM directors AS d WHERE director_id IN(SELECT d.director_id FROM film_director AS fd WHERE film_id=f.film_id)) AS name " +
+                "FROM films AS f " +
+                "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
+                "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
+                "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id ";
+
+        if (by.equals("title")) {
+            sqlRequest += "WHERE LOWER(f.name) LIKE LOWER('%?%')";
+        }
+        else if (by.equals("director")) {
+            sqlRequest += "WHERE LOWER(name) LIKE LOWER('%?%')";
+        } else {
+            sqlRequest += "WHERE LOWER(name) LIKE LOWER('%?%') OR LOWER(f.name) LIKE LOWER('%?%')";
+        }
+        return jdbcTemplate.query(sqlRequest , this::createFilm, query);
+    }
 }
