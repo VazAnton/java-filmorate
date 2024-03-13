@@ -555,12 +555,11 @@ public class FilmDbStorage implements FilmStorage {
 
         if (by.equals("title")) {
             sqlRequest += "WHERE LOWER(f.name) LIKE LOWER('%?%')";
-        }
-        else if (by.equals("director")) {
+        } else if (by.equals("director")) {
             sqlRequest += "WHERE LOWER(name) LIKE LOWER('%?%')";
         } else {
             sqlRequest += "WHERE LOWER(name) LIKE LOWER('%?%') OR LOWER(f.name) LIKE LOWER('%?%')";
         }
-        return jdbcTemplate.query(sqlRequest , this::createFilm, query);
+        return jdbcTemplate.query(sqlRequest, this::createFilm, query);
     }
 }
