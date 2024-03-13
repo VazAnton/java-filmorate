@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
@@ -14,8 +15,10 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.review.ReviewStorage.ReviewStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 
 @Repository
@@ -118,27 +121,29 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean addLikeOfReview(int id, int userId) {
-        return false;
+        if (jdbcTemplate.update("INSERT INTO REVIEWS (REVIEW_ID, USER_ID, IS_LIKE) " +
+                "VALUES (?, ?, ?)", id, userId, true) > 0) {
+            jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL + 1 WHERE REVIEW_ID = ?", id);
+            log.info("Пользователь с ID = {} добавил лайк для отзыва ID = {}.", userId, id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean deleteLikeOfReview(int id, int userId) {
-        String sqlQuery = "SELECT* FROM REVIEWS WHERE review_id = ? AND user_id = ?";
-        SqlRowSet reviewRows = jdbcTemplate.queryForRowSet(sqlQuery, id, userId);
-        if (reviewRows.next()) {
-            int i = jdbcTemplate.update("UPDATE REVIEWS SET useful = useful-? WHERE review_id = ? AND user_id = ?",
-                    1, id, userId);
-            if (i != 0) {
-                log.info("Удален лайк у отзыва " + id);
-                return true;
-            } else {
-                return false;
-            }
+
+        if (jdbcTemplate.update("DELETE FROM REVIEWS WHERE REVIEW_ID = ? AND USER_ID = ?", id, userId) < 1) {
+            log.info("Ошибка при удалении лайка для отзыва ID = {} от пользователя с ID = {}.", id, userId);
+            throw new ValidationException("Ошибка при удалении лайка для отзыва ID = %d от пользователя с ID = %d.");
         } else {
-            log.info("Лайк отзыва " + id + " не найден");
-            throw new ObjectNotFoundException("Лайк отзыва " + id + " не найден");
+            jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL - 1 WHERE REVIEW_ID = ?", id);
+            log.info("Пользователь удалил лайк для отзыва");
+            return true;
         }
     }
+
 
     @Override
     public boolean addDislikeOfReview(int id, int userId) {
