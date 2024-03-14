@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
@@ -103,9 +104,15 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public List<Review> getReviewOfFilm(int filmId) {
-        String sql = "SELECT * FROM REVIEWS WHERE FILM_ID = ? " +
-                "ORDER BY USEFUL DESC LIMIT ?";
-        return jdbcTemplate.query(sql, getReviewMapper(), filmId);
+        FilmStorage filmStorage = new FilmDbStorage(jdbcTemplate);
+        if (filmStorage.getFilm(filmId) != null) {
+            String sql = "SELECT * FROM REVIEWS WHERE FILM_ID = ? " +
+                    "ORDER BY USEFUL DESC LIMIT ?";
+            return jdbcTemplate.query(sql, getReviewMapper(), filmId);
+        } else {
+            throw new ObjectNotFoundException("Фильм не найден");
+
+        }
     }
 
     @Override
