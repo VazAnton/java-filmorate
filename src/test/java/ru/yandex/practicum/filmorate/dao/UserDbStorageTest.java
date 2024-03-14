@@ -562,7 +562,7 @@ class UserDbStorageTest {
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
-        assertEquals(1, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).get(0).getId());
+        assertEquals(anotherFilm.getId(), userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).get(0).getId());
         assertEquals(1, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).size());
 
     }
