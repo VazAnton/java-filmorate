@@ -54,7 +54,7 @@ public class UserService {
         return userStorage.deleteUserById(id);
     }
 
-    public List<Film> getRecommendationsFilms(int id){
+    public List<Film> getRecommendationsFilms(int id) {
         return userStorage.getRecommendationsFilmsByUser(id);
     }
 }
