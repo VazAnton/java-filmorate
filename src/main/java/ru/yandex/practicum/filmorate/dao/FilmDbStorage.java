@@ -538,7 +538,7 @@ public class FilmDbStorage implements FilmStorage {
             throw new ObjectNotFoundException("Неизвестный фильтр для поиска по названию фильмов и по режиссёру - " + by);
         }
         String sqlRequest = "SELECT f.film_id, " +
-                "f.name , " +
+                "f.name, " +
                 "f.description, " +
                 "f.release_date, " +
                 "f.duration, " +
@@ -547,19 +547,21 @@ public class FilmDbStorage implements FilmStorage {
                 "(SELECT GROUP_CONCAT(genre_id) FROM film_genre AS fg WHERE film_id=f.film_id) AS genre_id, " +
                 "(SELECT GROUP_CONCAT(g.name) FROM genres AS g WHERE genre_id IN(SELECT g.genre_id FROM film_genre AS fi_g WHERE film_id=f.film_id)) AS genre_name, " +
                 "(SELECT GROUP_CONCAT(director_id) FROM film_director AS fd WHERE film_id=f.film_id) AS director_id, " +
-                "(SELECT GROUP_CONCAT(d.name) FROM directors AS d WHERE director_id IN(SELECT d.director_id FROM film_director AS fd WHERE film_id=f.film_id)) AS name " +
+                "(SELECT GROUP_CONCAT(d.name) FROM directors AS d WHERE director_id IN(SELECT d.director_id FROM film_director AS fd WHERE film_id=f.film_id)) AS name, " +
+                "(SELECT COUNT(likes.film_id) FROM likes) as cnt " +
                 "FROM films AS f " +
                 "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
                 "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id ";
 
         if (by.equals("title")) {
-            sqlRequest += "WHERE LOWER(f.name) LIKE LOWER('%?%')";
+            sqlRequest += "WHERE LOWER(f.name) LIKE LOWER(CONCAT('%',?,'%')) ";
         } else if (by.equals("director")) {
-            sqlRequest += "WHERE LOWER(name) LIKE LOWER('%?%')";
+            sqlRequest += "WHERE LOWER(name) LIKE LOWER(CONCAT('%',?,'%')) ";
         } else {
-            sqlRequest += "WHERE LOWER(name) LIKE LOWER('%?%') OR LOWER(f.name) LIKE LOWER('%?%')";
+            sqlRequest += "WHERE LOWER(name) LIKE LOWER(CONCAT('%',?,'%')) OR LOWER(f.name) LIKE LOWER(CONCAT('%',?,'%')) ";
         }
+        sqlRequest += "GROUP BY f.film_id ORDER BY cnt DESC;";
         return jdbcTemplate.query(sqlRequest, this::createFilm, query);
     }
 }
