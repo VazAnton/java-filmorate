@@ -302,7 +302,7 @@ public class FilmDbStorage implements FilmStorage {
         }
         List<Director> filmDirectors = new ArrayList<>(film.getDirectors());
         filmDirectors.sort((director1, director2) -> director1.getId() - director2.getId());
-        jdbcTemplate.batchUpdate("INSERT INTO film_director (film_id, director_id) VALUES (?, ?);",
+        jdbcTemplate.batchUpdate("MERGE INTO film_director (film_id, director_id) VALUES (?, ?);",
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
