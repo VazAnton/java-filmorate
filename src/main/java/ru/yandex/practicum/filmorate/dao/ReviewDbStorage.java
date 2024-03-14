@@ -131,14 +131,9 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean addLikeOfReview(int id, int userId) {
-        //if (jdbcTemplate.update("INSERT INTO REVIEWS (REVIEW_ID, USER_ID, IS_LIKE) " +
-          //      "VALUES (?, ?, ?)", id, userId, true) > 0) {
-            jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL + 1 WHERE REVIEW_ID = ?", id);
-            log.info("Пользователь с ID = {} добавил лайк для отзыва ID = {}.", userId, id);
-            return true;
-        //} else {
-          //  return false;
-      //  }
+        jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL + 1 WHERE REVIEW_ID = ?", id);
+        log.info("Пользователь с ID = {} добавил лайк для отзыва ID = {}.", userId, id);
+        return true;
     }
 
     @Override
@@ -156,14 +151,9 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean addDislikeOfReview(int id, int userId) {
-        //if (jdbcTemplate.update("INSERT INTO REVIEWS (REVIEW_ID, USER_ID, IS_LIKE) " +
-          //      "VALUES (?, ?, ?)", id, userId, false) > 0) {
-            jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL - 1 WHERE REVIEW_ID = ?", id);
-            log.info("Пользователь с ID = {} добавил дизлайк для отзыва ID = {}.", userId, id);
-            return true;
-        //} else {
-          //  return false;
-        //}
+        jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL - 1 WHERE REVIEW_ID = ?", id);
+        log.info("Пользователь с ID = {} добавил дизлайк для отзыва ID = {}.", userId, id);
+        return true;
     }
 
     @Override
