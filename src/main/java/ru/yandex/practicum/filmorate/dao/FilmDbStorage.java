@@ -552,7 +552,7 @@ public class FilmDbStorage implements FilmStorage {
                 "FROM films AS f " +
                 "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id "+
+                "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
                 "LEFT OUTER JOIN directors AS d ON fd.director_id=d.director_id ";
 
         if (by.equals("title")) {
