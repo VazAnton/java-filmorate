@@ -39,7 +39,7 @@ public class ReviewDbStorage implements ReviewStorage {
         }
         if (review.getUserId() == null || review.getFilmId() == null) {
             log.error("Не заполнено поле с уникальным номером пользователя или фильма.");
-            throw new ValidationException("Внимание! Поле с уникальным номером пользователя должно быть заполнено!");
+            throw new ValidationException("Внимание! Поле с уникальным номером должно быть заполнено!");
         }
     }
 
@@ -51,7 +51,7 @@ public class ReviewDbStorage implements ReviewStorage {
 
     private Review createReview(ResultSet rs) throws SQLException {
         return Review.builder()
-                .id(rs.getInt("review_id"))
+                .reviewId(rs.getInt("review_id"))
                 .content(rs.getString("content"))
                 .isPositive(rs.getBoolean("is_positive"))
                 .userId(rs.getInt("user_id"))
@@ -77,7 +77,7 @@ public class ReviewDbStorage implements ReviewStorage {
                             "film_id", review.getFilmId(),
                             "useful", 0)
             ).intValue();
-            review.setId(id);
+            review.setReviewId(id);
         }
         return review;
     }
@@ -86,11 +86,13 @@ public class ReviewDbStorage implements ReviewStorage {
     public Review updateReview(Review review) {
         FilmStorage filmStorage = new FilmDbStorage(jdbcTemplate);
         UserStorage userStorage = new UserDbStorage(jdbcTemplate);
-        if (review != null && getReview(review.getId()) != null && filmStorage.getFilm(review.getFilmId()) != null &&
+        if (review != null && getReview(review.getReviewId()) != null && filmStorage.getFilm(review.getFilmId()) != null &&
                 userStorage.getUser(review.getUserId()) != null) {
-            jdbcTemplate.update("UPDATE reviews set content = ?, is_positive = ?, useful = ? WHERE review_id = ?;",
-                    review.getContent(), review.getIsPositive(), review.getUseful(), review.getId());
-            return getReview(review.getId());
+            jdbcTemplate.update("UPDATE reviews set content = ?, is_positive = ?, user_id = ?, " +
+                            "film_id = ?, useful = ? WHERE review_id = ?;",
+                    review.getContent(), review.getIsPositive(), review.getUserId(), review.getFilmId(),
+                    review.getUseful(), review.getReviewId());
+            return getReview(review.getReviewId());
         }
         return review;
     }
@@ -103,12 +105,17 @@ public class ReviewDbStorage implements ReviewStorage {
     }
 
     @Override
-    public List<Review> getReviewOfFilm(int filmId) {
+    public List<Review> getReviewOfFilm(Integer filmId, Integer count) {
         FilmStorage filmStorage = new FilmDbStorage(jdbcTemplate);
-        if (filmStorage.getFilm(filmId) != null) {
+        if (filmId == null) {
+            return jdbcTemplate.query("SELECT* " +
+                    "FROM reviews " +
+                    "ORDER BY useful DESC " +
+                    "LIMIT ?;", getReviewMapper(), count);
+        } else if (filmStorage.getFilm(filmId) != null) {
             String sql = "SELECT * FROM REVIEWS WHERE FILM_ID = ? " +
                     "ORDER BY USEFUL DESC LIMIT ?";
-            return jdbcTemplate.query(sql, getReviewMapper(), filmId);
+            return jdbcTemplate.query(sql, getReviewMapper(), filmId, count);
         } else {
             throw new ObjectNotFoundException("Фильм не найден");
 
@@ -138,7 +145,6 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean deleteLikeOfReview(int id, int userId) {
-
         if (jdbcTemplate.update("DELETE FROM REVIEWS WHERE REVIEW_ID = ? AND USER_ID = ?", id, userId) < 1) {
             log.info("Ошибка при удалении лайка для отзыва ID = {} от пользователя с ID = {}.", id, userId);
             throw new ValidationException("Ошибка при удалении лайка для отзыва ID = %d от пользователя с ID = %d.");
@@ -164,7 +170,6 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean deleteDislikeOfReview(int id, int userId) {
-
         if (jdbcTemplate.update("DELETE FROM REVIEWS WHERE REVIEW_ID = ? AND USER_ID = ?", id, userId) < 1) {
             log.info("Ошибка при удалении дизлайка для отзыва ID = {} от пользователя с ID = {}.", id, userId);
             throw new ValidationException("Ошибка при удалении дизлайка для отзыва ID = %d от пользователя с ID = %d.");

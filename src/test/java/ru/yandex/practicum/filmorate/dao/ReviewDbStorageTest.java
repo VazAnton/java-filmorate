@@ -61,7 +61,7 @@ class ReviewDbStorageTest {
                 .build();
         reviewDbStorage.addReview(testedReview);
 
-        assertThat(reviewDbStorage.getReview(testedReview.getId()))
+        assertThat(reviewDbStorage.getReview(testedReview.getReviewId()))
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(testedReview);
@@ -248,7 +248,7 @@ class ReviewDbStorageTest {
                 .build();
         reviewDbStorage.addReview(testedReview);
         Review updatedReview = Review.builder()
-                .id(testedReview.getId())
+                .reviewId(testedReview.getReviewId())
                 .content("Не самый лучший фильм, что я видел.")
                 .isPositive(false)
                 .userId(testedUser.getId())
@@ -298,13 +298,13 @@ class ReviewDbStorageTest {
                 .filmId(testedFilm.getId())
                 .build();
         reviewDbStorage.addReview(testedReview);
-        assertThat(reviewDbStorage.getReview(testedReview.getId()))
+        assertThat(reviewDbStorage.getReview(testedReview.getReviewId()))
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(testedReview);
 
-        reviewDbStorage.deleteReview(testedReview.getId());
+        reviewDbStorage.deleteReview(testedReview.getReviewId());
 
-        assertThrows(EmptyResultDataAccessException.class, () -> reviewDbStorage.getReview(testedReview.getId()));
+        assertThrows(EmptyResultDataAccessException.class, () -> reviewDbStorage.getReview(testedReview.getReviewId()));
     }
 }

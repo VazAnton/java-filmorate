@@ -29,8 +29,8 @@ public class ReviewService {
         return reviewStorage.getReview(id);
     }
 
-    public List<Review> getReviewOfFilm(int filmId) {
-        return reviewStorage.getReviewOfFilm(filmId);
+    public List<Review> getReviewOfFilm(Integer filmId, Integer count) {
+        return reviewStorage.getReviewOfFilm(filmId, count);
     }
 
     public boolean deleteReview(int id) {

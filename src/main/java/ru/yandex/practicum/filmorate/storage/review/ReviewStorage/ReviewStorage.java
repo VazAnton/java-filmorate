@@ -12,7 +12,7 @@ public interface ReviewStorage {
 
     Review getReview(int id);
 
-    List<Review> getReviewOfFilm(int filmId);
+    List<Review> getReviewOfFilm(Integer filmId, Integer count);
 
     boolean deleteReview(int id);
 
