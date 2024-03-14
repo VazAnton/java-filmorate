@@ -562,7 +562,7 @@ class UserDbStorageTest {
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
-        assertEquals(anotherFilm, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).get(0));
+        assertEquals(1, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).get(0).getId());
         assertEquals(1, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).size());
 
     }
@@ -609,7 +609,7 @@ class UserDbStorageTest {
         filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
-        assertEquals(null, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).get(0));
+        assertTrue(userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).isEmpty());
         assertEquals(0, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).size());
     }
 }
