@@ -310,8 +310,20 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> likeFilms(int userId){
-        getFilm(userId);
+    public List<Film> getCommonFilms(int userID, int friendId) {
+        List<Film> commonFilms = new ArrayList<>();
+        List<Film> userFilms = likeFilms(userID);
+        List<Film> friendFilms = likeFilms(friendId);
+        for (Film films : userFilms) {
+            if (friendFilms.contains(films)) {
+                commonFilms.add(films);
+            }
+        }
+        return commonFilms;
+    }
+
+
+    private List<Film> likeFilms(int userId) {
         String query = "SELECT f.film_id, " +
                 "f.name AS film_name, " +
                 "f.description, " +
@@ -330,7 +342,7 @@ public class FilmDbStorage implements FilmStorage {
                 "FROM films AS f " +
                 "LEFT OUTER JOIN likes AS l ON f.film_id=l.film_id " +
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
-                "Where f.film_id IN (Select film_id from likes where user_id = ?) "+
+                "Where f.film_id IN (Select film_id from likes where user_id = ?) " +
                 "GROUP BY f.film_id " +
                 "ORDER BY COUNT(l.user_id) DESC, f.film_id;";
         return jdbcTemplate.query(query, this::createFilm, userId);

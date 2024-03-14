@@ -32,5 +32,5 @@ public interface FilmStorage {
 
     boolean deleteFilmById(int id);
 
-    List<Film> likeFilms(int userId);
+    List<Film> getCommonFilms(int userID, int friendId);
 }

@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,15 +67,7 @@ public class FilmService {
         return filmStorage.deleteFilmById(id);
     }
 
-    public List<Film> getCommonFilms(int userID, int friendId){
-        List<Film> commonFilms = new ArrayList<>();
-        List<Film> userFilms = filmStorage.likeFilms(userID);
-        List<Film> friendFilms = filmStorage.likeFilms(friendId);
-        for(Film films: userFilms){
-            if(friendFilms.contains(films)){
-                commonFilms.add(films);
-            }
-        }
-        return commonFilms;
+    public List<Film> getCommonFilms(int userID, int friendId) {
+        return filmStorage.getCommonFilms(userID, friendId);
     }
 }

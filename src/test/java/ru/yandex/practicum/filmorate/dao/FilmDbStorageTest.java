@@ -334,4 +334,93 @@ class FilmDbStorageTest {
 
         assertTrue(filmDbStorage.deleteFilmById(testedFilm.getId()));
     }
+
+    @Test
+    public void checkCommonFilms() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        testedFilm = Film.builder()
+                .name("Маска")
+                .description("Фильм Маска -  это захватывающая комедия, где " +
+                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
+                        "невероятные суперсилы. " +
+                        "Фильм смешной и непременно заставит вас улыбнуться.")
+                .duration(126)
+                .releaseDate(LocalDate.of(2003, 3,
+                        26))
+                .mpa(Rating.builder().id(4).build())
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        Film anotherFilm = Film.builder()
+                .name("Титаник")
+                .description("Фильм - катастрофа")
+                .duration(194)
+                .releaseDate(LocalDate.of(1998, 2, 20))
+                .mpa(Rating.builder().id(5).build())
+                .build();
+        filmDbStorage.addFilm(anotherFilm);
+        testedUser = User.builder()
+                .name("Валерий")
+                .login("Bicycle")
+                .email("broken.velik@yandex.ru")
+                .birthday(LocalDate.of(1999, 5, 22))
+                .build();
+        userDbStorage.addUser(testedUser);
+        User anotherUser = User.builder()
+                .name("Сергей")
+                .login("Seryoga")
+                .email("voyu.na_lunu@yandex.ru")
+                .birthday(LocalDate.of(1997, 6, 13))
+                .build();
+        userDbStorage.addUser(anotherUser);
+        filmDbStorage.like(testedFilm.getId(), testedUser.getId());
+        filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
+        filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
+        filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
+        assertEquals(2, filmDbStorage.getCommonFilms(testedUser.getId(), anotherUser.getId()).size());
+        assertNotNull(filmDbStorage.getCommonFilms(testedUser.getId(), anotherUser.getId()));
+    }
+
+    @Test
+    public void noCommonFilms() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        testedFilm = Film.builder()
+                .name("Маска")
+                .description("Фильм Маска -  это захватывающая комедия, где " +
+                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
+                        "невероятные суперсилы. " +
+                        "Фильм смешной и непременно заставит вас улыбнуться.")
+                .duration(126)
+                .releaseDate(LocalDate.of(2003, 3,
+                        26))
+                .mpa(Rating.builder().id(4).build())
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        Film anotherFilm = Film.builder()
+                .name("Титаник")
+                .description("Фильм - катастрофа")
+                .duration(194)
+                .releaseDate(LocalDate.of(1998, 2, 20))
+                .mpa(Rating.builder().id(5).build())
+                .build();
+        filmDbStorage.addFilm(anotherFilm);
+        testedUser = User.builder()
+                .name("Валерий")
+                .login("Bicycle")
+                .email("broken.velik@yandex.ru")
+                .birthday(LocalDate.of(1999, 5, 22))
+                .build();
+        userDbStorage.addUser(testedUser);
+        User anotherUser = User.builder()
+                .name("Сергей")
+                .login("Seryoga")
+                .email("voyu.na_lunu@yandex.ru")
+                .birthday(LocalDate.of(1997, 6, 13))
+                .build();
+        userDbStorage.addUser(anotherUser);
+        filmDbStorage.like(testedFilm.getId(), testedUser.getId());
+        filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
+        assertTrue(filmDbStorage.getCommonFilms(testedUser.getId(), anotherUser.getId()).isEmpty());
+    }
 }
