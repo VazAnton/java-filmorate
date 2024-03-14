@@ -476,4 +476,43 @@ class FilmDbStorageTest {
                 .usingRecursiveComparison()
                 .isEqualTo(filmDbStorage.getFilm(film1Updated.getId()));
     }
+
+    @Test
+    public void checkSearchFilmInDb() {
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        List<Genre> filmGenres = new ArrayList<>();
+        Genre genre2 = Genre.builder()
+                .id(2)
+                .build();
+        Genre genre6 = Genre.builder()
+                .id(6)
+                .build();
+        filmGenres.add(genre2);
+        filmGenres.add(genre6);
+        testedDirector = Director.builder()
+                .name("Квентин Тарантино")
+                .build();
+        filmDbStorage.addDirector(testedDirector);
+        testedFilm = Film.builder()
+                .name("Бешеные псы")
+                .description("Фильм рассказывает историю группы грабителей, " +
+                        "которая после неудачного ограбления убегает в скромный склад, " +
+                        "где происходит настоящая драма.")
+                .duration(100)
+                .releaseDate(LocalDate.of(1992, 8, 10))
+                .mpa(Rating.builder()
+                        .id(5)
+                        .build())
+                .genres(filmGenres)
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        assertFalse(filmDbStorage.getFilms().isEmpty());
+
+        List<Film> filmSearch = filmDbStorage.getFilmsByNameOrNameAndDirector("Бешеные", "title");
+
+        assertThat(filmDbStorage.getFilms().get(0))
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(filmSearch.get(0));
+    }
 }
