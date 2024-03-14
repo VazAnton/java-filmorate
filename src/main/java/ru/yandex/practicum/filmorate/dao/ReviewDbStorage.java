@@ -86,12 +86,10 @@ public class ReviewDbStorage implements ReviewStorage {
     public Review updateReview(Review review) {
         FilmStorage filmStorage = new FilmDbStorage(jdbcTemplate);
         UserStorage userStorage = new UserDbStorage(jdbcTemplate);
-        if (review != null && getReview(review.getReviewId()) != null && filmStorage.getFilm(review.getFilmId()) != null &&
-                userStorage.getUser(review.getUserId()) != null) {
-            jdbcTemplate.update("UPDATE reviews set content = ?, is_positive = ?, user_id = ?, " +
-                            "film_id = ?, useful = ? WHERE review_id = ?;",
-                    review.getContent(), review.getIsPositive(), review.getUserId(), review.getFilmId(),
-                    review.getUseful(), review.getReviewId());
+        if (review != null && getReview(review.getReviewId()) != null && filmStorage.getFilm(review.getFilmId()) != null
+                && userStorage.getUser(review.getUserId()) != null) {
+            jdbcTemplate.update("UPDATE reviews set content = ?, is_positive = ? WHERE review_id = ?;",
+                    review.getContent(), review.getIsPositive(), review.getReviewId());
             return getReview(review.getReviewId());
         }
         return review;
