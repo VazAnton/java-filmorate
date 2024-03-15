@@ -19,7 +19,6 @@ public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private static final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
-    //private final Map<Integer, User> users = new HashMap<>();
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -81,6 +80,15 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
+    public boolean deleteUserById(int id) {
+        if (getUser(id) != null) {
+            jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public List<User> getUsers() {
         return jdbcTemplate.query("SELECT* FROM users", getUserMapper());
     }
@@ -136,6 +144,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getFriendsOfUser(int id) {
+        getUser(id);
         return jdbcTemplate.query("SELECT* " +
                 "FROM users " +
                 "WHERE user_id IN(SELECT friend_id " +

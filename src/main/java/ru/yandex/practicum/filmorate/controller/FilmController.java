@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -52,8 +53,10 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") Integer count) {
-        return filmService.getTopFilms(count);
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "2") Integer count,
+                                  @RequestParam(defaultValue = "0") Integer genreId,
+                                  @RequestParam(defaultValue = "0") Integer year) {
+        return filmService.getTopFilms(count, genreId, year);
     }
 
     @GetMapping("/genres")
@@ -74,5 +77,41 @@ public class FilmController {
     @GetMapping("/mpa")
     public List<Rating> getRatings() {
         return filmService.getRatings();
+    }
+
+    @DeleteMapping("/films/{id}")
+    public boolean deleteFilmById(@PathVariable int id) {
+        return filmService.deleteFilmById(id);
+    }
+
+    @PostMapping("/directors")
+    public Director addDirector(@RequestBody Director director) {
+        return filmService.addDirector(director);
+    }
+
+    @PutMapping("/directors")
+    public Director updateDirector(@RequestBody Director director) {
+        return filmService.updateDirector(director);
+    }
+
+    @GetMapping("/directors")
+    public List<Director> getDirectors() {
+        return filmService.getDirectors();
+    }
+
+    @GetMapping("/directors/{id}")
+    public Director getDirector(@PathVariable int id) {
+        return filmService.getDirector(id);
+    }
+
+    @DeleteMapping("/directors/{id}")
+    public boolean deleteDirector(@PathVariable int id) {
+        return filmService.deleteDirector(id);
+    }
+
+    @GetMapping("/films/director/{directorId}")
+    public List<Film> getFilmsOfDirector(@PathVariable int directorId,
+                                         @RequestParam(required = false) String sortBy) {
+        return filmService.getFilmsOfDirector(directorId, sortBy);
     }
 }
