@@ -345,7 +345,7 @@ class ReviewDbStorageTest {
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(testedReview);
-        assertEquals(testedReview, reviewDbStorage.getReviewOfFilm(7, 1).get(0));
+        assertEquals(testedReview, reviewDbStorage.getReviewOfFilm(testedFilm.getId(), 1).get(0));
     }
 
     @Test
