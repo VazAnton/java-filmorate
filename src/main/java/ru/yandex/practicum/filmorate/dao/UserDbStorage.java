@@ -6,11 +6,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.enums.EventTypes;
+import ru.yandex.practicum.filmorate.enums.Operations;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Map;
 
@@ -111,12 +116,16 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User addFriend(int id, int friendId) {
+        LocalTime now = LocalTime.now();
+        int millis = now.get(ChronoField.MILLI_OF_SECOND);
+        FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         User user = getUser(id);
         User friend = getUser(friendId);
         jdbcTemplate.update("INSERT INTO friends (user_id, friend_id) VALUES (?, ?)", id, friendId);
         if (getFriendsOfUser(id).contains(friend) && getFriendsOfUser(friendId).contains(user)) {
             jdbcTemplate.update("UPDATE friends set status_of_friendship = TRUE WHERE user_id = ? AND user_id = ?",
                     id, friendId);
+            feedDbStorage.createFeed(new Feed(0, millis, id, EventTypes.FRIEND.toString(), Operations.ADD.toString(), friendId));
         } else {
             jdbcTemplate.update("UPDATE friends set status_of_friendship = FALSE WHERE user_id = ? AND user_id = ?",
                     id, friendId);
@@ -126,9 +135,13 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User deleteFriend(int id, int friendId) {
+        LocalTime now = LocalTime.now();
+        int millis = now.get(ChronoField.MILLI_OF_SECOND);
+        FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         User chosenUser = getUser(id);
         User friendOfUser = getUser(friendId);
         jdbcTemplate.update("DELETE FROM friends WHERE friend_id=? AND user_id = ?;", friendId, id);
+        feedDbStorage.createFeed(new Feed(0, millis, id, EventTypes.FRIEND.toString(), Operations.REMOVE.toString(), friendId));
         return chosenUser;
     }
 
