@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -53,10 +52,8 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getTopFilms(@RequestParam(defaultValue = "2") Integer count,
-                                  @RequestParam(defaultValue = "0") Integer genreId,
-                                  @RequestParam(defaultValue = "0") Integer year) {
-        return filmService.getTopFilms(count, genreId, year);
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") Integer count) {
+        return filmService.getTopFilms(count);
     }
 
     @GetMapping("/genres")
@@ -84,45 +81,4 @@ public class FilmController {
         return filmService.deleteFilmById(id);
     }
 
-    @GetMapping("/films/common")
-    public List<Film> getCommonFilms(@RequestParam int userId, @RequestParam int friendId) {
-        return filmService.getCommonFilms(userId, friendId);
-    }
-
-    @PostMapping("/directors")
-    public Director addDirector(@RequestBody Director director) {
-        return filmService.addDirector(director);
-    }
-
-    @PutMapping("/directors")
-    public Director updateDirector(@RequestBody Director director) {
-        return filmService.updateDirector(director);
-    }
-
-    @GetMapping("/directors")
-    public List<Director> getDirectors() {
-        return filmService.getDirectors();
-    }
-
-    @GetMapping("/directors/{id}")
-    public Director getDirector(@PathVariable int id) {
-        return filmService.getDirector(id);
-    }
-
-    @DeleteMapping("/directors/{id}")
-    public boolean deleteDirector(@PathVariable int id) {
-        return filmService.deleteDirector(id);
-    }
-
-    @GetMapping("/films/director/{directorId}")
-    public List<Film> getFilmsOfDirector(@PathVariable int directorId,
-                                         @RequestParam(required = false) String sortBy) {
-        return filmService.getFilmsOfDirector(directorId, sortBy);
-    }
-
-    @GetMapping("/films/search")
-    public List<Film> getFilmsByNameOrNameAndDirector(@RequestParam(value = "query") String query,
-                                               @RequestParam(value = "by") String by) {
-        return filmService.getFilmsByNameOrNameAndDirector(query, by);
-    }
 }

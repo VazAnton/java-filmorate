@@ -6,22 +6,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.enums.EventTypes;
-import ru.yandex.practicum.filmorate.enums.Operations;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Feed;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private static final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
+    //private final Map<Integer, User> users = new HashMap<>();
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -114,11 +112,9 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User addFriend(int id, int friendId) {
-        FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         User user = getUser(id);
         User friend = getUser(friendId);
         jdbcTemplate.update("INSERT INTO friends (user_id, friend_id) VALUES (?, ?)", id, friendId);
-        feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), id, EventTypes.FRIEND.toString(), Operations.ADD.toString(), friendId));
         if (getFriendsOfUser(id).contains(friend) && getFriendsOfUser(friendId).contains(user)) {
             jdbcTemplate.update("UPDATE friends set status_of_friendship = TRUE WHERE user_id = ? AND user_id = ?",
                     id, friendId);
@@ -131,11 +127,9 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User deleteFriend(int id, int friendId) {
-        FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         User chosenUser = getUser(id);
-        getUser(friendId);
+        User friendOfUser = getUser(friendId);
         jdbcTemplate.update("DELETE FROM friends WHERE friend_id=? AND user_id = ?;", friendId, id);
-        feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), id, EventTypes.FRIEND.toString(), Operations.REMOVE.toString(), friendId));
         return chosenUser;
     }
 
@@ -157,48 +151,4 @@ public class UserDbStorage implements UserStorage {
                 "WHERE user_id IN(SELECT friend_id " +
                 "FROM friends WHERE user_id = ?);", UserDbStorage.getUserMapper(), id);
     }
-
-    @Override
-    public List<Film> getRecommendationsFilmsByUser(int id) {
-        List<Film> recommendationFilm = new ArrayList<>();
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        List<Integer> filmLikesByUser = getIdFilmLikes(id);
-        List<Integer> commonUserId = getIdUserFromLikes(id);
-        if (commonUserId.size() == 0) {
-            return recommendationFilm;
-        }
-        List<Integer> filmId = new ArrayList<>();
-        for (Integer userId : commonUserId) {
-            List<Integer> filmByFriend = getIdFilmLikes(userId);
-            for (Integer filmIdFriend : filmByFriend) {
-                if (!filmLikesByUser.contains(filmIdFriend)) {
-                    filmId.add(filmIdFriend);
-                }
-            }
-        }
-        Set<Integer> originFilmId = new HashSet<>(filmId);
-        for (Integer filmIdRecommendation : originFilmId) {
-            recommendationFilm.add(filmDbStorage.getFilm(filmIdRecommendation));
-        }
-        return recommendationFilm;
-    }
-
-    private List<Integer> getIdUserFromLikes(int id) {
-        String sql = "SELECT user_id FROM LIKES " +
-                "WHERE film_id IN " +
-                "(SELECT film_id FROM LIKES WHERE user_id = ? );";
-        return jdbcTemplate.query(sql,
-                (rs, rowNum) -> rs.getInt("user_id"),
-                id);
-    }
-
-    private List<Integer> getIdFilmLikes(int userId) {
-        String sql = "SELECT film_id FROM LIKES " +
-                "WHERE user_id = ?";
-        return jdbcTemplate.query(sql,
-                (rs, rowNum) -> rs.getInt("film_id"),
-                userId);
-    }
-
-
 }
