@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -517,5 +519,97 @@ class UserDbStorageTest {
         assertEquals(1, userDbStorage.getUsers().size());
 
         assertTrue(userDbStorage.deleteUserById(testedUser.getId()));
+    }
+
+    @Test
+    public void checkRecommendationFilm() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedUser = User.builder()
+                .name("Валерий")
+                .login("Bicycle")
+                .email("broken.velik@yandex.ru")
+                .birthday(LocalDate.of(1999, 5, 22))
+                .build();
+        userDbStorage.addUser(testedUser);
+        User anotherUser = User.builder()
+                .name("Сергей")
+                .login("Seryoga")
+                .email("voyu.na_lunu@yandex.ru")
+                .birthday(LocalDate.of(1997, 6, 13))
+                .build();
+        userDbStorage.addUser(anotherUser);
+        Film testedFilm = Film.builder()
+                .name("Маска")
+                .description("Фильм Маска -  это захватывающая комедия, где " +
+                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
+                        "невероятные суперсилы. " +
+                        "Фильм смешной и непременно заставит вас улыбнуться.")
+                .duration(126)
+                .releaseDate(LocalDate.of(2003, 3,
+                        26))
+                .mpa(Rating.builder().id(4).build())
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        Film anotherFilm = Film.builder()
+                .name("Титаник")
+                .description("Фильм - катастрофа")
+                .duration(194)
+                .releaseDate(LocalDate.of(1998, 2, 20))
+                .mpa(Rating.builder().id(5).build())
+                .build();
+        filmDbStorage.addFilm(anotherFilm);
+        filmDbStorage.like(testedFilm.getId(), testedUser.getId());
+        filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
+        filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
+        assertEquals(anotherFilm.getId(), userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).get(0).getId());
+        assertEquals(1, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).size());
+
+    }
+
+    @Test
+    public void noRecommendation() {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        testedUser = User.builder()
+                .name("Валерий")
+                .login("Bicycle")
+                .email("broken.velik@yandex.ru")
+                .birthday(LocalDate.of(1999, 5, 22))
+                .build();
+        userDbStorage.addUser(testedUser);
+        User anotherUser = User.builder()
+                .name("Сергей")
+                .login("Seryoga")
+                .email("voyu.na_lunu@yandex.ru")
+                .birthday(LocalDate.of(1997, 6, 13))
+                .build();
+        userDbStorage.addUser(anotherUser);
+        Film testedFilm = Film.builder()
+                .name("Маска")
+                .description("Фильм Маска -  это захватывающая комедия, где " +
+                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
+                        "невероятные суперсилы. " +
+                        "Фильм смешной и непременно заставит вас улыбнуться.")
+                .duration(126)
+                .releaseDate(LocalDate.of(2003, 3,
+                        26))
+                .mpa(Rating.builder().id(4).build())
+                .build();
+        filmDbStorage.addFilm(testedFilm);
+        Film anotherFilm = Film.builder()
+                .name("Титаник")
+                .description("Фильм - катастрофа")
+                .duration(194)
+                .releaseDate(LocalDate.of(1998, 2, 20))
+                .mpa(Rating.builder().id(5).build())
+                .build();
+        filmDbStorage.addFilm(anotherFilm);
+        filmDbStorage.like(testedFilm.getId(), testedUser.getId());
+        filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
+        filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
+        filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
+        assertTrue(userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).isEmpty());
+        assertEquals(0, userDbStorage.getRecommendationsFilmsByUser(testedUser.getId()).size());
     }
 }

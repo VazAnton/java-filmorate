@@ -10,14 +10,14 @@ import ru.yandex.practicum.filmorate.enums.EventTypes;
 import ru.yandex.practicum.filmorate.enums.Operations;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Feed;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class UserDbStorage implements UserStorage {
@@ -163,4 +163,52 @@ public class UserDbStorage implements UserStorage {
                 "WHERE user_id IN(SELECT friend_id " +
                 "FROM friends WHERE user_id = ?);", UserDbStorage.getUserMapper(), id);
     }
+
+    @Override
+    public List<Film> getRecommendationsFilmsByUser(int id) {
+
+        List<Film> recommendationFilm = new ArrayList<>();
+        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        List<Integer> filmLikesByUser = getIdFilmLikes(id);
+        List<Integer> commonUserId = getIdUserFromLikes(id);
+        if (commonUserId.size() == 0) {
+            return recommendationFilm;
+        }
+        List<Integer> filmId = new ArrayList<>();
+
+        for (Integer userId : commonUserId) {
+            List<Integer> filmByFriend = getIdFilmLikes(userId);
+            for (Integer filmIdFriend : filmByFriend) {
+                if (!filmLikesByUser.contains(filmIdFriend)) {
+                    filmId.add(filmIdFriend);
+                }
+            }
+        }
+        Set<Integer> originFilmId = new HashSet<>(filmId);
+        for (Integer filmIdRecommendation : originFilmId) {
+            recommendationFilm.add(filmDbStorage.getFilm(filmIdRecommendation));
+        }
+        return recommendationFilm;
+    }
+
+    private List<Integer> getIdUserFromLikes(int id) {
+        String sql = "SELECT user_id FROM LIKES " +
+                "WHERE film_id IN " +
+                "(SELECT film_id FROM LIKES WHERE user_id = ? );";
+        List<Integer> userIdList = jdbcTemplate.query(sql,
+                (rs, rowNum) -> rs.getInt("user_id"),
+                id);
+        return userIdList;
+    }
+
+    private List<Integer> getIdFilmLikes(int userId) {
+        String sql = "SELECT film_id FROM LIKES " +
+                "WHERE user_id = ?";
+        List<Integer> filmIdList = jdbcTemplate.query(sql,
+                (rs, rowNum) -> rs.getInt("film_id"),
+                userId);
+        return filmIdList;
+    }
+
+
 }
