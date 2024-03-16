@@ -138,14 +138,9 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean deleteLikeOfReview(int id, int userId) {
-        // if (jdbcTemplate.update("DELETE FROM REVIEWS WHERE REVIEW_ID = ? AND USER_ID = ?", id, userId) < 1) {
-        //   log.info("Ошибка при удалении лайка для отзыва ID = {} от пользователя с ID = {}.", id, userId);
-        // throw new ValidationException("Ошибка при удалении лайка для отзыва ID = %d от пользователя с ID = %d.");
-        // } else {
         jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL - 1 WHERE REVIEW_ID = ?", id);
         log.info("Пользователь удалил лайк для отзыва");
         return true;
-        //}
     }
 
 
@@ -158,13 +153,9 @@ public class ReviewDbStorage implements ReviewStorage {
 
     @Override
     public boolean deleteDislikeOfReview(int id, int userId) {
-        //if (jdbcTemplate.update("DELETE FROM REVIEWS WHERE REVIEW_ID = ? AND USER_ID = ?", id, userId) < 1) {
-        //  log.info("Ошибка при удалении дизлайка для отзыва ID = {} от пользователя с ID = {}.", id, userId);
-        //throw new ValidationException("Ошибка при удалении дизлайка для отзыва ID = %d от пользователя с ID = %d.");
-        //} else {
         jdbcTemplate.update("UPDATE REVIEWS SET USEFUL = USEFUL + 1 WHERE REVIEW_ID = ?", id);
         log.info("Пользователь с ID = {} удалил дизлайк для отзыва ID = {}.", userId, id);
         return true;
-        // }
+
     }
 }
