@@ -41,6 +41,8 @@ public class FeedDbStorage implements FeedStorage {
 
     @Override
     public List<Feed> getFeedByUserId(int id) {
+        UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
+        userDbStorage.getUser(id);
         return jdbcTemplate.query("SELECT* FROM feed WHERE user_id = ?;",
                 getFeedMapper(), id);
     }
@@ -48,7 +50,7 @@ public class FeedDbStorage implements FeedStorage {
     private RowMapper<Feed> getFeedMapper() {
         return ((rs, rowNum) ->
                 new Feed(rs.getInt("event_id"),
-                        rs.getInt("timestamp"),
+                        rs.getLong("timestamp"),
                         rs.getInt("user_id"),
                         rs.getString("event_type"),
                         rs.getString("operation"),
