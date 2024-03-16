@@ -33,6 +33,8 @@ public interface FilmStorage {
 
     boolean deleteFilmById(int id);
 
+    List<Film> getCommonFilms(int userID, int friendId);
+
     Director addDirector(Director director);
 
     Director updateDirector(Director director);

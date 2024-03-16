@@ -68,6 +68,10 @@ public class FilmService {
         return filmStorage.deleteFilmById(id);
     }
 
+    public List<Film> getCommonFilms(int userID, int friendId) {
+        return filmStorage.getCommonFilms(userID, friendId);
+    }
+
     public Director addDirector(Director director) {
         return filmStorage.addDirector(director);
     }

@@ -84,6 +84,11 @@ public class FilmController {
         return filmService.deleteFilmById(id);
     }
 
+    @GetMapping("/films/common")
+    public List<Film> getCommonFilms(@RequestParam int userId, @RequestParam int friendId) {
+        return filmService.getCommonFilms(userId, friendId);
+    }
+
     @PostMapping("/directors")
     public Director addDirector(@RequestBody Director director) {
         return filmService.addDirector(director);
