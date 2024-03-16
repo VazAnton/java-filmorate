@@ -194,8 +194,6 @@ class FilmDbStorageTest {
                 .mpa(Rating.builder().id(4).build())
                 .build();
 
-        filmDbStorage.updateFilm(updatedFilm);
-
         assertThat(filmDbStorage.updateFilm(updatedFilm))
                 .isNotNull()
                 .usingRecursiveComparison()

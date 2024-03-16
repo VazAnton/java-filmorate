@@ -171,15 +171,6 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public boolean deleteFilmById(int id) {
-        if (getFilm(id) != null) {
-            jdbcTemplate.update("DELETE FROM films WHERE film_id = ?", id);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public Film getFilm(int id) {
         Film film = jdbcTemplate.queryForObject("SELECT f.film_id, " +
                 "f.name , " +
@@ -220,6 +211,7 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.film_id;", this::createFilm);
     }
 
+    @Override
     public Rating getRating(int id) {
         Rating chosenRating = jdbcTemplate.queryForObject("SELECT* " +
                         "FROM ratings WHERE rating_id = ?",
@@ -336,15 +328,9 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getCommonFilms(int userID, int friendId) {
-        List<Film> commonFilms = new ArrayList<>();
-        List<Film> userFilms = likeFilms(userID);
-        List<Film> friendFilms = likeFilms(friendId);
-        for (Film films : userFilms) {
-            if (friendFilms.contains(films)) {
-                commonFilms.add(films);
-            }
-        }
-        return commonFilms;
+        List<Film> userFilms = new ArrayList<>(likeFilms(userID));
+        userFilms.retainAll(likeFilms(friendId));
+        return new ArrayList<>(userFilms);
     }
 
 
@@ -522,7 +508,6 @@ public class FilmDbStorage implements FilmStorage {
             log.error("Не заданы параметры поиска по названию фильмов и по режиссёру");
             throw new ObjectNotFoundException("Не заданы параметры поиска: запрос или фильтр - " + query + " by " + by);
         }
-
         if (!(by.equals("director") || by.equals("title") || by.equals("director,title") || by.equals("title,director"))) {
             log.error("Ошибка: некорректно задан фильтр для поиска по названию фильмов и по режиссёру");
             throw new ObjectNotFoundException("Неизвестный фильтр для поиска по названию фильмов и по режиссёру - " + by);
@@ -540,7 +525,6 @@ public class FilmDbStorage implements FilmStorage {
                 "LEFT OUTER JOIN ratings AS r ON f.rating_id=r.rating_id " +
                 "LEFT OUTER JOIN film_director AS fd ON f.film_id=fd.film_id " +
                 "LEFT OUTER JOIN directors AS d ON fd.director_id=d.director_id ";
-
         if (by.equals("title")) {
             sqlRequest += "WHERE LOWER(f.name) LIKE LOWER(CONCAT('%',?,'%')) GROUP BY f.film_id ORDER BY cnt DESC;";
             return jdbcTemplate.query(sqlRequest, this::createFilm, query);

@@ -9,7 +9,8 @@ import java.util.List;
 
 @Service
 public class FeedService {
-    FeedStorage feedStorage;
+
+    private final FeedStorage feedStorage;
 
     @Autowired
     public FeedService(FeedStorage feedStorage) {
