@@ -14,11 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Film {
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
     private List<Genre> genres;
     private Rating mpa;
+    private List<Director> directors;
 }

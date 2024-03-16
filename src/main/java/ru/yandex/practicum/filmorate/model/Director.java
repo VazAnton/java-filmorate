@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @AllArgsConstructor
 @Builder
-public class Rating {
+@Data
+public class Director {
     private Integer id;
     private String name;
 }
