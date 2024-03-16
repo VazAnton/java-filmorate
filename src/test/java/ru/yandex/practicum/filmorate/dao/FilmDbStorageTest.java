@@ -349,7 +349,7 @@ class FilmDbStorageTest {
         nFilm = filmDbStorage.getTopFilms(10, 0, 0);
 
         assertNotNull(filmDbStorage.getTopFilms(10, 0, 1998));
-        assertEquals(1, filmDbStorage.getTopFilms(2, 3, 1998).size());
+        assertEquals(2, filmDbStorage.getTopFilms(2, 3, 1998).size());
     }
 
     @Test

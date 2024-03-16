@@ -19,8 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -281,13 +279,11 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public boolean like(int id, int userId) {
-        LocalTime now = LocalTime.now();
-        int millis = now.get(ChronoField.MILLI_OF_SECOND);
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         if (getFilm(id) != null && userDbStorage.getUser(userId) != null) {
             jdbcTemplate.update("INSERT INTO likes (film_id, user_id) VALUES (?, ?);", id, userId);
-            feedDbStorage.createFeed(new Feed(0, millis, userId, EventTypes.LIKE.toString(), Operations.ADD.toString(), id));
+            feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), userId, EventTypes.LIKE.toString(), Operations.ADD.toString(), id));
 
         }
         return true;
@@ -295,13 +291,11 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public boolean deleteLike(int id, int userId) {
-        LocalTime now = LocalTime.now();
-        int millis = now.get(ChronoField.MILLI_OF_SECOND);
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         if (getFilm(id) != null && userDbStorage.getUser(userId) != null) {
             jdbcTemplate.update("DELETE FROM likes WHERE user_id = ? AND film_id = ?;", userId, id);
-            feedDbStorage.createFeed(new Feed(0, millis, userId, EventTypes.LIKE.toString(), Operations.REMOVE.toString(), id));
+            feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), userId, EventTypes.LIKE.toString(), Operations.REMOVE.toString(), id));
         }
         return true;
     }
