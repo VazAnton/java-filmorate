@@ -73,7 +73,7 @@ public class FilmDbStorage implements FilmStorage {
         throw new SQLException();
     }
 
-    private List<Genre> createGenres(SqlRowSet genreRow) throws SQLException {
+    private List<Genre> createGenres(SqlRowSet genreRow) {
         List<Genre> genres = new ArrayList<>();
         while (genreRow.next()) {
             String genreIds = genreRow.getString("genre_id");
