@@ -192,8 +192,8 @@ public class FilmDbStorage implements FilmStorage {
         if (film != null && getFilm(film.getId()) != null) {
             validateFilm(film);
             jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
-                            "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
-                    film.getDuration(), film.getMpa().getId(), film.getId());
+                            "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(),
+                    film.getReleaseDate(), film.getDuration(), film.getMpa().getId(), film.getId());
             setGenre(film);
             setDirectors(film);
             return getFilm(film.getId());

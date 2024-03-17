@@ -118,7 +118,8 @@ public class UserDbStorage implements UserStorage {
         User user = getUser(id);
         User friend = getUser(friendId);
         jdbcTemplate.update("INSERT INTO friends (user_id, friend_id) VALUES (?, ?)", id, friendId);
-        feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), id, EventTypes.FRIEND.toString(), Operations.ADD.toString(), friendId));
+        feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), id, EventTypes.FRIEND.toString(),
+                Operations.ADD.toString(), friendId));
         if (getFriendsOfUser(id).contains(friend) && getFriendsOfUser(friendId).contains(user)) {
             jdbcTemplate.update("UPDATE friends set status_of_friendship = TRUE WHERE user_id = ? AND user_id = ?",
                     id, friendId);
@@ -135,7 +136,8 @@ public class UserDbStorage implements UserStorage {
         User chosenUser = getUser(id);
         getUser(friendId);
         jdbcTemplate.update("DELETE FROM friends WHERE friend_id=? AND user_id = ?;", friendId, id);
-        feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), id, EventTypes.FRIEND.toString(), Operations.REMOVE.toString(), friendId));
+        feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), id, EventTypes.FRIEND.toString(),
+                Operations.REMOVE.toString(), friendId));
         return chosenUser;
     }
 
