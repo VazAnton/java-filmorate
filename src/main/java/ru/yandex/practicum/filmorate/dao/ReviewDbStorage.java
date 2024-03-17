@@ -16,8 +16,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.review.ReviewStorage.ReviewStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -51,17 +49,6 @@ public class ReviewDbStorage implements ReviewStorage {
                 rs.getBoolean("is_positive"), rs.getInt("user_id"), rs.getInt("film_id"),
                 rs.getInt("useful")));
     }
-
-    private Review createReview(ResultSet rs) throws SQLException {
-        return Review.builder()
-                .reviewId(rs.getInt("review_id"))
-                .content(rs.getString("content"))
-                .isPositive(rs.getBoolean("is_positive"))
-                .userId(rs.getInt("user_id"))
-                .filmId(rs.getInt("film_id"))
-                .useful(rs.getInt("useful"))
-                .build();
-    } //Вдруг пригодится
 
     @Override
     public Review addReview(Review review) {
