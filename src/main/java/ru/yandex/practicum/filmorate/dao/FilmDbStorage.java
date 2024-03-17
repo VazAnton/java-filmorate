@@ -84,6 +84,7 @@ public class FilmDbStorage implements FilmStorage {
         throw new SQLException();
     }
 
+
     @Override
     public boolean deleteFilmById(int id) {
         if (getFilm(id) != null) {
@@ -92,8 +93,8 @@ public class FilmDbStorage implements FilmStorage {
         }
         return false;
     }
-
-    private List<Genre> createGenres(SqlRowSet genreRow) throws SQLException {
+  
+    private List<Genre> createGenres(SqlRowSet genreRow) {
         List<Genre> genres = new ArrayList<>();
         while (genreRow.next()) {
             String genreIds = genreRow.getString("genre_id");
