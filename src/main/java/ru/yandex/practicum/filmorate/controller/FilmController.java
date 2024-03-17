@@ -122,7 +122,7 @@ public class FilmController {
 
     @GetMapping("/films/search")
     public List<Film> getFilmsByNameOrNameAndDirector(@RequestParam(value = "query") String query,
-                                               @RequestParam(value = "by") String by) {
+                                                      @RequestParam(value = "by") String by) {
         return filmService.getFilmsByNameOrNameAndDirector(query, by);
     }
 }

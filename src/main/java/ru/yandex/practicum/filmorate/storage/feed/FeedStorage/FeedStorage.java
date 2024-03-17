@@ -9,5 +9,4 @@ public interface FeedStorage {
     void createFeed(Feed feed);
 
     List<Feed> getFeedByUserId(int id);
-
 }

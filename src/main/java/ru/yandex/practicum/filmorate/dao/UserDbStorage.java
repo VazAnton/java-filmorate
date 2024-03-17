@@ -199,6 +199,4 @@ public class UserDbStorage implements UserStorage {
                 (rs, rowNum) -> rs.getInt("film_id"),
                 userId);
     }
-
-
 }

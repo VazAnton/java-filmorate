@@ -111,7 +111,6 @@ public class ReviewDbStorage implements ReviewStorage {
             return jdbcTemplate.query(sql, getReviewMapper(), filmId, count);
         } else {
             throw new ObjectNotFoundException("Фильм не найден");
-
         }
     }
 
@@ -139,7 +138,6 @@ public class ReviewDbStorage implements ReviewStorage {
         log.info("Пользователь удалил лайк для отзыва");
         return true;
     }
-
 
     @Override
     public boolean addDislikeOfReview(int id, int userId) {

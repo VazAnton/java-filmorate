@@ -93,7 +93,7 @@ public class FilmDbStorage implements FilmStorage {
         return false;
     }
 
-    private List<Genre> createGenres(SqlRowSet genreRow) throws SQLException {
+    private List<Genre> createGenres(SqlRowSet genreRow) {
         List<Genre> genres = new ArrayList<>();
         while (genreRow.next()) {
             String genreIds = genreRow.getString("genre_id");
@@ -248,13 +248,9 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Rating getRating(int id) {
-        Rating chosenRating = jdbcTemplate.queryForObject("SELECT* " +
+        return jdbcTemplate.queryForObject("SELECT* " +
                         "FROM ratings WHERE rating_id = ?;",
                 getRatingMapper(), id);
-        if (chosenRating == null) {
-            throw new ObjectNotFoundException("Внимание! Рейтинга с таким номером не существует!");
-        }
-        return chosenRating;
     }
 
     @Override
@@ -264,12 +260,8 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Genre getGenre(int id) {
-        Genre chosenGenre = jdbcTemplate.queryForObject("SELECT* FROM genres WHERE genre_id = ?;",
+        return jdbcTemplate.queryForObject("SELECT* FROM genres WHERE genre_id = ?;",
                 FilmDbStorage.getGenreMapper(), id);
-        if (chosenGenre == null) {
-            throw new ObjectNotFoundException("Внимание! Жанра с таким номером не существует!");
-        }
-        return chosenGenre;
     }
 
     private List<Genre> setGenre(Film film) {
@@ -398,7 +390,6 @@ public class FilmDbStorage implements FilmStorage {
         userFilms.retainAll(likeFilms(friendId));
         return new ArrayList<>(userFilms);
     }
-
 
     private List<Film> likeFilms(int userId) {
         String query = "SELECT f.film_id, " +
