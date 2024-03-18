@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.enums.EventTypes;
 import ru.yandex.practicum.filmorate.enums.Operations;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
@@ -20,29 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
+@Slf4j
 public class ReviewDbStorage implements ReviewStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final Logger log = LoggerFactory.getLogger(ReviewDbStorage.class);
-
-    public ReviewDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    private void validate(Review review) {
-        if (review.getContent() == null || review.getContent().isBlank()) {
-            log.error("Не заполне текст отзыва.");
-            throw new ValidationException("Внимание! Текст отзыва должен быть заполнен!");
-        }
-        if (review.getIsPositive() == null) {
-            log.error("Не заполнено поле с мнением о фильме.");
-            throw new ValidationException("Внимание! Поле с мнением о фильме должно быть заполнено!");
-        }
-        if (review.getUserId() == null || review.getFilmId() == null) {
-            log.error("Не заполнено поле с уникальным номером пользователя или фильма.");
-            throw new ValidationException("Внимание! Поле с уникальным номером должно быть заполнено!");
-        }
-    }
 
     private RowMapper<Review> getReviewMapper() {
         return ((rs, rowNum) -> new Review(rs.getInt("review_id"), rs.getString("content"),
@@ -57,7 +38,6 @@ public class ReviewDbStorage implements ReviewStorage {
         FeedDbStorage feedDbStorage = new FeedDbStorage(jdbcTemplate);
         if (review != null && userStorage.getUser(review.getUserId()) != null &&
                 filmStorage.getFilm(review.getFilmId()) != null) {
-            validate(review);
             SimpleJdbcInsert simpleReviewInsert = new SimpleJdbcInsert(jdbcTemplate)
                     .withTableName("reviews")
                     .usingGeneratedKeyColumns("review_id");

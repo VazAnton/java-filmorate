@@ -3,9 +3,7 @@ package ru.yandex.practicum.filmorate.dao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.*;
 
 import java.time.LocalDate;
@@ -49,116 +47,6 @@ class FilmDbStorageTest {
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(filmDbStorage.getFilm(testedFilm.getId()));
-    }
-
-    @Test
-    public void checkAddFilmIfFilmCantPassedValidationBecauseNameIsNull() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedFilm = Film.builder()
-                .name(null)
-                .description("Фильм Маска -  это захватывающая комедия, где " +
-                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
-                        "невероятные суперсилы. " +
-                        "Фильм смешной и непременно заставит вас улыбнуться.")
-                .duration(126)
-                .releaseDate(LocalDate.of(2003, 3,
-                        26))
-                .mpa(Rating.builder().id(4).build())
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addFilm(testedFilm));
-    }
-
-    @Test
-    public void checkAddFilmIfFilmCanPassedValidationBecauseNameIsEmpty() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedFilm = Film.builder()
-                .name("")
-                .description("Фильм Маска -  это захватывающая комедия, где " +
-                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
-                        "невероятные суперсилы. " +
-                        "Фильм смешной и непременно заставит вас улыбнуться.")
-                .duration(126)
-                .releaseDate(LocalDate.of(2003, 3,
-                        26))
-                .mpa(Rating.builder().id(4).build())
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addFilm(testedFilm));
-    }
-
-    @Test
-    public void checkAddFilmIfFilmCanPassedValidationBecauseDescriptionIsNull() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedFilm = Film.builder()
-                .name("Маска")
-                .description(null)
-                .duration(126)
-                .releaseDate(LocalDate.of(2003, 3,
-                        26))
-                .mpa(Rating.builder().id(4).build())
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addFilm(testedFilm));
-    }
-
-    @Test
-    public void checkAddFilmIfFilmCanPassedValidationBecauseInDescriptionMoreThen200Characters() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedFilm = Film.builder()
-                .name("Маска")
-                .description("Фильм Маска - это захватывающая комедийная " +
-                        "приключенческая история о скромном банковском служащем по имени Стэнли Ипкисс. Однажды " +
-                        "он находит " +
-                        "древнюю маску, которая превращает его в эксцентричного супергероя. Стэнли начинает " +
-                        "использовать свои " +
-                        "новые суперспособности для борьбы с преступностью и покорения сердца красавицы. Но с " +
-                        "каждым днем он " +
-                        "понимает, что маска имеет свою темную сторону. Фильм полон юмора, экшена и неожиданных " +
-                        "поворотов " +
-                        "сюжета. Не пропустите эту захватывающую историю о супергерое-неудачнике!")
-                .duration(126)
-                .releaseDate(LocalDate.of(2003, 3,
-                        26))
-                .mpa(Rating.builder().id(4).build())
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addFilm(testedFilm));
-    }
-
-    @Test
-    public void checkAddFilmIfFilmCanPassedValidationBecauseReleaseDateIsNull() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedFilm = Film.builder()
-                .name("Маска")
-                .description("Фильм Маска -  это захватывающая комедия, где " +
-                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
-                        "невероятные суперсилы. " +
-                        "Фильм смешной и непременно заставит вас улыбнуться.")
-                .duration(126)
-                .releaseDate(null)
-                .mpa(Rating.builder().id(4).build())
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addFilm(testedFilm));
-    }
-
-    @Test
-    public void checkAddFilmIfFilmCanPassedValidationBecauseDurationIsNegative() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedFilm = Film.builder()
-                .name("Маска")
-                .description("Фильм Маска -  это захватывающая комедия, где " +
-                        "главный герой Стэнли Ипкисс случайно находит магическую маску, что дарует ему " +
-                        "невероятные суперсилы. " +
-                        "Фильм смешной и непременно заставит вас улыбнуться.")
-                .duration(-1)
-                .releaseDate(LocalDate.of(2003, 3,
-                        26))
-                .mpa(Rating.builder().id(4).build())
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addFilm(testedFilm));
     }
 
     @Test
@@ -354,20 +242,6 @@ class FilmDbStorageTest {
     }
 
     @Test
-    public void checkGetRatings() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        assertNotNull(filmDbStorage.getRatings());
-        assertEquals(5, filmDbStorage.getRatings().size());
-    }
-
-    @Test
-    public void checkGetGenres() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        assertNotNull(filmDbStorage.getGenres());
-        assertEquals(5, filmDbStorage.getRatings().size());
-    }
-
-    @Test
     public void checkDeleteFilm() {
         FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
         testedFilm = Film.builder()
@@ -388,95 +262,9 @@ class FilmDbStorageTest {
     }
 
     @Test
-    public void addDirectorShouldThrowValidationExceptionIfDirectorNameIsNull() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedDirector = Director.builder()
-                .name(null)
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addDirector(testedDirector));
-    }
-
-    @Test
-    public void addDirectorShouldThrowValidationExceptionIfDirectorNameIsBlank() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedDirector = Director.builder()
-                .name(" ")
-                .build();
-
-        assertThrows(ValidationException.class, () -> filmDbStorage.addDirector(testedDirector));
-    }
-
-    @Test
-    public void checkAddDirectorIfDirectorCanPassValidation() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedDirector = Director.builder()
-                .name("Квентин Тарантино")
-                .build();
-
-        filmDbStorage.addDirector(testedDirector);
-
-        assertThat(filmDbStorage.getDirector(testedDirector.getId()))
-                .isNotNull()
-                .usingRecursiveComparison()
-                .isEqualTo(testedDirector);
-    }
-
-    @Test
-    public void checkUpdateDirectorIfDirectorCanPassValidation() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedDirector = Director.builder()
-                .name("Квентин Тарантино")
-                .build();
-        filmDbStorage.addDirector(testedDirector);
-        Director updatedDirector = Director.builder()
-                .id(1)
-                .name("Тарантино")
-                .build();
-
-        assertThat(filmDbStorage.updateDirector(updatedDirector))
-                .isNotNull()
-                .usingRecursiveComparison()
-                .isEqualTo(filmDbStorage.getDirector(testedDirector.getId()));
-    }
-
-    @Test
-    public void checkGetDirectors() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedDirector = Director.builder()
-                .name("Квентин Тарантино")
-                .build();
-        filmDbStorage.addDirector(testedDirector);
-        Director anotherDirector = Director.builder()
-                .name("Вес Крейвен")
-                .build();
-        filmDbStorage.addDirector(anotherDirector);
-
-        assertEquals(2, filmDbStorage.getDirectors().size());
-    }
-
-    @Test
-    public void checkDeleteDirectorIfDirectorExists() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        testedDirector = Director.builder()
-                .name("Квентин Тарантино")
-                .build();
-        filmDbStorage.addDirector(testedDirector);
-
-        assertTrue(filmDbStorage.deleteDirector(testedDirector.getId()));
-    }
-
-    @Test
-    public void deleteDirectorShouldThrowEmptyResultExceptionIfDirectorNotExists() {
-        FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
-        assertEquals(0, filmDbStorage.getDirectors().size());
-
-        assertThrows(EmptyResultDataAccessException.class, () -> filmDbStorage.deleteDirector(1));
-    }
-
-    @Test
     public void checkUpdateFilmIfFilmHaveNewDirector() {
         FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        DirectorDbStorage directorDbStorage = new DirectorDbStorage(jdbcTemplate);
         List<Genre> filmGenres = new ArrayList<>();
         Genre genre2 = Genre.builder()
                 .id(2)
@@ -489,7 +277,7 @@ class FilmDbStorageTest {
         testedDirector = Director.builder()
                 .name("Квентин Тарантино")
                 .build();
-        filmDbStorage.addDirector(testedDirector);
+        directorDbStorage.addDirector(testedDirector);
         testedFilm = Film.builder()
                 .name("Бешеные псы")
                 .description("Фильм рассказывает историю группы грабителей, " +
@@ -516,7 +304,7 @@ class FilmDbStorageTest {
                         .id(5)
                         .build())
                 .genres(filmGenres)
-                .directors(List.of(filmDbStorage.getDirector(testedDirector.getId())))
+                .directors(List.of(directorDbStorage.getDirector(testedDirector.getId())))
                 .build();
 
         filmDbStorage.updateFilm(film1Updated);
@@ -569,6 +357,7 @@ class FilmDbStorageTest {
         filmDbStorage.like(testedFilm.getId(), anotherUser.getId());
         filmDbStorage.like(anotherFilm.getId(), testedUser.getId());
         filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
+
         assertEquals(2, filmDbStorage.getCommonFilms(testedUser.getId(), anotherUser.getId()).size());
         assertNotNull(filmDbStorage.getCommonFilms(testedUser.getId(), anotherUser.getId()));
     }
@@ -613,12 +402,14 @@ class FilmDbStorageTest {
         userDbStorage.addUser(anotherUser);
         filmDbStorage.like(testedFilm.getId(), testedUser.getId());
         filmDbStorage.like(anotherFilm.getId(), anotherUser.getId());
+
         assertTrue(filmDbStorage.getCommonFilms(testedUser.getId(), anotherUser.getId()).isEmpty());
     }
 
     @Test
     public void checkSearchFilmInDb() {
         FilmDbStorage filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        DirectorDbStorage directorDbStorage = new DirectorDbStorage(jdbcTemplate);
         List<Genre> filmGenres = new ArrayList<>();
         Genre genre2 = Genre.builder()
                 .id(2)
@@ -631,7 +422,7 @@ class FilmDbStorageTest {
         testedDirector = Director.builder()
                 .name("Квентин Тарантино")
                 .build();
-        filmDbStorage.addDirector(testedDirector);
+        directorDbStorage.addDirector(testedDirector);
         testedFilm = Film.builder()
                 .name("Бешеные псы")
                 .description("Фильм рассказывает историю группы грабителей, " +

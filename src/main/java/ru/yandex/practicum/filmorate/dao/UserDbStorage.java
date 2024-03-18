@@ -1,14 +1,13 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.enums.EventTypes;
 import ru.yandex.practicum.filmorate.enums.Operations;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
@@ -18,38 +17,16 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Repository
+@RequiredArgsConstructor
+@Slf4j
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
-
-    public UserDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private void validate(User user) {
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            log.error("Не заполнена электронная почта.");
-            throw new ValidationException("Поле с адресом алектронной почты не может быть пустым!");
-        } else if (!user.getEmail().contains("@")) {
-            log.error("Было передан неверный адрес электронной почты.");
-            throw new ValidationException("Адрес алектронной почты должен содержать символ @!");
-        }
-        if (user.getLogin() == null || user.getLogin().isEmpty()) {
-            log.error("Не заполнен логин.");
-            throw new ValidationException("Логин пользователя должен быть заполнен!");
-        } else if (user.getLogin().contains(" ")) {
-            log.error("Логин пользователя содержит пробелы.");
-            throw new ValidationException("Логин пользователя не может содержать пробелы!");
-        }
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (user.getName() == null || user.getName().isEmpty() || user.getName().isBlank()) {
             log.error("При создании пользователя не было указано его имя.");
             user.setName(user.getLogin());
-        }
-        if (user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Передана некорректная дата рождения пользователя.");
-            throw new ValidationException("День рождения пользователя должен быть указан и не может быть больше " +
-                    "текущей даты!");
         }
     }
 
@@ -78,6 +55,7 @@ public class UserDbStorage implements UserStorage {
             validate(user);
             jdbcTemplate.update("UPDATE users set email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?",
                     user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
+            return getUser(user.getId());
         }
         return user;
     }
