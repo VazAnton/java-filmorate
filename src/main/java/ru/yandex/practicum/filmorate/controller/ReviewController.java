@@ -1,30 +1,35 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.service.review.ReviewService.ReviewService;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@AllArgsConstructor
+@Validated
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @Autowired
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
+//    @Autowired
+//    public ReviewController(ReviewService reviewService) {
+//        this.reviewService = reviewService;
+//    }
 
     @PostMapping
-    public Review addReview(@RequestBody Review review) {
+    public Review addReview(@RequestBody @Valid Review review) {
         return reviewService.addReview(review);
     }
 
     @PutMapping
-    public Review updateReview(@RequestBody Review review) {
+    public Review updateReview(@RequestBody @Valid Review review) {
         return reviewService.updateReview(review);
     }
 

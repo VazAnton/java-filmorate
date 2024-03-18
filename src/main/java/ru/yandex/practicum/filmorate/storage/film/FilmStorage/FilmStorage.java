@@ -23,27 +23,27 @@ public interface FilmStorage {
 
     List<Film> getTopFilms(Integer count, Integer genreId, Integer year);
 
-    Genre getGenre(int id);
-
-    List<Genre> getGenres();
-
-    Rating getRating(int id);
-
-    List<Rating> getRatings();
+//    Genre getGenre(int id);
+//
+//    List<Genre> getGenres();
+//
+//    Rating getRating(int id);
+//
+//    List<Rating> getRatings();
 
     boolean deleteFilmById(int id);
 
     List<Film> getCommonFilms(int userID, int friendId);
 
-    Director addDirector(Director director);
-
-    Director updateDirector(Director director);
-
-    Director getDirector(int id);
-
-    List<Director> getDirectors();
-
-    boolean deleteDirector(int id);
+//    Director addDirector(Director director);
+//
+//    Director updateDirector(Director director);
+//
+//    Director getDirector(int id);
+//
+//    List<Director> getDirectors();
+//
+//    boolean deleteDirector(int id);
 
     List<Film> getFilmsOfDirector(int directorId, String sortBy);
 
