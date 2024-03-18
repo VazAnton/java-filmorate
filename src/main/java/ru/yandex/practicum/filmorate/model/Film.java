@@ -6,7 +6,6 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.yandex.practicum.filmorate.customConstraints.IsAfter;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -34,6 +33,5 @@ public class Film {
     private Integer duration;
     private List<Genre> genres;
     private Rating mpa;
-    @Valid
     private List<Director> directors;
 }

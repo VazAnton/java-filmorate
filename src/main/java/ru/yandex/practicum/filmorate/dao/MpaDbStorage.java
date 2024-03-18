@@ -1,14 +1,16 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage.MpaStorage;
 
 import java.util.List;
 
-@AllArgsConstructor
+@Repository
+@RequiredArgsConstructor
 public class MpaDbStorage implements MpaStorage {
 
     private final JdbcTemplate jdbcTemplate;

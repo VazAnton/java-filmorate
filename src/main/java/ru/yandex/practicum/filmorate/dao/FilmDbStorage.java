@@ -1,18 +1,15 @@
 package ru.yandex.practicum.filmorate.dao;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.enums.EventTypes;
 import ru.yandex.practicum.filmorate.enums.Operations;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
@@ -25,56 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
 @Slf4j
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    //private static final Logger log = LoggerFactory.getLogger(FilmDbStorage.class);
-    //private final LocalDate firstFilmRelease = LocalDate.of(1895, 12, 28);
-
-    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-//    private void validateFilm(Film film) {
-//        if (film.getName() == null || film.getName().isBlank()) {
-//            log.error("Не заполнено название фильма.");
-//            throw new ValidationException("Название фильма должно быть заполнено!");
-//        }
-//        if (film.getDescription() == null || film.getDescription().length() > 200) {
-//            log.error("Указана некоректная длина описания фильма.");
-//            throw new ValidationException("Описание к фильму должно быть заполнено и не может содержать более 200 " +
-//                    "символов!");
-//        }
-//        if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(firstFilmRelease)) {
-//            log.error("Дата выхода фильма введена некорректно.");
-//            throw new ValidationException("Дата релиза должна быть указана и не может быть раньше даты релиза первого " +
-//                    "фильма!");
-//        }
-//        if (film.getDuration() < 0) {
-//            log.error("Была передана неверная продолжительность фильма.");
-//            throw new ValidationException("Продолжительность фильма не может быть отрицаетльной!");
-//        }
-//    }
-//
-//    private void validateDirector(Director director) {
-//        if (director.getName() == null || director.getName().isBlank()) {
-//            log.error("Не заполнено имя режиссера.");
-//            throw new ValidationException("Имя режиссера должно быть указано!");
-//        }
-//    }
-
-//    private static RowMapper<Genre> getGenreMapper() {
-//        return ((rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")));
-//    }
-//
-//    private RowMapper<Rating> getRatingMapper() {
-//        return ((rs, rowNum) -> new Rating(rs.getInt("rating_id"), rs.getString("name")));
-//    }
-//
-//    private RowMapper<Director> getDirectorMapper() {
-//        return ((rs, rowNum) -> new Director(rs.getInt("director_id"), rs.getString("name")));
-//    }
 
     private Rating createMpa(SqlRowSet ratingRow) throws SQLException {
         if (ratingRow.next()) {
@@ -170,7 +122,6 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film addFilm(Film film) {
         if (film != null) {
-            //validateFilm(film);
             SimpleJdbcInsert simpleFilmInsert = new SimpleJdbcInsert(jdbcTemplate)
                     .withTableName("films")
                     .usingGeneratedKeyColumns("film_id");
@@ -192,7 +143,6 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film updateFilm(Film film) {
         if (film != null && getFilm(film.getId()) != null) {
-            //validateFilm(film);
             jdbcTemplate.update("UPDATE films set name = ?, description = ?, release_date = ?, duration = ?, " +
                             "rating_id = ? WHERE film_id = ?;", film.getName(), film.getDescription(), film.getReleaseDate(),
                     film.getDuration(), film.getMpa().getId(), film.getId());
@@ -248,24 +198,6 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.film_id;", this::createFilm);
     }
 
-//    @Override
-//    public Rating getRating(int id) {
-//        return jdbcTemplate.queryForObject("SELECT* " +
-//                        "FROM ratings WHERE rating_id = ?;",
-//                getRatingMapper(), id);
-//    }
-//
-//    @Override
-//    public List<Rating> getRatings() {
-//        return jdbcTemplate.query("SELECT* FROM ratings;", getRatingMapper());
-//    }
-//
-//    @Override
-//    public Genre getGenre(int id) {
-//        return jdbcTemplate.queryForObject("SELECT* FROM genres WHERE genre_id = ?;",
-//                FilmDbStorage.getGenreMapper(), id);
-//    }
-
     private List<Genre> setGenre(Film film) {
         removeGenre(film.getId());
         if (film.getGenres() == null) {
@@ -320,11 +252,6 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?;", filmId);
     }
 
-//    @Override
-//    public List<Genre> getGenres() {
-//        return jdbcTemplate.query("SELECT* FROM genres;", FilmDbStorage.getGenreMapper());
-//    }
-
     @Override
     public boolean like(int id, int userId) {
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
@@ -332,7 +259,6 @@ public class FilmDbStorage implements FilmStorage {
         if (getFilm(id) != null && userDbStorage.getUser(userId) != null) {
             jdbcTemplate.update("INSERT INTO likes (film_id, user_id) VALUES (?, ?);", id, userId);
             feedDbStorage.createFeed(new Feed(0, System.currentTimeMillis(), userId, EventTypes.LIKE.toString(), Operations.ADD.toString(), id));
-
         }
         return true;
     }
@@ -355,7 +281,6 @@ public class FilmDbStorage implements FilmStorage {
         }
         String param;
         String bound = " LIMIT " + count;
-
         String sql = "SELECT f.film_id," +
                 " f.name," +
                 " f.description," +
@@ -417,49 +342,6 @@ public class FilmDbStorage implements FilmStorage {
                 "ORDER BY COUNT(l.user_id) DESC, f.film_id;";
         return jdbcTemplate.query(query, this::createFilm, userId);
     }
-
-//    @Override
-//    public Director addDirector(Director director) {
-//        if (director != null) {
-//            //validateDirector(director);
-//            SimpleJdbcInsert simpleDirectorInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                    .withTableName("directors")
-//                    .usingGeneratedKeyColumns("director_id");
-//            int id = simpleDirectorInsert.executeAndReturnKey(
-//                    Map.of("name", director.getName())).intValue();
-//            director.setId(id);
-//        }
-//        return director;
-//    }
-//
-//    @Override
-//    public Director updateDirector(Director director) {
-//        if (director != null && getDirector(director.getId()) != null) {
-//            jdbcTemplate.update("UPDATE directors set name = ? WHERE director_id = ?;", director.getName(),
-//                    director.getId());
-//            return getDirector(director.getId());
-//        }
-//        return director;
-//    }
-//
-//    @Override
-//    public Director getDirector(int id) {
-//        return jdbcTemplate.queryForObject("SELECT* FROM directors WHERE director_id = ?;", getDirectorMapper(), id);
-//    }
-//
-//    @Override
-//    public List<Director> getDirectors() {
-//        return jdbcTemplate.query("SELECT* FROM directors;", getDirectorMapper());
-//    }
-//
-//    @Override
-//    public boolean deleteDirector(int id) {
-//        if (getDirector(id) != null) {
-//            jdbcTemplate.update("DELETE FROM directors WHERE director_id = ?;", id);
-//            return true;
-//        }
-//        return false;
-//    }
 
     @Override
     public List<Film> getFilmsOfDirector(int directorId, String sortBy) {

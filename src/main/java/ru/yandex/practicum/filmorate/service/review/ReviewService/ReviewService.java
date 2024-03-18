@@ -1,25 +1,19 @@
 package ru.yandex.practicum.filmorate.service.review.ReviewService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.review.ReviewStorage.ReviewStorage;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class ReviewService {
 
     private final ReviewStorage reviewStorage;
-
-//    @Autowired
-//    public ReviewService(ReviewStorage reviewStorage) {
-//        this.reviewStorage = reviewStorage;
-//    }
 
     public Review addReview(Review review) {
         log.info("Отзыв успешно добавлен!");

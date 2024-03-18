@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.service.mpa.MpaService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage.MpaStorage;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class MpaService {

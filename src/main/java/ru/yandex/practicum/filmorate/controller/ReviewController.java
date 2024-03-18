@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Review;
@@ -10,18 +9,13 @@ import ru.yandex.practicum.filmorate.service.review.ReviewService.ReviewService;
 import javax.validation.Valid;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Validated
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
-
-//    @Autowired
-//    public ReviewController(ReviewService reviewService) {
-//        this.reviewService = reviewService;
-//    }
 
     @PostMapping
     public Review addReview(@RequestBody @Valid Review review) {

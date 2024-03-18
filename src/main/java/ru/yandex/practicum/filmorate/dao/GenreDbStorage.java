@@ -1,14 +1,16 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage.GenreStorage;
 
 import java.util.List;
 
-@AllArgsConstructor
+@Repository
+@RequiredArgsConstructor
 public class GenreDbStorage implements GenreStorage {
 
     private final JdbcTemplate jdbcTemplate;

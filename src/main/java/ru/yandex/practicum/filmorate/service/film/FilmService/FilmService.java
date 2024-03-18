@@ -1,28 +1,19 @@
 package ru.yandex.practicum.filmorate.service.film.FilmService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class FilmService {
 
     private final FilmStorage filmStorage;
-
-//    @Autowired
-//    public FilmService(FilmStorage filmStorage) {
-//        this.filmStorage = filmStorage;
-//    }
 
     public Film addFilm(Film film) {
         log.info("Фильм успешно добавлен!");
@@ -43,22 +34,6 @@ public class FilmService {
         log.info("Информация обо всех фильмах успешно получена!");
         return filmStorage.getFilms();
     }
-
-//    public Genre getGenre(int id) {
-//        return filmStorage.getGenre(id);
-//    }
-//
-//    public List<Genre> getGenres() {
-//        return filmStorage.getGenres();
-//    }
-//
-//    public Rating getRating(int id) {
-//        return filmStorage.getRating(id);
-//    }
-//
-//    public List<Rating> getRatings() {
-//        return filmStorage.getRatings();
-//    }
 
     public boolean deleteFilmById(int id) {
         log.info("Выбранный фильм успешно удален!");
@@ -84,26 +59,6 @@ public class FilmService {
         log.info("Получена инфрмация о самых популярных фильмах!");
         return filmStorage.getTopFilms(count, rat, year);
     }
-
-//    public Director addDirector(Director director) {
-//        return filmStorage.addDirector(director);
-//    }
-//
-//    public Director updateDirector(Director director) {
-//        return filmStorage.updateDirector(director);
-//    }
-//
-//    public Director getDirector(int id) {
-//        return filmStorage.getDirector(id);
-//    }
-//
-//    public List<Director> getDirectors() {
-//        return filmStorage.getDirectors();
-//    }
-//
-//    public boolean deleteDirector(int id) {
-//        return filmStorage.deleteDirector(id);
-//    }
 
     public List<Film> getFilmsOfDirector(int directorId, String sortBy) {
         log.info("Получена информация о фильмах режиссера " + directorId);

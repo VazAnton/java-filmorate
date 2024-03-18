@@ -1,21 +1,21 @@
 package ru.yandex.practicum.filmorate.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.storage.director.DirectorStorage.DirectorStorage;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
+@RequiredArgsConstructor
 public class DirectorDbStorage implements DirectorStorage {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public DirectorDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private RowMapper<Director> getDirectorMapper() {
         return ((rs, rowNum) -> new Director(rs.getInt("director_id"), rs.getString("name")));
@@ -24,7 +24,6 @@ public class DirectorDbStorage implements DirectorStorage {
     @Override
     public Director addDirector(Director director) {
         if (director != null) {
-            //validateDirector(director);
             SimpleJdbcInsert simpleDirectorInsert = new SimpleJdbcInsert(jdbcTemplate)
                     .withTableName("directors")
                     .usingGeneratedKeyColumns("director_id");

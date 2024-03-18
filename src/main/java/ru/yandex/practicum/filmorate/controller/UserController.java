@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Feed;
@@ -13,7 +12,7 @@ import ru.yandex.practicum.filmorate.service.user.UserService.UserService;
 import javax.validation.Valid;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Validated
 @RestController
 @RequestMapping("/users")
@@ -21,12 +20,6 @@ public class UserController {
 
     private final UserService userService;
     private final FeedService feedService;
-
-//    @Autowired
-//    public UserController(UserService userService, FeedService feedService) {
-//        this.userService = userService;
-//        this.feedService = feedService;
-//    }
 
     @PostMapping
     public User addUser(@RequestBody @Valid User user) {

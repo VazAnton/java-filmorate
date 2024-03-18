@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.service.director.DirectorService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Director;
@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.storage.director.DirectorStorage.DirectorSt
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class DirectorService {

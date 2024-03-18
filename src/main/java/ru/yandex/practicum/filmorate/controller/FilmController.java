@@ -1,30 +1,21 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.service.film.FilmService.FilmService;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Validated
 @RestController
 @RequestMapping("/films")
 public class FilmController {
 
     private final FilmService filmService;
-
-//    @Autowired
-//    public FilmController(FilmService filmService) {
-//        this.filmService = filmService;
-//    }
 
     @PostMapping
     public Film addFilm(@RequestBody @Valid Film film) {
@@ -36,7 +27,7 @@ public class FilmController {
         return filmService.updateFilm(film);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public Film getFilm(@PathVariable int id) {
         return filmService.getFilm(id);
     }
@@ -65,26 +56,6 @@ public class FilmController {
         return filmService.getTopFilms(count, genreId, year);
     }
 
-//    @GetMapping("/genres")
-//    public List<Genre> getGenres() {
-//        return filmService.getGenres();
-//    }
-//
-//    @GetMapping("/genres/{id}")
-//    public Genre getGenre(@PathVariable int id) {
-//        return filmService.getGenre(id);
-//    }
-//
-//    @GetMapping("/mpa/{id}")
-//    public Rating getRating(@PathVariable int id) {
-//        return filmService.getRating(id);
-//    }
-//
-//    @GetMapping("/mpa")
-//    public List<Rating> getRatings() {
-//        return filmService.getRatings();
-//    }
-
     @DeleteMapping("/{id}")
     public boolean deleteFilmById(@PathVariable int id) {
         return filmService.deleteFilmById(id);
@@ -94,31 +65,6 @@ public class FilmController {
     public List<Film> getCommonFilms(@RequestParam int userId, @RequestParam int friendId) {
         return filmService.getCommonFilms(userId, friendId);
     }
-
-//    @PostMapping("/directors")
-//    public Director addDirector(@RequestBody @Valid Director director) {
-//        return filmService.addDirector(director);
-//    }
-//
-//    @PutMapping("/directors")
-//    public Director updateDirector(@RequestBody @Valid Director director) {
-//        return filmService.updateDirector(director);
-//    }
-//
-//    @GetMapping("/directors")
-//    public List<Director> getDirectors() {
-//        return filmService.getDirectors();
-//    }
-//
-//    @GetMapping("/directors/{id}")
-//    public Director getDirector(@PathVariable int id) {
-//        return filmService.getDirector(id);
-//    }
-//
-//    @DeleteMapping("/directors/{id}")
-//    public boolean deleteDirector(@PathVariable int id) {
-//        return filmService.deleteDirector(id);
-//    }
 
     @GetMapping("/director/{directorId}")
     public List<Film> getFilmsOfDirector(@PathVariable int directorId,
