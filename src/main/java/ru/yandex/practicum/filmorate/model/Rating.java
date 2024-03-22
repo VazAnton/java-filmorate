@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class Rating {
-    private int id;
+    private Integer id;
     private String name;
 }
